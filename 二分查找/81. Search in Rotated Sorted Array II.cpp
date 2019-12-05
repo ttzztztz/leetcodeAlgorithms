@@ -4,6 +4,7 @@ public:
         const int N = nums.size();
         int left = 0, right = N - 1;
         while (left <= right) {
+            cout << left << " " << right << endl;
             while (left + 1 <= right && nums[left + 1] == nums[left]) {
                 left++;
             }
@@ -16,7 +17,7 @@ public:
                 return true;
             }
 
-            if (nums[0] <= nums[middle]) {
+            if (nums[left] <= nums[middle]) {
                 if (nums[left] <= target && target < nums[middle]) {
                     right = middle - 1;
                 } else {
