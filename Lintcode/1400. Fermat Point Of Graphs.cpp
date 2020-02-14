@@ -6,8 +6,7 @@ public:
      * @param d: The length of edges
      * @return: Return the index of the fermat point
      */
-    vector<vector<int>> edge;
-    map<pair<int, int>, long long> weight;
+    vector<vector<pair<int, long long>>> edge;
     vector<long long> dist;
     vector<int> size;
     int N, answerPoint;
@@ -25,16 +24,13 @@ public:
         answerPoint = N;
         answer = numeric_limits<long long>::max();
         
-        edge = vector<vector<int>>(N + 1, vector<int>{});
+        edge = vector<vector<pair<int, long long>>>(N + 1, vector<pair<int, long long>>{});
         dist = vector<long long>(N + 1, 0);
         size = vector<int>(N + 1, 0);
         
         for (int i = 0; i < M; i++) {
-            edge[x[i]].push_back(y[i]);
-            edge[y[i]].push_back(x[i]);
-            
-            weight[{x[i], y[i]}] = d[i];
-            weight[{y[i], x[i]}] = d[i];
+            edge[x[i]].emplace_back(y[i], d[i]);
+            edge[y[i]].emplace_back(x[i], d[i]);
         }
         
         dfs1(1, -1);
@@ -44,19 +40,27 @@ public:
 private:
     void dfs1(int u, int parent) {
         size[u] = 1;
-        for (int v : edge[u]) {
+        for (auto& p : edge[u]) {
+            int v;
+            long long w;
+            tie(v, w) = p;
+            
             if (v == parent) continue;
             
             dfs1(v, u);
             size[u] += size[v];
-            dist[1] += weight[{u, v}];
+            dist[1] += w;
         }
     }
     void dfs2(int u, int parent) {
-        for (int v : edge[u]) {
+        for (auto& p : edge[u]) {
+            int v;
+            long long w;
+            tie(v, w) = p;
+            
             if (v == parent) continue;
             
-            dist[v] = dist[u] + weight[{u, v}] * (N - 2 * size[v]);
+            dist[v] = dist[u] + w * (N - 2 * size[v]);
             dfs2(v, u);
         }
         
