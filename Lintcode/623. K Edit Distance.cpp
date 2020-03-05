@@ -2,7 +2,7 @@ class TrieNode {
 public:
     bool flag;
     unordered_map<char, TrieNode*> next;
-    TrieNode(): flag(false) {};
+    TrieNode() : flag(false) {};
 };
 
 class Solution {
@@ -13,58 +13,58 @@ public:
      * @param k: An integer
      * @return: output all the strings that meet the requirements
      */
-    int k;
     vector<string> kDistance(vector<string> &words, string &target, int k) {
-        this->k = k;
-        TrieNode* root = new TrieNode();
-        for (int i = 0; i < words.size(); i++) {
-            build(words[i], root);
-        }
+        init(words);
+        const int N = target.size();
+        vector<int> f(N + 1);
+        for (int i = 0; i <= N; i++) f[i] = i;
         
-        vector<int> f(target.size() + 1);
-        for (int i = 0; i <= target.size(); i++) f[i] = i;
-        
-        dfs(target, "", root, f);
+        dfs("", target, k, f, root);
         return answer;
     }
 private:
-    void build(const string& s, TrieNode* root) {
-        TrieNode* current = root;
-        for (int i = 0; i < s.size(); i++) {
-            if (!current->next.count(s[i])) {
-                current->next[s[i]] = new TrieNode();
-            }
-            current = current->next[s[i]];
-        }
-        current->flag = true;
-    }
-    void dfs(const string& target, const string& str, TrieNode* root, const vector<int>& f) {
-        if (root->flag && f[target.size()] <= k) {
-            answer.push_back(str);
+    TrieNode* root;
+    vector<string> answer;
+    void dfs(const string& cur, const string& target, const int k, const vector<int>& f, const TrieNode* u) {
+        const int N = target.size();
+        if (u->flag && f[N] <= k) {
+            answer.push_back(cur);
         }
         
-        for (auto& p : root->next) {
+        for (const auto& p : u->next) {
             char ch;
-            TrieNode* n;
-            tie(ch, n) = p;
+            TrieNode* nxt;
+            tie(ch, nxt) = p;
             
-            vector<int> g = f;
-            for (int i = 0; i < g.size(); i++) g[i]++;
-            for (int i = 0; i < g.size(); i++) {
-                if (i >= 1) {
-                    g[i] = min(g[i], f[i - 1] + 1);
-                }
+            vector<int> g(N + 1, 99999999);
+            for (int i = 0; i <= N; i++) {
+                if(i >= 1) g[i] = min(g[i], g[i - 1] + 1);
                 g[i] = min(g[i], f[i] + 1);
-            }
-            for (int i = 1; i < g.size(); i++) {
-                g[i] = min(g[i], g[i - 1] + 1);
-                if (target[i - 1] == ch) {
+                if(i >= 1) g[i] = min(g[i], f[i - 1] + 1);
+                
+                if (i >= 1 && ch == target[i - 1]) {
                     g[i] = min(g[i], f[i - 1]);
                 }
             }
             
-            dfs(target, str + ch, n, g);
+            dfs(cur + ch, target, k, g, nxt);
         }
     }
-    vector<string> answer;
+    void init(const vector<string> &words) {
+        root = new TrieNode();
+        for (const string& word : words) {
+            insert(word);
+        }
+    }
+    void insert(const string& word) {
+        const int N = word.size();
+        TrieNode* cur = root;
+        for (int i = 0; i < N; i++) {
+            if (!cur->next.count(word[i])) {
+                cur->next[word[i]] = new TrieNode();
+            }
+            cur = cur->next[word[i]];
+        }
+        cur->flag = true;
+    }
 };
