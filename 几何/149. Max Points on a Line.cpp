@@ -1,3 +1,9 @@
+// 三点共线的条件：下面的行列式计算结果为0
+// | x1 x2 1 |
+// | y1 y2 1 | = 0
+// | z1 z2 1 |
+
+
 class Solution {
 public:
     int maxPoints(vector<vector<int>>& oldPoints) {
