@@ -2,7 +2,6 @@ class Solution {
 public:
     bool containsCycle(vector<vector<char>>& grid) {
         n = grid.size(), m = grid[0].size();
-        memset(inStack, 0, sizeof inStack);
         memset(visited, 0, sizeof visited);
         this->grid = grid;
         
@@ -15,7 +14,7 @@ public:
     }
 private:
     int n, m;
-    bool inStack[505][505], visited[505][505];
+    bool visited[505][505];
     vector<vector<char>> grid;
     
     bool pointValid(int i, int j) {
@@ -24,7 +23,6 @@ private:
     
     bool dfs(int i, int j, int pi, int pj) {
         if (visited[i][j]) return false;
-        inStack[i][j] = true;
         visited[i][j] = true;
         
         const int dx[] = {0, 0, -1, 1};
@@ -36,11 +34,10 @@ private:
             if (pointValid(nx, ny) && grid[nx][ny] == grid[i][j]) {
                 if (nx == pi && ny == pj) continue;
                 
-                if (inStack[nx][ny] || dfs(nx, ny, i, j)) return true;
+                if (visited[nx][ny] || dfs(nx, ny, i, j)) return true;
             }
         }
         
-        inStack[i][j] = false;
         return false;
     }
 };
