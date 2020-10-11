@@ -20,7 +20,7 @@ private:
         
         if (s1[i] == s2[j]) return dfs(i + 1, j - 1, v1, v2);
         else {
-            if (a == b) return false;
+            if (v1 == v2) return false;
             if (rev_s1[i] == s2[j] && dfs(i, j, v1 ^ 1, v2)) return true;
             if (rev_s2[j] == s1[i] && dfs(i, j, v1, v2 ^ 1)) return true;
         }
