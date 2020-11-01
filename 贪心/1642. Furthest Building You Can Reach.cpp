@@ -1,4 +1,4 @@
-class Solution {
+iclass Solution {
 public:
     int furthestBuilding(vector<int>& heights, int bricks, int ladders) {
         const int n = heights.size();
@@ -19,7 +19,7 @@ public:
                     ans = max(ans, i);
                 } else if (ladders > 0) {
                     ans = max(ans, i);
-                    if (!heap.empty()) {
+                    if (!heap.empty() && bricks + heap.top() >= delta) {
                         bricks += heap.top();
                         heap.pop();
                         ladders--;
