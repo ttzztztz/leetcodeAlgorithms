@@ -1,34 +1,35 @@
 class Solution {
 public:
     vector<vector<int>> permuteUnique(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        const int N = nums.size();
-        visited = vector<bool>(N, false);
-        dfs(nums, 0);
-        return answer;
+        this->nums = nums;
+        sort(this->nums.begin(), this->nums.end());
+        n = nums.size();
+        visited = vector<bool>(n, false);
+        finalState = vector<bool>(n, true);
+        dfs();
+        return ans;
     }
 private:
-    vector<vector<int>> answer;
-    vector<int> tmp;
-    vector<bool> visited;
+    vector<vector<int>> ans;
+    vector<int> cur, nums;
+    int n;
+    vector<bool> visited, finalState;
     
-    void dfs(const vector<int>& nums, int i) {
-        if (tmp.size() == nums.size()) {
-            answer.push_back(tmp);
+    void dfs() {
+        if (visited == finalState) {
+            ans.push_back(cur);
             return;
         }
-        if (i > nums.size()) return;
         
-        for (int i = 0; i < nums.size(); i++) {
-            if (visited[i]) continue;
-            
-            if (i >= 1 && (!visited[i - 1] && nums[i - 1] == nums[i])) continue;
-            
-            visited[i] = true;
-            tmp.push_back(nums[i]);
-            dfs(nums, i + 1);
-            tmp.pop_back();
-            visited[i] = false;
+        for (int k = 0; k < n; k++) {
+            if (visited[k]) continue;
+
+            if (k - 1 >= 0 && !visited[k - 1] && nums[k] == nums[k - 1]) continue;
+            cur.push_back(nums[k]);
+            visited[k] = true;
+            dfs();
+            visited[k] = false;
+            cur.pop_back();
         }
     }
 };
