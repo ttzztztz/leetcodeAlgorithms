@@ -1,31 +1,20 @@
 class Solution {
 public:
     int longestMountain(vector<int>& A) {
-        const int N = A.size();
-        if (N < 3) {
-            return 0;
+        const int n = A.size();
+        
+        int ans = 0;
+        for (int l = 0; l < n;) {
+            int r = l;
+            
+            bool a = false, b = false;
+            while (r + 1 < n && A[r] < A[r + 1]) a = true, r++;
+            while (r + 1 < n && A[r] > A[r + 1]) b = true, r++;
+            
+            if (a && b) ans = max(ans, r - l + 1);
+            l = max(l + 1, r);
         }
-
-        int answer = 0, index = 0;
-        while (index < N) {
-            int end = index;
-            while (end + 1 < N && A[end] < A[end + 1]) {
-                end++;
-            }
-
-            if (index + 1 <= end && end + 1 < N) {
-                while (end + 1 < N && A[end] > A[end + 1]) {
-                    end++;
-                }
-
-                if (end - index + 1 >= 3) {
-                    answer = max(answer, end - index + 1);
-                }
-            }
-
-            index = max(index + 1, end);
-        }
-
-        return answer;
+        
+        return ans;
     }
 };
