@@ -1,40 +1,27 @@
 class Solution {
 public:
-    /**
-     * @param sweetness: an integer array
-     * @param K: an integer
-     * @return:  return the maximum total sweetness of the piece
-     */
-    int solve(const vector<int>& sweetness, int k) {
-        int answer = 0, current = 0;
-        
-        for (int i : sweetness) {
-            current += i;
-            if (current >= k) {
-                answer++;
-                current = 0;
-            }
-        }
-        
-        return answer;
-    }
-    int maximizeSweetness(vector<int> &sweetness, int K) {
-        const int N = sweetness.size();
-        int left = *min_element(sweetness.begin(), sweetness.end()), right = 0;
-        
-        if (K >= N) return 0;
-        K++;
-        for (int i : sweetness) right += i;
-        
-        while (left <= right) {
-            const int mid = (left + right) >> 1;
-            if (solve(sweetness, mid) >= K) {
-                left = mid + 1;
+    int maximizeSweetness(vector<int>& sweetness, int K) {
+        int l = *min_element(sweetness.begin(), sweetness.end()), r = accumulate(sweetness.begin(), sweetness.end(), 0);
+        while (l <= r) {
+            const int mid = (l + r) / 2;
+            if (Solve(sweetness, mid) >= K + 1) {
+                l = mid + 1;
             } else {
-                right = mid - 1;
+                r = mid - 1;
             }
         }
-        
-        return left - 1;
+        return l - 1;
+    }
+private:
+    int Solve(const vector<int>& sweetness, int min_chunk) {
+        int ans = 0, sum = 0;
+        for (int i = 0; i < sweetness.size(); i++) {
+            sum += sweetness[i];
+            if (sum >= min_chunk) {
+                sum = 0;
+                ans++;
+            }
+        }
+        return ans;
     }
 };

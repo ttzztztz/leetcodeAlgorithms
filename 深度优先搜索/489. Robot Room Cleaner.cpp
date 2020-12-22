@@ -16,31 +16,30 @@
  *     void clean();
  * };
  */
- 
+
 class Solution {
 public:
     void cleanRoom(Robot& robot) {
-        dfs(robot, 0, 0, 0);
+        visited_.insert(Hash(0, 0));
+        Dfs(0, 0, 0, robot);
     }
 private:
-    unordered_set<string> visited;
-    string ID(int i, int j) {
-        string answer;
-        answer += to_string(i);
-        answer += ',';
-        answer += to_string(j);
-        return answer;
+    string Hash(int i, int j) {
+        return to_string(i) + "," + to_string(j);
     }
-    void dfs(Robot& robot, int i, int j, int dir) {
-        const int dx[] = {0, 1, 0, -1};
-        const int dy[] = {1, 0, -1, 0};
+    unordered_set<string> visited_;
+    
+    void Dfs(int i, int j, int dir, Robot& robot) {
+        robot.clean();
+        const int kDx[] = {0, 1, 0, -1};
+        const int kDy[] = {1, 0, -1, 0};
         
         for (int k = 0; k < 4; k++) {
-            const int nx = i + dx[(dir + k) % 4], ny = j + dy[(dir + k) % 4];
-            if (!visited.count(ID(nx, ny)) && robot.move()) {
-                visited.insert(ID(nx, ny));
-                
-                dfs(robot, nx, ny, (dir + k) % 4);
+            const int nx = i + kDx[(dir + k) % 4], ny = j + kDy[(dir + k) % 4];
+            
+            if (!visited_.count(Hash(nx, ny)) && robot.move()) {
+                visited_.insert(Hash(nx, ny));
+                Dfs(nx, ny, (dir + k) % 4, robot);
                 robot.turnRight();
                 robot.turnRight();
                 robot.move();
