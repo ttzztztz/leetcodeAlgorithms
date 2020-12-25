@@ -1,35 +1,39 @@
 class Solution {
 public:
-    /**
-     * @param costs: n x k cost matrix
-     * @return: an integer, the minimum cost to paint all houses
-     */
-    int minCostII(vector<vector<int>> &costs) {
-        if (costs.size() == 0) return 0;
+    int minCostII(vector<vector<int>>& costs) {
+        if (costs.empty()) return 0;
+
+        const int n = costs.size(), k = costs[0].size();
+        vector<vector<int>> f(n, vector<int>(k + 2, numeric_limits<int>::max())), g(n, vector<int>(k + 2, numeric_limits<int>::max())), h(n, vector<int>(k + 2, numeric_limits<int>::max()));
         
-        const int N = costs.size(), K = costs[0].size();
-        vector<vector<int>> dp(N + 1, vector<int>(K + 2, 999999));
-        vector<vector<int>> f(N + 1, vector<int>(K + 2, 999999));
-        vector<vector<int>> g(N + 1, vector<int>(K + 2, 999999));
+        for (int j = 1; j <= k; j++) {
+            f[0][j] = costs[0][j - 1];
+        }
+        for (int j = 1; j <= k; j++) {
+            g[0][j] = min(g[0][j - 1], f[0][j]);
+        }
+        for (int j = k; j >= 1; j--) {
+            h[0][j] = min(h[0][j + 1], f[0][j]);
+        }
         
-        for (int i = 1; i <= K; i++) dp[0][i] = f[0][i] = g[0][i] = 0;
-        
-        for (int i = 1; i <= N; i++) {
-            for (int k = 1; k <= K; k++) {
-                dp[i][k] = min(dp[i][k], min(f[i - 1][k - 1], g[i - 1][k + 1]) + costs[i - 1][k - 1]);
-                
-                f[i][k] = min(f[i][k - 1], dp[i][k]);
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j <= k; j++) {
+                f[i][j] = min(g[i - 1][j - 1], h[i - 1][j + 1]) + costs[i][j - 1];
             }
             
-            for (int k = K; k >= 0; k--) {
-                g[i][k] = min(g[i][k + 1], dp[i][k]);
+            for (int j = 1; j <= k; j++) {
+                g[i][j] = min(g[i][j - 1], f[i][j]);
+            }
+            
+            for (int j = k; j >= 1; j--) {
+                h[i][j] = min(h[i][j + 1], f[i][j]);
             }
         }
         
-        int answer = 999999;
-        for (int i = 1; i <= K; i++) {
-            answer = min(answer, dp[N][i]);
+        int ans = numeric_limits<int>::max();
+        for (int i = 1; i <= k; i++) {
+            ans = min(ans, f[n - 1][i]);
         }
-        return answer;
+        return ans;
     }
 };
