@@ -1,23 +1,17 @@
 class Solution {
 public:
-    /**
-     * @param target: a target string 
-     * @param dictionary: a set of strings in a dictionary
-     * @return: an abbreviation of the target string with the smallest possible length
-     */
-    string minAbbreviation(string &target, vector<string> &dictionary) {
-        const int N = target.size(), mask = (1 << N) - 1;
-        
-        unordered_set<int> maskSet;
-        for (const string& s : dictionary) {
-            if (s.size() != target.size()) continue;
-            maskSet.insert(getMask(target, s));
+    string minAbbreviation(string target, vector<string>& dictionary) {
+        const int n = target.size();
+        unordered_set<int> bitset;
+        for (const string& word : dictionary) {
+            if (word.size() != target.size()) continue;
+            bitset.insert(str_difference(target, word));
         }
         
-        string answer;
-        for (int state = 1; state <= mask; state++) {
+        string ans;
+        for (int state = 0; state < (1 << n); state++) {
             bool valid = true;
-            for (int j : maskSet) {
+            for (const int j : bitset) {
                 if ((state & j) == state) {
                     valid = false;
                     break;
@@ -25,35 +19,69 @@ public:
             }
             if (!valid) continue;
             
-            string cur = generate(state, target);
-            if (answer.empty() || cur.size() < answer.size()) answer = cur;
-        }
-        return answer;
-    }
-private:
-    int getMask(const string& target, const string& word) {
-        int answer = 0;
-        const int N = target.size();
-        for (int i = 0; i < N; i++) {
-            if (target[i] == word[i]) answer |= 1 << i;
-        }
-        return answer;
-    }
-    string generate(const int mask, const string& target) {
-        string answer;
-        int cnt0 = 0;
-        for (int i = 0; i < target.size(); i++) {
-            if (mask & (1 << i)) {
-                if (cnt0 > 0) {
-                    answer += to_string(cnt0);
-                    cnt0 = 0;
-                }
-                answer += target[i];
-            } else {
-                cnt0++;
+            const int cur_size = str_len(target, state);
+            if (ans.empty() || cur_size < ans.size()) {
+                ans = str_generate(target, state);
             }
         }
-        if (cnt0 > 0) answer += to_string(cnt0);
-        return answer;
+        return ans;
+    }
+private:
+    int str_difference(const string& target, const string& word) {
+        int state = 0;
+        const int n = target.size();
+        for (int j = 0; j < n; j++) {
+            if (word[j] == target[j]) {
+                state |= (1 << j);
+            }
+        }
+        return state;
+    }
+    
+    int len(int hidden) {
+        int ans = 0;
+        while (hidden) {
+            ans++;
+            hidden /= 10;
+        }
+        return ans;
+    }
+    
+    int str_len(const string& target, const int state) {
+        int ans = 0;
+        
+        int hidden = 0;
+        const int n = target.size();
+        for (int i = 0; i < n; i++) {
+            if (state & (1 << i)) {
+                if (hidden > 0) ans += len(hidden);
+                ans ++;
+                hidden = 0;
+            } else {
+                hidden++;
+            }
+        }
+        if (hidden > 0) ans += len(hidden);
+        
+        return ans;
+    }
+    
+    string str_generate(const string& target, const int state) {
+        string ans;
+        
+        int hidden = 0;
+        const int n = target.size();
+        for (int i = 0; i < n; i++) {
+            if (state & (1 << i)) {
+                if (hidden > 0) ans += to_string(hidden);
+                ans += target[i];
+                hidden = 0;
+            } else {
+                hidden++;
+            }
+        }
+        if (hidden > 0) ans += to_string(hidden);
+        
+        return ans;
     }
 };
