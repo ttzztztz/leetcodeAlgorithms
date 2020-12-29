@@ -1,76 +1,47 @@
 class Solution {
 public:
-    int N = 0;
-    vector<pair<int, int>> upper, lower;
-
-    int dfs(vector<int>& A, vector<vector<int>>& dp, int step, int index) {
-        if (index == N - 1) {
-            return true;
-        }
-        if (dp[step][index] != -1) {
-            return dp[step][index];
-        }
-
-        const int current = A[index];
-        int answer = 0;
-        if (step == 1) {
-            auto it = std::lower_bound(upper.begin(), upper.end(), std::make_pair(current, 0), [](const pair<int, int>& $1, const pair<int, int>& $2)->bool{
-                return $1.first < $2.first;
-            });
-
-            while (it != upper.end() && it->second <= index) {
-                it++;
-            }
-
-            if (it != upper.end()) {
-                answer |= dfs(A, dp, !step, it->second);
-            }
-        } else {
-            auto it = std::upper_bound(lower.begin(), lower.end(), std::make_pair(current, 0), [](const pair<int, int>& $1, const pair<int, int>& $2)->bool{
-                return $1.first < $2.first;
-            });
-
-            it--;
-            while (it >= lower.begin() && it->second <= index) {
-                it--;
-            }
-
-            if (it >= lower.begin()) {
-                answer |= dfs(A, dp, !step, it->second);
-            }
-        }
-        return dp[step][index] = (answer == 1);
-    }
     int oddEvenJumps(vector<int>& A) {
-        this->N = A.size();
-        vector<vector<int>> dp(2, vector<int>(20005, -1));
-
-        for (int i = 0; i < A.size(); i++) {
-            upper.emplace_back(A[i], i);
-            lower.emplace_back(A[i], i);
-        }
-
-        sort(upper.begin(), upper.end(), [](const pair<int, int>& $1, const pair<int, int>& $2)->bool {
-            if ($1.first == $2.first) {
-                return $1.second < $2.second;
-            } else {
-                return $1.first < $2.first;
+        if (A.empty()) return 0;
+        vector<int> nxt_pos_odd(A.size(), -1);
+        vector<int> nxt_pos_even(A.size(), -1);
+        
+        set<int> numbers(A.begin(), A.end());
+        unordered_map<int, deque<int>> all_occur;
+        for (int i = 0; i < A.size(); i++) all_occur[A[i]].push_back(i);
+        
+        const int n = A.size();
+        for (int i = 0; i < n - 1; i++) {
+            all_occur[A[i]].pop_front();
+            if (all_occur[A[i]].empty()) numbers.erase(A[i]);
+            
+            auto it1 = numbers.lower_bound(A[i]);
+            if (it1 != numbers.end()) {
+                nxt_pos_odd[i] = all_occur[*it1].front();
             }
-        });
-        sort(lower.begin(), lower.end(), [](const pair<int, int>& $1, const pair<int, int>& $2)->bool {
-            if ($1.first == $2.first) {
-                return $1.second > $2.second;
-            } else {
-                return $1.first < $2.first;
+            
+            if (it1 != numbers.begin() && 
+                (it1 == numbers.end() || *it1 > A[i])) {
+                it1--;
             }
-        });
-
-        int answer = 0;
-        for (int i = 0; i < N; i++) {
-            if (dfs(A, dp, 1, i)) {
-                answer++;
+            
+            if (A[i] >= *it1) {
+                nxt_pos_even[i] = all_occur[*it1].front();
             }
         }
-        return answer;
+        vector<vector<int>> f(A.size(), vector<int>(2, 0));
+        f[n - 1][1] = f[n - 1][0] = 1;
+        int ans = 1;
+        for (int i = n - 2; i >= 0; i--) {
+            if (nxt_pos_odd[i] != -1) {
+                f[i][1] |= f[nxt_pos_odd[i]][0];
+            }
+            
+            if (nxt_pos_even[i] != -1) {
+                f[i][0] |= f[nxt_pos_even[i]][1];
+            }
+            
+            if (f[i][1]) ans++;
+        }
+        return ans;
     }
 };
