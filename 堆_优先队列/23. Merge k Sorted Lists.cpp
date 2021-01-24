@@ -3,48 +3,43 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class ListNodeItem {
-public:
-    int val;
-    ListNode *current;
-    ListNodeItem() : val(0), current(nullptr) {};
-    ListNodeItem(int v, ListNode* n) : val(v), current(n) {};
-    bool operator< (const ListNodeItem& $2) const {
-        return this->val > $2.val;
+
+struct Comp {
+    bool operator()(ListNode* lhs, ListNode* rhs) const {
+        return lhs->val > rhs->val;
     }
 };
 
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        ListNode* head = nullptr;
-        ListNode* tail = nullptr;
-        priority_queue<ListNodeItem> queue;
-        for (auto& node : lists) {
-            if (nullptr != node) {
-                queue.emplace(node->val, node);
+        priority_queue<ListNode*, vector<ListNode*>, Comp> heap;
+        for (auto& list : lists) {
+            if (list) heap.push(list);
+        }
+        
+        ListNode* flag = new ListNode(0);
+        ListNode* cur = flag;
+        while (!heap.empty()) {
+            ListNode* u = heap.top();
+            heap.pop();
+            
+            cur->next = u;
+            cur = cur->next;
+            
+            ListNode* next = u->next;
+            if (next) {
+                heap.push(next);
             }
         }
-        while (!queue.empty()) {
-            ListNodeItem item = queue.top();
-            queue.pop();
-
-            if (nullptr != item.current->next) {
-                queue.emplace(item.current->next->val, item.current->next);
-            }
-
-            if (head == nullptr) {
-                head = item.current;
-                tail = head;
-            } else {
-                tail->next = item.current;
-                tail = item.current;
-            }
-
-        }
-        return head;
+        
+        ListNode* ans = flag->next;
+        delete flag;
+        return ans;
     }
 };
