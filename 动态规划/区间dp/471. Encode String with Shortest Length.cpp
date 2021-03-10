@@ -2,29 +2,30 @@ class Solution {
 public:
     string encode(string s) {
         const int n = s.size();
-        vector<vector<string>> dp(n + 1, vector<string>(n + 1));
-        
+        string f[n + 1][n + 1];
         for (int len = 1; len <= n; len++) {
             for (int i = 0; i + len - 1 < n; i++) {
                 const int j = i + len - 1;
-                dp[i][j] = Compress(s.substr(i, len));
+                f[i][j] = s.substr(i, len);
+
                 for (int k = i; k + 1 <= j; k++) {
-                    if (Compress(dp[i][k] + dp[k + 1][j]).size() < dp[i][j].size()) {
-                        dp[i][j] = Compress(dp[i][k] + dp[k + 1][j]);
+                    if (f[i][j].size() > (f[i][k] + f[k + 1][j]).size()) {
+                        f[i][j] = f[i][k] + f[k + 1][j];
                     }
                 }
+                
+                auto [compress_len, repeat] = can_compress(s.substr(i, len));
+                string tmp = to_string(repeat) + "[" + f[i][i + compress_len - 1] + "]";
+                if (tmp.size() < f[i][j].size()) f[i][j] = tmp;
             }
         }
-        return dp[0][n - 1];
+        return f[0][n - 1];
     }
 private:
-    string Compress(const string& str) {
-        string new_str = str + str;
-        const int idx = new_str.find(str, 1);
-        const int len = idx;
-        string compressed = to_string(str.size() / len) + "[" + str.substr(0, len) + "]";
-        
-        if (compressed.size() < str.size()) return compressed;
-        else return str;
+    typedef pair<int, int> PII;
+    PII can_compress(const string& s) {
+        string t = s + s;
+        const int len = t.find(s, 1);
+        return { len, s.size() / len };
     }
 };
