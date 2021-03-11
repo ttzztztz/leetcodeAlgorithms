@@ -8,17 +8,21 @@
 - 单调队列
   1. [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/)
   2. [683. K Empty Slots](https://leetcode.com/problems/k-empty-slots/)
+- 双指针
+  1. [443. String Compression](https://leetcode.com/problems/string-compression/)
 - 快速选择
   1. [215. Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/)
 - 数组排序
   1. [912. Sort an Array](https://leetcode.com/problems/sort-an-array/)
 - KMP
   1. [1392. Longest Happy Prefix](https://leetcode.com/problems/longest-happy-prefix/)
-- 二叉树 / Morris 遍历
+- 二叉树的遍历 / Morris 遍历
   1. [94. Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal)
   2. [144. Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/)
   3. [145. Binary Tree Postorder Traversal](https://leetcode.com/problems/binary-tree-postorder-traversal)
   4. [102. Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal)
+- 二叉搜索树
+  1. [285. Inorder Successor in BST](https://leetcode.com/problems/inorder-successor-in-bst/)
 - 字典树
   1. [208. Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/)
 - 区间问题
@@ -39,7 +43,7 @@
   - 一般dp
     1. [10. Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching)
     2. [44. Wildcard Matching](https://leetcode.com/problems/wildcard-matching/)
-  - 悬线法
+  - 悬线dp
     1. [85. Maximal Rectangle](https://leetcode.com/problems/maximal-rectangle/)
 - 曼哈顿距离
   1. [1478. Allocate Mailboxes](https://leetcode.com/problems/allocate-mailboxes/)
@@ -65,3 +69,8 @@
 - 随机化
   - 蓄水池抽样
     1. [382. Linked List Random Node](https://leetcode.com/problems/linked-list-random-node/)
+- 计算几何
+  - 凸包
+    1. [587. Erect the Fence](https://leetcode.com/problems/erect-the-fence/)
+  - 最近点对
+    1. [Lintcode 966. 平面最近点对](https://www.lintcode.com/problem/966/)
