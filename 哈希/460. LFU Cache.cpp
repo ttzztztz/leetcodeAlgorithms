@@ -2,74 +2,66 @@
 
 class LFUCache {
 public:
-    LFUCache(int capacity) {
-        this->cap = capacity;
-    }
-    
+    LFUCache(int capacity) : cap(capacity) {}
     int get(int key) {
-        if (cap == 0 || !storage.count(key)) return -1;
-        int val, freq;
-        list<int>::iterator it;
-
-        return _get(key);
+        if (cap == 0) return -1;
+        // cout << "get " << key << endl;
+        if (kv.count(key)) {
+            auto& val = kv[key];
+            freq_map[val.freq].erase(val.it);
+            freq_map[val.freq + 1].push_back(key);
+            val.it = --freq_map[val.freq + 1].end();
+            if (val.freq == min_freq && freq_map[val.freq].empty()) {
+                min_freq++;
+            }
+            val.freq++;
+            return val.data;
+        } else {
+            return -1;
+        }
     }
     
     void put(int key, int value) {
         if (cap == 0) return;
-        
-        if (storage.count(key)) { // exist
-            int val, freq;
-            list<int>::iterator it;
-            _get(key);
-            
-            tie(val, freq, it) = storage[key];
-            storage[key] = {value, freq, it};
-        } else { // not exist
-            if (storage.size() + 1 > cap) {
-                clean();
+        // cout << "put " << key << ", " << value << endl;
+        if (kv.count(key)) {
+            auto& val = kv[key];
+            freq_map[val.freq].erase(val.it);
+            freq_map[val.freq + 1].push_back(key);
+            val.it = --freq_map[val.freq + 1].end();
+            if (val.freq == min_freq && freq_map[val.freq].empty()) {
+                min_freq++;
             }
-            
-            if (2 >= freq_collection.size()) freq_collection.resize(2);
-            freq_collection[1].push_back(key);
-            auto new_it = --freq_collection[1].end();
-            
-            storage[key] = { value, 1, new_it };
+            val.freq++;
+            val.data = value;
+        } else {
+            if (kv.size() == cap) {
+                int clean_key = freq_map[min_freq].front();
+                kv.erase(clean_key);
+                freq_map[min_freq].pop_front();
+            }
+
+            Value val(value);
+            freq_map[val.freq].push_back(key);
+            val.it = --freq_map[val.freq].end();
+            kv[key] = val;
             min_freq = 1;
         }
     }
 private:
-    typedef tuple<int, int, list<int>::iterator> Data;
-    unordered_map<int, Data> storage;
-    vector<list<int>> freq_collection;
-    int min_freq = numeric_limits<int>::max();
-    int cap;
-    
-    int _get(int key) {
-        int val, freq;
+    class Value {
+    public:
+        int data, freq;
         list<int>::iterator it;
+        
+        Value() : data(0), freq(1) {};
+        Value(int d) : data(d), freq(1) {};
+    };
 
-        tie(val, freq, it) = storage[key];
-        freq_collection[freq].erase(it);
-        if (freq + 1 >= freq_collection.size()) freq_collection.resize(freq + 2);
-        freq_collection[freq + 1].push_back(key);
-        auto new_it = --freq_collection[freq + 1].end();
-        storage[key] = { val, freq + 1, new_it };
-        
-        if (min_freq == freq && freq_collection[min_freq].empty()) {
-            min_freq = freq + 1;
-        } 
-        
-        return val;
-    }
-    
-    void clean() {
-        auto& v = freq_collection[min_freq];
-        auto remove_it = freq_collection[min_freq].begin();
-        const int key = *remove_it;
-            
-        v.erase(remove_it);
-        storage.erase(key);
-    }
+    unordered_map<int, list<int>> freq_map;
+    unordered_map<int, Value> kv;
+    int min_freq = 1;
+    int cap;
 };
 
 /**
