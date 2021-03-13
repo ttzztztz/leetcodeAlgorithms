@@ -39,6 +39,9 @@
   1. [803. Bricks Falling When Hit](https://leetcode.com/problems/bricks-falling-when-hit/)
   2. [765. Couples Holding Hands](https://leetcode.com/problems/couples-holding-hands/)
 - 动态规划
+  - 一般 dp
+    1. [10. Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching)
+    2. [44. Wildcard Matching](https://leetcode.com/problems/wildcard-matching/)
   - 区间 dp
     1. [471. Encode String with Shortest Length](https://leetcode.com/problems/encode-string-with-shortest-length/)
   - 背包 dp
@@ -46,9 +49,6 @@
     2. [1049. Last Stone Weight II](https://leetcode.com/problems/last-stone-weight-ii/)
   - 子集 dp
     1. [465. Optimal Account Balancing](https://leetcode.com/problems/optimal-account-balancing/)
-  - 一般 dp
-    1. [10. Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching)
-    2. [44. Wildcard Matching](https://leetcode.com/problems/wildcard-matching/)
   - 悬线 dp
     1. [85. Maximal Rectangle](https://leetcode.com/problems/maximal-rectangle/)
   - 概率 dp
