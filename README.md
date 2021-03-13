@@ -88,6 +88,8 @@
 - 树状数组
   1. [493. Reverse Pairs](https://leetcode.com/problems/reverse-pairs/)
   2. [1782. Count Pairs Of Nodes](https://leetcode.com/problems/count-pairs-of-nodes/)
+- 链表
+  1. [287. Find the Duplicate Number](https://leetcode.com/problems/find-the-duplicate-number/)
 
 ## 冷门问题
 
