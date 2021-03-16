@@ -68,6 +68,7 @@
 - 矩阵相关
   1. [1504. Count Submatrices With All Ones](https://leetcode.com/problems/count-submatrices-with-all-ones/)
   2. [1727. Largest Submatrix With Rearrangements](https://leetcode.com/problems/largest-submatrix-with-rearrangements/)
+  3. [1277. Count Square Submatrices with All Ones](https://leetcode.com/problems/count-square-submatrices-with-all-ones)
 - 二分搜索
   1. [4. Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays/)
 - 二分答案
@@ -90,6 +91,10 @@
   2. [1782. Count Pairs Of Nodes](https://leetcode.com/problems/count-pairs-of-nodes/)
 - 链表
   1. [287. Find the Duplicate Number](https://leetcode.com/problems/find-the-duplicate-number/)
+- 栈
+  1. [32. Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses)
+- 树
+  1. [536. Construct Binary Tree from String](https://leetcode.com/problems/construct-binary-tree-from-string/)
 
 ## 冷门问题
 
