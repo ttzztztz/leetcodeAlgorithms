@@ -68,6 +68,7 @@
 - 矩阵相关
   1. [1504. Count Submatrices With All Ones](https://leetcode.com/problems/count-submatrices-with-all-ones/)
   2. [1727. Largest Submatrix With Rearrangements](https://leetcode.com/problems/largest-submatrix-with-rearrangements/)
+  3. [1277. Count Square Submatrices with All Ones](https://leetcode.com/problems/count-square-submatrices-with-all-ones)
 - 二分搜索
   1. [4. Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays/)
 - 二分答案
@@ -95,6 +96,10 @@
   1. [Nowcoder. 有趣的排序](https://www.nowcoder.com/questionTerminal/adc291e7e79f452c8b59243a5ce68d3a)
   2. [Lintcode 307. Transform String](https://www.lintcode.com/problem/307)
   3. [Lintcode 313. Minimum Insertion](https://www.lintcode.com/problem/313)
+- 栈
+  1. [32. Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses)
+- 树
+  1. [536. Construct Binary Tree from String](https://leetcode.com/problems/construct-binary-tree-from-string/)
 
 ## 冷门问题
 

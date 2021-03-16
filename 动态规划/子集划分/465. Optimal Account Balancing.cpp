@@ -2,31 +2,35 @@ class Solution {
 public:
     int minTransfers(vector<vector<int>>& transactions) {
         unordered_map<int, int> balance;
-        for (auto& v : transactions) {
-            balance[v[0]] -= v[2];
-            balance[v[1]] += v[2];
+        for (auto& t : transactions) {
+            balance[t[0]] += t[2];
+            balance[t[1]] -= t[2];
         }
         
         vector<int> nums;
-        for (auto [k, v] : balance) {
+        for (auto& [k, v] : balance) {
             if (v != 0) nums.push_back(v);
         }
-        
         const int n = nums.size();
-        vector<int> dp(1 << n, 0), sum(1 << n, 0);
-        for (int state = 1; state < (1 << n); state++) {
-            for (int i = 0; i < n; i++) {
-                if (!(state & (1 << i))) continue;
-                
-                sum[state] = sum[state ^ (1 << i)] + nums[i];
-                if (sum[state] == 0) {
-                    dp[state] = max(dp[state], dp[state ^ (1 << i)] + 1);
-                } else {
-                    dp[state] = max(dp[state], dp[state ^ (1 << i)]);
+
+        vector<int> f(1 << n, 0), sum(1 << n, 0);
+        for (int i = 0; i < (1 << n); i++) {
+            for (int j = 0; j < n; j++) {
+                if (i & (1 << j)) {
+                    sum[i] += nums[j];
                 }
             }
         }
         
-        return n - dp[(1 << n) - 1];
+        for (int i = 0; i < (1 << n); i++) {
+            for (int j = 0; j < n; j++) {
+                if (i & (1 << j)) {
+                    if (sum[i] == 0) f[i] = max(f[i], f[i ^ (1 << j)] + 1);
+                    else f[i] = max(f[i], f[i ^ (1 << j)]);
+                }
+            }
+        }
+        
+        return n - f[(1 << n) - 1];
     }
 };
