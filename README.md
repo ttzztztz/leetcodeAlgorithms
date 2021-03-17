@@ -96,6 +96,12 @@
   1. [32. Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses)
 - 树
   1. [536. Construct Binary Tree from String](https://leetcode.com/problems/construct-binary-tree-from-string/)
+  2. [222. Count Complete Tree Nodes](https://leetcode.com/problems/count-complete-tree-nodes/)
+  3. [958. Check Completeness of a Binary Tree](https://leetcode.com/problems/check-completeness-of-a-binary-tree/)
+- 图论
+  1. [207. Course Schedule](https://leetcode.com/problems/course-schedule/)
+  2. [1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree](https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/)
+  3. [399. Evaluate Division](https://leetcode.com/problems/evaluate-division/)
 
 ## 冷门问题
 
@@ -107,3 +113,5 @@
     1. [587. Erect the Fence](https://leetcode.com/problems/erect-the-fence/)
   - 最近点对
     1. [Lintcode 966. 平面最近点对](https://www.lintcode.com/problem/966/)
+- 图论
+  1. [1761. Minimum Degree of a Connected Trio in a Graph](https://leetcode.com/problems/minimum-degree-of-a-connected-trio-in-a-graph/)
