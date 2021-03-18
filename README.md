@@ -112,6 +112,10 @@
 - 随机化
   - 蓄水池抽样
     1. [382. Linked List Random Node](https://leetcode.com/problems/linked-list-random-node/)
+  - 拒绝采样法
+    1. [478. Generate Random Point in a Circle](https://leetcode.com/problems/generate-random-point-in-a-circle/)
+  - 概率分布
+    1. [478. Generate Random Point in a Circle](https://leetcode.com/problems/generate-random-point-in-a-circle/)
 - 计算几何
   - 凸包
     1. [587. Erect the Fence](https://leetcode.com/problems/erect-the-fence/)
