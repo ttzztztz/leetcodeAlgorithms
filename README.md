@@ -1,5 +1,22 @@
 # 经典问题整理
 
+## 基础问题
+
+- 二叉树的遍历 / Morris 遍历
+  1. [94. Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal)
+  2. [144. Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/)
+  3. [145. Binary Tree Postorder Traversal](https://leetcode.com/problems/binary-tree-postorder-traversal)
+  4. [102. Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal)
+  5. [589. N-ary Tree Preorder Traversal](https://leetcode.com/problems/n-ary-tree-preorder-traversal/)
+  6. [590. N-ary Tree Postorder Traversal](https://leetcode.com/problems/n-ary-tree-postorder-traversal/)
+- 二叉搜索树
+  1. [285. Inorder Successor in BST](https://leetcode.com/problems/inorder-successor-in-bst/)
+- 字典树
+  1. [208. Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/)
+- 排序 / 顺序统计
+  1. [215. Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/)
+  2. [912. Sort an Array](https://leetcode.com/problems/sort-an-array/)
+
 ## 非常经典
 
 - 单调栈
@@ -10,21 +27,10 @@
   2. [683. K Empty Slots](https://leetcode.com/problems/k-empty-slots/)
 - 双指针
   1. [443. String Compression](https://leetcode.com/problems/string-compression/)
-- 排序 / 顺序统计
-  1. [215. Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/)
-  2. [912. Sort an Array](https://leetcode.com/problems/sort-an-array/)
 - KMP
   1. [1392. Longest Happy Prefix](https://leetcode.com/problems/longest-happy-prefix/)
-- 二叉树的遍历 / Morris 遍历
-  1. [94. Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal)
-  2. [144. Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/)
-  3. [145. Binary Tree Postorder Traversal](https://leetcode.com/problems/binary-tree-postorder-traversal)
-  4. [102. Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal)
-- 二叉搜索树
-  1. [285. Inorder Successor in BST](https://leetcode.com/problems/inorder-successor-in-bst/)
 - 字典树
-  1. [208. Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/)
-  2. [1707. Maximum XOR With an Element From Array](https://leetcode.com/problems/maximum-xor-with-an-element-from-array/)
+  1. [1707. Maximum XOR With an Element From Array](https://leetcode.com/problems/maximum-xor-with-an-element-from-array/)
 - 区间问题
   1. [56. Merge Intervals](https://leetcode.com/problems/merge-intervals/)
   2. [57. Insert Interval](https://leetcode.com/problems/insert-interval/)
