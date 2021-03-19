@@ -102,6 +102,7 @@
   1. [536. Construct Binary Tree from String](https://leetcode.com/problems/construct-binary-tree-from-string/)
   2. [222. Count Complete Tree Nodes](https://leetcode.com/problems/count-complete-tree-nodes/)
   3. [958. Check Completeness of a Binary Tree](https://leetcode.com/problems/check-completeness-of-a-binary-tree/)
+  4. [285. Inorder Successor in BST](https://leetcode.com/problems/inorder-successor-in-bst/)
 - 图论
   1. [207. Course Schedule](https://leetcode.com/problems/course-schedule/)
   2. [1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree](https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/)
