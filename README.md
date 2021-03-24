@@ -27,6 +27,7 @@
   2. [683. K Empty Slots](https://leetcode.com/problems/k-empty-slots/)
 - 双指针
   1. [443. String Compression](https://leetcode.com/problems/string-compression/)
+  2. [31. Next Permutation](https://leetcode.com/problems/next-permutation/)
 - KMP
   1. [1392. Longest Happy Prefix](https://leetcode.com/problems/longest-happy-prefix/)
 - 字典树
@@ -130,3 +131,6 @@
     1. [Lintcode 966. 平面最近点对](https://www.lintcode.com/problem/966/)
 - 图论
   1. [1761. Minimum Degree of a Connected Trio in a Graph](https://leetcode.com/problems/minimum-degree-of-a-connected-trio-in-a-graph/)
+  2. [Luogu P3386 【模板】二分图最大匹配](https://www.luogu.com.cn/problem/P3386)
+- Manacher
+  1. [5. Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)
