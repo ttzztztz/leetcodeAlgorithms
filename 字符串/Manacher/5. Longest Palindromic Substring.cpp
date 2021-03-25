@@ -18,7 +18,7 @@ public:
                 right = i + r;
             }
             
-            if (r - 1> ans_r) {
+            if (r - 1 > ans_r) {
                 ans_r = r - 1;
                 ans_c = i;
             }
