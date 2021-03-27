@@ -124,6 +124,8 @@
     1. [478. Generate Random Point in a Circle](https://leetcode.com/problems/generate-random-point-in-a-circle/)
   - 概率分布
     1. [478. Generate Random Point in a Circle](https://leetcode.com/problems/generate-random-point-in-a-circle/)
+  - 洗牌算法
+    1. [384. Shuffle an Array](https://leetcode.com/problems/shuffle-an-array/)
 - 计算几何
   - 凸包
     1. [587. Erect the Fence](https://leetcode.com/problems/erect-the-fence/)
