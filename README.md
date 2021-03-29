@@ -114,6 +114,8 @@
   1. [207. Course Schedule](https://leetcode.com/problems/course-schedule/)
   2. [1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree](https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/)
   3. [399. Evaluate Division](https://leetcode.com/problems/evaluate-division/)
+- 数学
+  1. [1808. Maximize Number of Nice Divisors](https://leetcode.com/problems/maximize-number-of-nice-divisors/)
 
 ## 冷门问题
 
