@@ -138,3 +138,5 @@
   2. [Luogu P3386 【模板】二分图最大匹配](https://www.luogu.com.cn/problem/P3386)
 - Manacher
   1. [5. Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)
+- 高斯消元
+  1. [Luogu P3389 【模板】高斯消元法](https://www.luogu.com.cn/problem/P3389)
