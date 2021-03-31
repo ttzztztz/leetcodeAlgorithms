@@ -22,6 +22,7 @@
 - 单调栈
   1. [84. Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/)
   2. [962. Maximum Width Ramp](https://leetcode.com/problems/maximum-width-ramp/)
+  3. [795. Number of Subarrays with Bounded Maximum](https://leetcode.com/problems/number-of-subarrays-with-bounded-maximum/)
 - 单调队列
   1. [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/)
   2. [683. K Empty Slots](https://leetcode.com/problems/k-empty-slots/)
