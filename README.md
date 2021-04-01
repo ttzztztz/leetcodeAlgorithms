@@ -100,6 +100,8 @@
 - 链表
   1. [287. Find the Duplicate Number](https://leetcode.com/problems/find-the-duplicate-number/)
   2. [剑指 Offer 03. 数组中重复的数字](https://leetcode-cn.com/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/)
+  3. [234. Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list/)
+  4. [148. Sort List](https://leetcode.com/problems/sort-list/)
 - 等价变换
   1. [Nowcoder. 有趣的排序](https://www.nowcoder.com/questionTerminal/adc291e7e79f452c8b59243a5ce68d3a)
   2. [Lintcode 307. Transform String](https://www.lintcode.com/problem/307)
