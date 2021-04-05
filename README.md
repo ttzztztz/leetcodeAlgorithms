@@ -52,6 +52,7 @@
     2. [44. Wildcard Matching](https://leetcode.com/problems/wildcard-matching/)
   - 区间 dp
     1. [471. Encode String with Shortest Length](https://leetcode.com/problems/encode-string-with-shortest-length/)
+    2. [1039. Minimum Score Triangulation of Polygon](https://leetcode.com/problems/minimum-score-triangulation-of-polygon/)
   - 背包 dp
     1. [1774. Closest Dessert Cost](https://leetcode.com/submissions/detail/463384240/)
     2. [1049. Last Stone Weight II](https://leetcode.com/problems/last-stone-weight-ii/)
@@ -116,9 +117,14 @@
   3. [958. Check Completeness of a Binary Tree](https://leetcode.com/problems/check-completeness-of-a-binary-tree/)
   4. [285. Inorder Successor in BST](https://leetcode.com/problems/inorder-successor-in-bst/)
 - 图论
-  1. [207. Course Schedule](https://leetcode.com/problems/course-schedule/)
-  2. [1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree](https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/)
-  3. [399. Evaluate Division](https://leetcode.com/problems/evaluate-division/)
+  - 拓扑排序
+    1. [207. Course Schedule](https://leetcode.com/problems/course-schedule/)
+  - 连通性 / 并查集
+    1. [1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree](https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/)
+  - Floyed
+    1. [399. Evaluate Division](https://leetcode.com/problems/evaluate-division/)
+  - Dijkstra
+    1. [743. Network Delay Time](https://leetcode.com/problems/network-delay-time/)
 - 数学
   1. [1808. Maximize Number of Nice Divisors](https://leetcode.com/problems/maximize-number-of-nice-divisors/)
 
