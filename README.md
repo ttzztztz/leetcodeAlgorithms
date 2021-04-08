@@ -121,6 +121,7 @@
     1. [207. Course Schedule](https://leetcode.com/problems/course-schedule/)
   - 连通性 / 并查集
     1. [1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree](https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/)
+    2. [305. Number of Islands II](https://leetcode.com/problems/number-of-islands-ii/)
   - Floyed
     1. [399. Evaluate Division](https://leetcode.com/problems/evaluate-division/)
   - Dijkstra
