@@ -128,6 +128,8 @@
     1. [743. Network Delay Time](https://leetcode.com/problems/network-delay-time/)
 - 数学
   1. [1808. Maximize Number of Nice Divisors](https://leetcode.com/problems/maximize-number-of-nice-divisors/)
+- LCA
+  1. [1676. Lowest Common Ancestor of a Binary Tree IV](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree-iv)
 
 ## 冷门问题
 
