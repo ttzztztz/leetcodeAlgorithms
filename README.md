@@ -111,6 +111,7 @@
   3. [Lintcode 313. Minimum Insertion](https://www.lintcode.com/problem/313)
 - 栈
   1. [32. Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses)
+  2. [1190. Reverse Substrings Between Each Pair of Parentheses](https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/)
 - 树
   1. [536. Construct Binary Tree from String](https://leetcode.com/problems/construct-binary-tree-from-string/)
   2. [222. Count Complete Tree Nodes](https://leetcode.com/problems/count-complete-tree-nodes/)

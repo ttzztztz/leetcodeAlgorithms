@@ -1,20 +1,17 @@
 class Solution {
 public:
     bool canConstruct(string s, int k) {
-        const int N = s.size();
-        
-        if (k == N) return true;
-        if (k > N) return false;
-        
         unordered_map<char, int> appear;
+        const int n = s.size();
         for (const char ch : s) appear[ch]++;
-        
-        int oddNumber = 0;
-        for (auto& p : appear) {
-            if (p.second % 2 == 1) oddNumber++;
+        int odd = 0, even = 0;
+        for (auto& [k, v] : appear) {
+            if (v % 2 == 1) {
+                odd++;
+                v--;
+            }
+            even += v / 2;
         }
-        
-        if (oddNumber <= 1) return true;
-        else return k >= oddNumber;
+        return odd <= k && k <= n;
     }
 };
