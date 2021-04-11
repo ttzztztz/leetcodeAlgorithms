@@ -95,6 +95,8 @@
     1. [1199. Minimum Time to Build Blocks](https://leetcode.com/problems/minimum-time-to-build-blocks/)
   - 区间
     1. [1024. Video Stitching](https://leetcode.com/problems/video-stitching/)
+  - 其他
+    1. [767. Reorganize String](https://leetcode.com/problems/reorganize-string/)
 - 状态压缩
   1. [864. Shortest Path to Get All Keys](https://leetcode.com/problems/shortest-path-to-get-all-keys/)
 - 树状数组
