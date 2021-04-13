@@ -95,6 +95,8 @@
     1. [1199. Minimum Time to Build Blocks](https://leetcode.com/problems/minimum-time-to-build-blocks/)
   - 区间
     1. [1024. Video Stitching](https://leetcode.com/problems/video-stitching/)
+  - 其他
+    1. [767. Reorganize String](https://leetcode.com/problems/reorganize-string/)
 - 状态压缩
   1. [864. Shortest Path to Get All Keys](https://leetcode.com/problems/shortest-path-to-get-all-keys/)
 - 树状数组
@@ -111,16 +113,20 @@
   3. [Lintcode 313. Minimum Insertion](https://www.lintcode.com/problem/313)
 - 栈
   1. [32. Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses)
+  2. [1190. Reverse Substrings Between Each Pair of Parentheses](https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/)
 - 树
   1. [536. Construct Binary Tree from String](https://leetcode.com/problems/construct-binary-tree-from-string/)
   2. [222. Count Complete Tree Nodes](https://leetcode.com/problems/count-complete-tree-nodes/)
   3. [958. Check Completeness of a Binary Tree](https://leetcode.com/problems/check-completeness-of-a-binary-tree/)
   4. [285. Inorder Successor in BST](https://leetcode.com/problems/inorder-successor-in-bst/)
+- 深度优先搜索
+  1. [1254. Number of Closed Islands](https://leetcode.com/problems/number-of-closed-islands/)
 - 图论
   - 拓扑排序
     1. [207. Course Schedule](https://leetcode.com/problems/course-schedule/)
   - 最小生成树 / 并查集
     1. [1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree](https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/)
+    2. [305. Number of Islands II](https://leetcode.com/problems/number-of-islands-ii/)
   - Floyed
     1. [399. Evaluate Division](https://leetcode.com/problems/evaluate-division/)
   - Dijkstra
@@ -132,6 +138,11 @@
 - 数学
   - 最大公因数
     1. [1808. Maximize Number of Nice Divisors](https://leetcode.com/problems/maximize-number-of-nice-divisors/)
+- LCA
+  1. [1676. Lowest Common Ancestor of a Binary Tree IV](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree-iv)
+- 构造答案
+  1. [667. Beautiful Arrangement II](https://leetcode.com/problems/beautiful-arrangement-ii/)
+  2. [1253. Reconstruct a 2-Row Binary Matrix](https://leetcode.com/problems/reconstruct-a-2-row-binary-matrix/)
 
 ## 冷门问题
 
