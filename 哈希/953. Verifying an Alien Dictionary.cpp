@@ -1,20 +1,27 @@
 class Solution {
 public:
     bool isAlienSorted(vector<string>& words, string order) {
+        const int n = order.size();
         unordered_map<char, int> a;
-        for (int i = 0; i < order.size(); i++) {
-            a[order[i]] = i;
-        }
-        a[0] = -1;
+        for (int i = 0; i < n; i++) a[order[i]] = i;
         
-        vector<string> k = words;
-        sort(k.begin(), k.end(), [&](const string& $1, const string& $2) -> bool {
-            int ptr = 0;
-            while ($1[ptr] == $2[ptr]) {
-                ptr++;
+        for (int i = 0; i + 1 < words.size(); i++) {
+            const string& l = words[i], r = words[i + 1];
+            
+            bool ok = false;
+            for (int j = 0; j < min(l.size(), r.size()); j++) {
+                if (l[j] == r[j]) continue;
+                
+                if (a[l[j]] > a[r[j]]) {
+                    return false;
+                } else {
+                    ok = true;
+                    break;
+                }
             }
-            return a[$1[ptr]] < a[$2[ptr]];
-        });
-        return k == words;
+            
+            if (l.size() > r.size() && !ok) return false;
+        }
+        return true;
     }
 };

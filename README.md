@@ -119,14 +119,19 @@
 - 图论
   - 拓扑排序
     1. [207. Course Schedule](https://leetcode.com/problems/course-schedule/)
-  - 连通性 / 并查集
+  - 最小生成树 / 并查集
     1. [1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree](https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/)
   - Floyed
     1. [399. Evaluate Division](https://leetcode.com/problems/evaluate-division/)
   - Dijkstra
     1. [743. Network Delay Time](https://leetcode.com/problems/network-delay-time/)
+  - 二染色问题
+    1. [785. Is Graph Bipartite?](https://leetcode.com/problems/is-graph-bipartite/)
+  - NP 问题
+    1. [753. Cracking the Safe](https://leetcode.com/problems/cracking-the-safe/)
 - 数学
-  1. [1808. Maximize Number of Nice Divisors](https://leetcode.com/problems/maximize-number-of-nice-divisors/)
+  - 最大公因数
+    1. [1808. Maximize Number of Nice Divisors](https://leetcode.com/problems/maximize-number-of-nice-divisors/)
 
 ## 冷门问题
 
