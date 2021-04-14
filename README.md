@@ -144,6 +144,9 @@
   1. [667. Beautiful Arrangement II](https://leetcode.com/problems/beautiful-arrangement-ii/)
   2. [1253. Reconstruct a 2-Row Binary Matrix](https://leetcode.com/problems/reconstruct-a-2-row-binary-matrix/)
 
+## 有坑的问题
+1. [152. Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray)
+
 ## 冷门问题
 
 - 随机化
