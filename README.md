@@ -67,6 +67,8 @@
     2. [1067. Digit Count in Range](https://leetcode.com/problems/digit-count-in-range/)
   - 倍增 dp
     1. [466. Count The Repetitions](https://leetcode.com/problems/count-the-repetitions/)
+  - 划分 dp
+    1. [1278. Palindrome Partitioning III](https://leetcode.com/problems/palindrome-partitioning-iii/)
   - 优化
     - 前缀 / 后缀 优化
       1. [265. Paint House II](https://leetcode.com/problems/paint-house-ii/)
