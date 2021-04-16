@@ -1,39 +1,19 @@
 class Solution {
 public:
     int maxFreq(string s, int maxLetters, int minSize, int maxSize) {
-        int answer = 0;
-        const int N = s.size();
-
-        for (int len = minSize; len <= maxSize; len++) {
-            unordered_map<string, int> substringCount;
-
-            for (int i = 0; i + len - 1 < N; i++) {
-                const string substring = s.substr(i, len);
-                substringCount[substring]++;
-            }
-
-            map<char, int> letter;
-            int leftPtr = 0, rightPtr = 0;
-            while (rightPtr < N) {
-                while ((letter.size() > maxLetters || rightPtr - leftPtr + 1 > len) && leftPtr <= rightPtr) {
-                    letter[s[leftPtr]]--;
-                    if (letter[s[leftPtr]] == 0) {
-                        letter.erase(s[leftPtr]);
-                    }
-                    leftPtr++;
-                }
-
-                letter[s[rightPtr]]++;
-                if (letter.size() <= maxLetters && rightPtr - leftPtr + 1 == len) {
-                    answer = max(answer, substringCount[s.substr(leftPtr, rightPtr - leftPtr + 1)]);
-                }
-                rightPtr++;
-            }
-
-            if (answer > 0) {
-                break;
-            }
+        unordered_map<string, int> occur;
+        unordered_map<char, int> letter;
+        int ans = 0;
+        
+        for (int i = 0; i < minSize; i++) letter[s[i]]++;
+        if (letter.size() <= maxLetters) ans = max(ans, ++occur[s.substr(0, minSize)]);
+        for (int l = 0, r = minSize; r < s.size(); l++, r++) {
+            letter[s[r]]++;
+            letter[s[l]]--;
+            if (letter[s[l]] == 0) letter.erase(s[l]);
+            
+            if (letter.size() <= maxLetters) ans = max(ans, ++occur[s.substr(l + 1, minSize)]);
         }
-        return answer;
+        return ans;
     }
 };

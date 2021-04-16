@@ -1,42 +1,42 @@
 class Solution {
 public:
-    int answer = 0;
-    void dfs(int u, vector<int>& status, vector<int>& candies, vector<vector<int>>& keys, vector<vector<int>>& containedBoxes, vector<int>& initialBoxes) {
-        answer += candies[u];
-        candies[u] = 0;
-
-        for (int key : keys[u]) {
-            status[key] = 1;
-        }
-
-        for (int contain : containedBoxes[u]) {
-            initialBoxes.push_back(contain);
-        }
-
-        keys[u].clear();
-    }
-
-    bool solve(vector<int>& status, vector<int>& candies, vector<vector<int>>& keys, vector<vector<int>>& containedBoxes, vector<int>& initialBoxes) {
-        int lastAnswer = answer;
-        vector<int> copyInitialBoxes = initialBoxes;
-        vector<int> toBeDone;
-        initialBoxes.clear();
-
-        for (int box : copyInitialBoxes) {
-            if (!status[box]) {
-                initialBoxes.push_back(box);
+    int maxCandies(vector<int>& status, vector<int>& candies, vector<vector<int>>& keys, vector<vector<int>>& containedBoxes, vector<int>& initialBoxes) {
+        deque<int> q;
+        const int n = status.size();
+        vector<int> boxes(n, 0);
+        for (int b : initialBoxes) {
+            if (status[b] == 1) {
+                q.push_back(b);
+                boxes[b] = 2;
             } else {
-                toBeDone.push_back(box);
+                boxes[b] = 1;
             }
         }
-
-        for (int box : toBeDone) {
-            dfs(box, status, candies, keys, containedBoxes, initialBoxes);
+        
+        int ans = 0;
+        while (!q.empty()) {
+            const int u = q.front();
+            q.pop_front();
+            
+            ans += candies[u];
+            for (int v : keys[u]) {
+                status[v] = 1;
+                
+                if (boxes[v] == 1 && status[v] == 1) {
+                    q.push_back(v);
+                    boxes[v] = 2;
+                }
+            }
+            
+            for (int v : containedBoxes[u]) {
+                if (boxes[v] == 0) boxes[v] = 1;
+                
+                if (boxes[v] == 1 && status[v] == 1) {
+                    q.push_back(v);
+                    boxes[v] = 2;
+                }
+            }
         }
-        return answer > lastAnswer;
-    }
-    int maxCandies(vector<int>& status, vector<int>& candies, vector<vector<int>>& keys, vector<vector<int>>& containedBoxes, vector<int>& initialBoxes) {
-        while (solve(status, candies, keys, containedBoxes, initialBoxes)) {}
-        return answer;
+        return ans;
     }
 };
