@@ -15,16 +15,16 @@ public:
             const int t = data[data.size() - m - 1];
             sum -= t;
             
-            if (mx_backup.count(t)) {
+            if (mx_backup.find(t) != mx_backup.end()) {
                 mx_backup.erase(mx_backup.find(t));
-            } else if (mx_primary.count(t)) {
+            } else if (mx_primary.find(t) != mx_primary.end()) {
                 sum_mx -= t;
                 mx_primary.erase(mx_primary.find(t));
             }
             
-            if (mi_backup.count(t)) {
+            if (mi_backup.find(t) != mi_backup.end()) {
                 mi_backup.erase(mi_backup.find(t));
-            } else if (mi_primary.count(t)) {
+            } else if (mi_primary.find(t) != mi_primary.end()) {
                 sum_mi -= t;
                 mi_primary.erase(mi_primary.find(t));
             }

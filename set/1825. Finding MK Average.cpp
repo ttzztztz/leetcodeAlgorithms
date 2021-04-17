@@ -6,54 +6,37 @@ public:
     
     void addElement(int num) {
         data.push_back(num);
-        sum += num;
-        candidate.insert(num);
         
-        if (data.size() > m) {
-            const int t = data[data.size() - m - 1];
-            sum -= t;
-            if (mxs.count(t)) {
-                sum_mx -= t;
-                mxs.erase(mxs.find(t));
-            } else if (candidate.count(t)) {
-                candidate.erase(candidate.find(t));
-            } else if (mis.count(t)) {
-                sum_mi -= t;
-                mis.erase(mis.find(t));
-            }
+        if (!mis.empty() && num <= *mis.rbegin()) mis.insert(num);
+        else if (!mxs.empty() && *mis.begin() <= num) mxs.insert(num);
+        else candidate.insert(num), sum_middle += num;
+        
+        while (mis.size() > k) {
+            sum_middle += *mis.rbegin();
+            shift_right(mis, candidate);
+        }
+        while (mxs.size() > k) {
+            sum_middle += *mxs.begin();
+            shift_left(candidate, mxs);
         }
         
+        if (data.size() > m) {
+            const int t = data.front();
+            data.pop_front();
+            
+            if (mis.find(t) != mis.end()) mis.erase(mis.find(t));
+            else if (candidate.find(t) != candidate.end()) candidate.erase(candidate.find(t)), sum_middle -= t;
+            else mxs.erase(mxs.find(t));
+         }
+        
         if (data.size() >= m) {
-            while (!mis.empty() && !candidate.empty() && *mis.rbegin() > *candidate.begin()) {
-                const int a = *mis.rbegin();
-                const int b = *candidate.begin();
-                
-                sum_mi += b - a;
-                
-                mis.insert(b), mis.erase(mis.find(a));
-                candidate.insert(a), candidate.erase(candidate.find(b));
-            }
-            
-            while (!mxs.empty() && !candidate.empty() && *mxs.begin() < *candidate.rbegin()) {
-                const int a = *mxs.begin();
-                const int b = *candidate.rbegin();
-                
-                sum_mx += b - a;
-                
-                mxs.insert(b), mxs.erase(mxs.find(a));
-                candidate.insert(a), candidate.erase(candidate.find(b));
-            }
-            
             while (mis.size() < k) {
-                const int t = *candidate.begin();
-                sum_mi += t;
-                candidate.erase(candidate.find(t)), mis.insert(t);
+                sum_middle -= *candidate.begin();
+                shift_left(mis, candidate);
             }
-            
             while (mxs.size() < k) {
-                const int t = *candidate.rbegin();
-                sum_mx += t;
-                candidate.erase(candidate.find(t)), mxs.insert(t);
+                sum_middle -= *candidate.rbegin();
+                shift_right(candidate, mxs);
             }
         }
     }
@@ -61,16 +44,25 @@ public:
     int calculateMKAverage() {
         if (data.size() < m) return -1;
 
-        ll a = sum - sum_mi - sum_mx;
         ll b = m - 2 * k;
-        return a / b;
+        return sum_middle / b;
     }
 private:
     int m, k;
-    vector<int> data;
+    deque<int> data;
     multiset<int> mxs, mis, candidate;
     typedef long long ll;
-    ll sum_mx = 0, sum_mi = 0, sum = 0;
+    ll sum_middle = 0;
+    
+    void shift_left(multiset<int>& l, multiset<int>& r) {
+        l.insert(*r.begin());
+        r.erase(r.begin());
+    }
+    
+    void shift_right(multiset<int>& l, multiset<int>& r) {
+        r.insert(*l.rbegin());
+        l.erase(--l.end());
+    }
 };
 
 /**
