@@ -1,26 +1,21 @@
 class Solution {
 public:
     int minimumTotal(vector<vector<int>>& triangle) {
-        if (triangle.size() == 0) {
-            return 0;
-        }
-
-        for (int i = 1; i < triangle.size(); i++) {
-            for (int j = 0; j < triangle[i].size(); j++) {
-                if (j == 0) {
-                    triangle[i][j] += triangle[i - 1][j];
-                } else if (j == triangle[i].size() - 1) {
-                    triangle[i][j] += triangle[i - 1][j - 1];
-                } else {
-                    triangle[i][j] = std::min(triangle[i][j] + triangle[i - 1][j - 1], triangle[i][j] + triangle[i - 1][j]);
-                }
+        if (triangle.empty()) return 0;
+        const int n = triangle.size();
+        vector<int> f(n, 99999999);
+        f[0] = triangle[0][0];
+        // f[i][j] = max{f[i - 1][j - 1], f[i - 1][j]} + a[i][j]
+        for (int i = 1; i < n; i++) {
+            const int m = triangle[i].size();
+            
+            vector<int> g(n, 99999999);
+            for (int j = 0; j < m; j++) {
+                if (j >= 1) g[j] = min(f[j - 1], f[j]) + triangle[i][j];
+                else g[j] = f[j] + triangle[i][j];
             }
+            f = g;
         }
-
-        int answer = 0x7fffffff;
-        for (int i = 0; i < triangle[triangle.size() - 1].size(); i++) {
-            answer = std::min(answer, triangle[triangle.size() - 1][i]);
-        }
-        return answer;
+        return *min_element(f.begin(), f.end());
     }
 };
