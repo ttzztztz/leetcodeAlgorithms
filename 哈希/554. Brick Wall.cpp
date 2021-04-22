@@ -1,23 +1,24 @@
 class Solution {
 public:
     int leastBricks(vector<vector<int>>& wall) {
-        const int N = wall.size();
-        int answer = N, right = 0;
+        const int n = wall.size();
         
+        int ans = n, x = 0;
         unordered_map<int, int> appear;
-        for (int i = 0; i < N; i++) {
-            int offset = 0;
-            for (int j = 0; j < wall[i].size(); j++) {
-                offset += wall[i][j];
-                appear[offset]++;
+        for (auto& line : wall) {
+            int cur = 0;
+            appear[cur]++;
+            for (auto& w : line) {
+                cur += w;
+                appear[cur]++;
             }
-            right = max(right, offset);
+            x = cur;
         }
         
-        for (auto& p : appear) {
-            if (p.first == 0 || p.first == right) continue;
-            answer = min(answer, N - p.second);
+        for (auto& [k, v] : appear) {
+            if (k == 0 || k == x) continue;
+            ans = min(ans, n - v);
         }
-        return answer;
+        return ans;
     }
 };
