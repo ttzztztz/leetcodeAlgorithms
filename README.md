@@ -166,8 +166,12 @@
   - 最近点对
     1. [Lintcode 966. 平面最近点对](https://www.lintcode.com/problem/966/)
 - 图论
-  1. [1761. Minimum Degree of a Connected Trio in a Graph](https://leetcode.com/problems/minimum-degree-of-a-connected-trio-in-a-graph/)
-  2. [Luogu P3386 【模板】二分图最大匹配](https://www.luogu.com.cn/problem/P3386)
+  - 最小生成树
+    1. [1761. Minimum Degree of a Connected Trio in a Graph](https://leetcode.com/problems/minimum-degree-of-a-connected-trio-in-a-graph/)
+  - 二分图匹配
+    1. [Luogu P3386 【模板】二分图最大匹配](https://www.luogu.com.cn/problem/P3386)
+  - Tarjan
+    1. [1192. Critical Connections in a Network](https://leetcode.com/problems/critical-connections-in-a-network/)
 - Manacher
   1. [5. Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)
 - 高斯消元
