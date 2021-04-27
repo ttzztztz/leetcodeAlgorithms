@@ -1,33 +1,20 @@
 class Solution {
 public:
     int minInsertions(string s) {
-        const int N = s.size();
-        vector<vector<int>> dp(N + 5, vector<int>(N + 5, -1));
+        const int n = s.size();
+        vector<vector<int>> f(n, vector<int>(n, 0));
         
-        for (int i = 0; i < N; i++) {
-            dp[i][i] = 1;
-        }
-        
-        for (int i = 0; i + 1 < N; i++) {
-            if (s[i] == s[i + 1]) {
-                dp[i][i + 1] = 2;
-            } else {
-                dp[i][i + 1] = 1;
-            }
-        }
-        
-        for (int len = 3; len <= N; len++) {
-            for (int i = 0; i + len - 1 < N; i++) {
+        for (int i = 0; i < n; i++) f[i][i] = 1;
+        for (int len = 2; len <= n; len++) {
+            for (int i = 0; i + len - 1 < n; i++) {
                 const int j = i + len - 1;
                 
-                if (s[i] == s[j]) {
-                    dp[i][j] = dp[i + 1][j - 1] + 2;
-                } else {
-                    dp[i][j] = max(dp[i][j - 1], dp[i + 1][j]);
-                }
+                f[i][j] = 1;
+                if (s[i] == s[j]) f[i][j] = f[i + 1][j - 1] + 2;
+                f[i][j] = max(f[i][j], max(f[i + 1][j], f[i][j - 1]));
             }
         }
         
-        return N - dp[0][N - 1];
+        return n - f[0][n - 1];
     }
 };
