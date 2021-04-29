@@ -1,20 +1,20 @@
 class Solution {
 public:
     int minFlips(int a, int b, int c) {
-        int answer = 0;
-        for (int i = 0; i < 32; i++) {
-            const int mask = 1 << i;
+        int ans = 0;
+        for (int i = 30; i >= 0; i--) {
+            const int x = (a >> i) & 1;
+            const int y = (b >> i) & 1;
+            const int z = (c >> i) & 1;
             
-            const int _a = a & mask, _b = b & mask, _c = c & mask;
-            if (_c) { // 1
-                if (!_a && !_b) {
-                    answer++;
-                }
-            } else { // 0
-                if (_a) answer++;
-                if (_b) answer++;
+            if (z == 1 && x == 0 && y == 0) {
+                ans++;
+            }
+            if (z == 0) {
+                ans += x + y;
             }
         }
-        return answer;
+        
+        return ans;
     }
 };
