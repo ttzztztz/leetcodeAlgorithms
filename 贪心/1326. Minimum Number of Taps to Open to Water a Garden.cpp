@@ -7,9 +7,7 @@ public:
         for (int i = 0; i < ranges.size(); i++) {
             range.push_back(vector<int>{i - ranges[i], i + ranges[i]});
         }
-        sort(range.begin(), range.end(), [](const vector<int>& $1, const vector<int>& $2)->bool {
-            return $1[0] < $2[0];
-        });
+        sort(range.begin(), range.end());
         
         int answer = 0;
         for (int i = 0, left = 0, right = 0; right < n; left = right, answer++) {
