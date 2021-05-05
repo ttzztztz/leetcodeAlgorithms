@@ -97,6 +97,7 @@
     1. [1199. Minimum Time to Build Blocks](https://leetcode.com/problems/minimum-time-to-build-blocks/)
   - 区间
     1. [1024. Video Stitching](https://leetcode.com/problems/video-stitching/)
+    2. [630. Course Schedule III](https://leetcode.com/problems/course-schedule-iii/)
   - 其他
     1. [767. Reorganize String](https://leetcode.com/problems/reorganize-string/)
 - 状态压缩
@@ -148,6 +149,7 @@
 
 ## 有坑的问题
 1. [152. Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray)
+2. [665. Non-decreasing Array](https://leetcode.com/problems/non-decreasing-array/)
 
 ## 冷门问题
 
