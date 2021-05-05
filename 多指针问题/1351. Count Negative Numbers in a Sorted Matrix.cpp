@@ -1,14 +1,14 @@
 class Solution {
 public:
     int countNegatives(vector<vector<int>>& grid) {
-        const int N = grid.size(), M = grid[0].size();
-        int answer = 0;
+        int ans = 0;
+        if (grid.empty()) return ans;
+        const int n = grid.size(), m = grid[0].size();
         
-        int ptr = M - 1;
-        for (int i = 0; i < N; i++) {
-            while (ptr >= 0 && grid[i][ptr] < 0) ptr--;
-            answer += M - 1 - ptr;
+        for (int i = 0, j = m - 1; i < n; i++) {
+            while (j >= 0 && grid[i][j] < 0) j--;
+            ans += max(0, m - j - 1);
         }
-        return answer;
+        return ans;
     }
 };

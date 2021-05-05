@@ -1,24 +1,22 @@
 class Solution {
 public:
     bool isPossible(vector<int>& target) {
-        long long sum = 0;
-        priority_queue<long long, vector<long long>, less<>> heap;
-        for (int i : target) {
-            sum += i;
-            heap.push(i);
-        }
+        const int n = target.size();
         
-        while (heap.top() != 1) {
-            const long long top = heap.top();
+        typedef long long ll;
+        ll sum = accumulate(target.begin(), target.end(), 0ll);
+        priority_queue<int, vector<int>, less<>> heap(target.begin(), target.end());
+        
+        while (sum > 1 && heap.top() > sum / 2) {
+            const ll t = heap.top();
             heap.pop();
+            sum -= t;
+            if (sum <= 1) return sum == 1;
             
-            const long long next = 2 * top - sum;
-            if (next <= 0) return false;
-            
+            const ll next = t % sum;
             heap.push(next);
-            sum = top;
+            sum += next;
         }
-        
-        return true;
+        return sum == n;
     }
 };

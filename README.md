@@ -98,6 +98,7 @@
   - 区间
     1. [1024. Video Stitching](https://leetcode.com/problems/video-stitching/)
     2. [630. Course Schedule III](https://leetcode.com/problems/course-schedule-iii/)
+    3. [1353. Maximum Number of Events That Can Be Attended](https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/)
   - 其他
     1. [767. Reorganize String](https://leetcode.com/problems/reorganize-string/)
 - 状态压缩
@@ -114,6 +115,7 @@
   1. [Nowcoder. 有趣的排序](https://www.nowcoder.com/questionTerminal/adc291e7e79f452c8b59243a5ce68d3a)
   2. [Lintcode 307. Transform String](https://www.lintcode.com/problem/307)
   3. [Lintcode 313. Minimum Insertion](https://www.lintcode.com/problem/313)
+  4. [1354. Construct Target Array With Multiple Sums](https://leetcode.com/problems/construct-target-array-with-multiple-sums/)
 - 栈
   1. [32. Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses)
   2. [1190. Reverse Substrings Between Each Pair of Parentheses](https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/)
