@@ -9,6 +9,8 @@
   4. [102. Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal)
   5. [589. N-ary Tree Preorder Traversal](https://leetcode.com/problems/n-ary-tree-preorder-traversal/)
   6. [590. N-ary Tree Postorder Traversal](https://leetcode.com/problems/n-ary-tree-postorder-traversal/)
+- 二叉树的性质
+  1. [1361. Validate Binary Tree Nodes](https://leetcode.com/problems/validate-binary-tree-nodes/)
 - 二叉搜索树
   1. [285. Inorder Successor in BST](https://leetcode.com/problems/inorder-successor-in-bst/)
 - 字典树
