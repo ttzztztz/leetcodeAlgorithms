@@ -1,37 +1,36 @@
-const int dx[] = {0, 0, 1, -1};
-const int dy[] = {1, -1, 0, 0};
-
 class Solution {
 public:
-    int N, M;
-    typedef tuple<int, int, int> Point;
-    bool pointValid(int i, int j) {
-        return i >= 0 && j >= 0 && i < N && j < M;
-    }
     int minCost(vector<vector<int>>& grid) {
-        N = grid.size(), M = grid[0].size();
-
-        priority_queue<Point, vector<Point>, greater<>> heap;
-        heap.emplace(0, 0, 0);
-        vector<vector<bool>> visited(N, vector<bool>(M, false));
+        if (grid.empty()) return 0;
+        const int n = grid.size(), m = grid[0].size();
         
+        typedef tuple<int, int, int> State;
+        priority_queue<State, vector<State>, greater<>> heap;
+        heap.emplace(0, 0, 0);
+        
+        vector<vector<int>> dist(n, vector<int>(m, n * m + 5));
+        const int dx[] = { 0, 0, 1, -1 };
+        const int dy[] = { 1, -1, 0, 0 };
+        
+        auto point_valid = [&](int i, int j) -> bool {
+            return i >= 0 && j >= 0 && i < n && j < m;
+        };
         while (!heap.empty()) {
-            int dist, i, j;
-            tie(dist, i, j) = heap.top();
-            
-            if (i == N - 1 && j == M - 1) return dist;
+            auto [change, x, y] = heap.top();
             heap.pop();
-            if (visited[i][j]) continue;
-            visited[i][j] = true;
             
-            const int k = grid[i][j] - 1;
-            if (pointValid(i + dx[k], j + dy[k])) heap.emplace(dist, i + dx[k], j + dy[k]);
-            for (int s = 0; s < 4; s++) {
-                if (s == k) continue;
-                if (pointValid(i + dx[s], j + dy[s])) heap.emplace(dist + 1, i + dx[s], j + dy[s]);
+            dist[x][y] = change;
+            if (x == n - 1 && y == m - 1) return change;
+            
+            const int t = grid[x][y];
+            for (int k = 1; k <= 4; k++) {
+                const int nx = x + dx[k - 1], ny = y + dy[k - 1];
+                if (point_valid(nx, ny) && change + (k != t) < dist[nx][ny]) {
+                    dist[nx][ny] = change + (k != t);
+                    heap.emplace(change + (k != t), nx, ny);
+                }
             }
         }
-        
-        return -1;
+        return n + m;
     }
 };
