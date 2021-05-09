@@ -1,34 +1,26 @@
 class Solution {
 public:
-    int lowbit(int x) {
-        return x&(-x);
-    }
-    int query(int x) {
-        int answer = 0;
-        while (x) {
-            answer += bit[x];
-            x -= lowbit(x);
+    int numOfMinutes(int n, int headID, vector<int>& manager, vector<int>& informTime) {
+        edges = vector<vector<int>>(n + 1);
+        inform_time = informTime;
+        for (int i = 0; i < n; i++) {
+            if (manager[i] == -1) continue;
+            edges[manager[i]].push_back(i);
         }
-        return answer;
-    }
-    void incr(int x, int y) {
-        int answer = 0;
-        while (x && x <= N) {
-            bit[x] += y;
-            x += lowbit(x);
-        }
-    }
-    int N;
-    vector<int> bit;
-    int numTimesAllBlue(vector<int>& light) {
-        int answer = 0;
-        N = light.size();
-        bit = vector<int>(N + 5, 0);
         
-        for (int i = 1; i <= N; i++) {
-            incr(light[i - 1], 1);
-            if (query(i) == i) answer++;
+        dfs(headID, inform_time[headID]);
+        return ans;
+    }
+private:
+    vector<vector<int>> edges;
+    vector<int> inform_time;
+    int ans = 0;
+    
+    void dfs(int root, int dist) {
+        ans = max(ans, dist);
+        
+        for (int v : edges[root]) {
+            dfs(v, dist + inform_time[v]);
         }
-        return answer;
     }
 };

@@ -1,60 +1,32 @@
 class Solution {
 public:
     string rankTeams(vector<string>& votes) {
-        const int N = votes.size(), M = votes[0].size();
-        unordered_set<char> allChars, used;
-        
-        vector<vector<int>> pre(M, vector<int>(26, 0));
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                pre[j][votes[i][j] - 'A']++;
-                allChars.insert(votes[i][j]);
+        if (votes.empty()) return "";
+        const int n = votes.size(), m = votes[0].size();
+        unordered_map<char, vector<int>> data;
+        for (const string& vote : votes) {
+            for (int j = 0; j < m; j++) {
+                if (!data.count(vote[j])) data[vote[j]] = vector<int>(m, 0);
+                data[vote[j]][j]++;
             }
         }
         
-        string answer;
-        while (used.size() < allChars.size()) {
-            unordered_set<char> tmp;
-            for (char i : allChars) {
-                if (!used.count(i)) {
-                    tmp.insert(i);
-                }
-            }
-            
-            int j = 0;
-            while (tmp.size() >= 2) {
-                if (j >= M) break;
-                
-                vector<int> statics(26, 0);
-                for (int i = 0; i < 26; i++) {
-                    if (used.count(i + 'A') || !tmp.count(i + 'A')) continue;
-                    statics[i] += pre[j][i];
-                }
-
-                int maxVal = 0;
-                vector<char> nxt;
-                for (int i = 0; i < 26; i++) {
-                    if (used.count(i + 'A') || !tmp.count(i + 'A')) continue;
-                    if (statics[i] > maxVal) {
-                        nxt = vector<char>{i + 'A'};
-                        maxVal = statics[i];
-                    } else if (statics[i] == maxVal) {
-                        nxt.push_back(i + 'A');
-                    }
-                }
-                
-                if (!nxt.empty()) tmp = unordered_set<char>(nxt.begin(), nxt.end());
-                if (nxt.size() == 1) break;
-                j++;
-            }
-            
-            vector<char> candidate;
-            for (char p : tmp) candidate.push_back(p);
-            sort(candidate.begin(), candidate.end());
-            answer.push_back(candidate[0]);
-            used.insert(candidate[0]);
+        vector<vector<int>> sorted_data;
+        for (auto [k, v] : data) {
+            v.push_back(k);
+            sorted_data.push_back(v);
         }
+        sort(sorted_data.begin(), sorted_data.end(), [&](const auto& lhs, const auto& rhs) -> bool {
+            for (int i = 0; i < m; i++) {
+                if (lhs[i] != rhs[i]) {
+                    return lhs[i] > rhs[i];
+                }
+            }
+            return lhs[m] < rhs[m];
+        });
         
-        return answer;
+        string ans;
+        for (int i = 0; i < m; i++) ans += (char) sorted_data[i].back();
+        return ans;
     }
 };

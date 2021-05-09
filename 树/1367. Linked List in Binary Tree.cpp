@@ -3,7 +3,9 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 /**
@@ -12,48 +14,27 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
-    vector<int> listVal;
-    vector<int> cur;
-    bool cmp(vector<int>::iterator start, vector<int>::iterator end) {
-        int i = 0;
-        while (start != end) {
-            if (*start != listVal[i]) return false;
-            start++;
-            i++;
-        }
-        return true;
-    }
-    bool dfs(TreeNode* root) {
-        if (root == nullptr) return false;
-        cur.push_back(root->val);
-        
-        if (cur.size() >= listVal.size()) {
-            auto it = cur.end() - listVal.size();
-            if (cmp(it, cur.end())) return true;
-        }
-        
-        if (root->left) {
-            if (dfs(root->left)) return true;
-        }
-        
-        if (root->right) {
-            if (dfs(root->right)) return true;
-        }
-        
-        cur.pop_back();
-        return false;
-    }
     bool isSubPath(ListNode* head, TreeNode* root) {
-        while (head) {
-            listVal.push_back(head->val);
-            head = head->next;
-        }
+        this->list_head = head;
+        return dfs(root, head);
+    }
+private:
+    ListNode* list_head;
+    bool dfs(TreeNode* root, ListNode* head) {
+        if (head == nullptr) return true;
+        if (root == nullptr) return false;
         
-        return dfs(root);
+        if (root->val == head->val) {
+            return dfs(root->left, head->next) || dfs(root->right, head->next);
+        } else {
+            return dfs(root->left, list_head) || dfs(root->right, list_head);
+        }
     }
 };
