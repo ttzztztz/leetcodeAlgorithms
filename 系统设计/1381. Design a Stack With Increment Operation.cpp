@@ -1,27 +1,38 @@
 class CustomStack {
 public:
-    int maxSize;
-    vector<int> data;
     CustomStack(int maxSize) {
-        this->maxSize = maxSize;
+        max_size = maxSize;
     }
     
     void push(int x) {
-        if (data.size() >= maxSize) return;
-        
+        if (data.size() == max_size) return;
         data.push_back(x);
+        
+        if (!diff.empty()) diff.back() += cur;
+        diff.push_back(0);
+        cur = 0;
     }
     
     int pop() {
         if (data.empty()) return -1;
-        int answer = data.back();
-        data.pop_back();
-        return answer;
+        else {
+            const int t = data.back();
+            data.pop_back();
+            cur += diff.back();
+            diff.pop_back();
+            return t + cur;
+        }
     }
     
     void increment(int k, int val) {
-        for (int i = 0; i < min(k, (int) data.size()); i++) data[i] += val;
+        if (data.empty()) return;
+        const int n = data.size();
+        diff[min(k - 1, n - 1)] += val;
     }
+private:
+    int max_size = 0;
+    vector<int> data, diff;
+    int cur = 0;
 };
 
 /**

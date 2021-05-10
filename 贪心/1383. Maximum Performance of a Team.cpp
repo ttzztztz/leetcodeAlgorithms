@@ -1,36 +1,34 @@
 class Solution {
 public:
     int maxPerformance(int n, vector<int>& speed, vector<int>& efficiency, int k) {
-        const int MOD = 1e9+7;
+        typedef pair<int, int> PII;
+        typedef long long ll;
+        const int mod = 1e9+7;
         
-        vector<pair<unsigned long long, unsigned long long>> people;
-        for (int i = 0; i < n; i++) people.emplace_back(speed[i], efficiency[i]);
-        sort(people.begin(), people.end(), [](const auto& $1, const auto& $2)->bool {
-            return $1.second > $2.second;
+        vector<PII> data;
+        for (int i = 0; i < n; i++) data.emplace_back(speed[i], efficiency[i]);
+        sort(data.begin(), data.end(), [&](const auto& lhs, const auto& rhs) -> bool {
+            return lhs.second > rhs.second;
         });
-        priority_queue<unsigned long long, vector<unsigned long long>, greater<>> heap;
-        unsigned long long heap_sum = 0, answer = 0;
         
+        ll ans = 0, sum = 0;
+        priority_queue<ll, vector<ll>, greater<>> heap;
         for (int i = 0; i < n; i++) {
-            unsigned long long s, e;
-            tie(s, e) = people[i];
+            auto [s, e] = data[i];
+            
             if (heap.size() < k) {
                 heap.push(s);
-                heap_sum += s;
-            } else {
-                if (heap.top() < s) {
-                    unsigned long long tmp = heap.top();
-                    heap.pop();
-                    heap_sum -= tmp;
-                    heap.push(s);
-                    heap_sum += s;
-                }
+                sum += s;
+            } else if (heap.size() == k && heap.top() < s) {
+                sum -= heap.top();
+                heap.pop();
+                
+                sum += s;
+                heap.push(s);
             }
             
-            answer = max(answer, e * heap_sum);
+            ans = max(ans, sum * e);
         }
-        
-        answer %= MOD;
-        return answer;
+        return ans % mod;
     }
 };
