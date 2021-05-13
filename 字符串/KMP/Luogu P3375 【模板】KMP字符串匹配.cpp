@@ -48,7 +48,7 @@ int main() {
     build();
     kmp();
 
-    for (int i = 1; i <= lenP;i++) {
+    for (int i = 1; i <= lenP; i++) {
         std::cout << nxt[i] << " ";
     }
     return 0;
