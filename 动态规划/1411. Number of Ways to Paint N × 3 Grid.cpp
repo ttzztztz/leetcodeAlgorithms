@@ -1,47 +1,33 @@
 class Solution {
 public:
     int numOfWays(int n) {
-        memset(f, 0xff, sizeof f);
-        this->N = n;
+        const int mod = 1e9+7;
+        typedef long long ll;
+        vector<vector<vector<ll>>> f(3, vector<vector<ll>>(3, vector<ll>(3, 0)));
+        for (int a = 0; a < 3; a++) for (int b = 0; b < 3; b++) for (int c = 0; c < 3; c++) {
+            if (a == b || b == c) continue;
+            f[a][b][c] = 1;
+        }
         
-        long long answer = 0;
-        for (int i = 0; i <= 2; i++) {
-            for (int j = 0; j <= 2; j++) {
-                for (int k = 0; k <= 2; k++) {
-                    if (i == j || j == k) continue;
-                    answer += dfs(1, i, j, k);
-                    answer %= MOD;
+        for (int i = n - 2; i >= 0; i--) {
+            vector<vector<vector<ll>>> g(3, vector<vector<ll>>(3, vector<ll>(3, 0)));
+            
+            for (int a = 0; a < 3; a++) for (int b = 0; b < 3; b++) for (int c = 0; c < 3; c++) {
+                if (a == b || b == c) continue;
+                for (int x = 0; x < 3; x++) for (int y = 0; y < 3; y++) for (int z = 0; z < 3; z++) {
+                    if (x == y || y == z || x == a || y == b || z == c) continue;
+                    g[a][b][c] = (g[a][b][c] + f[x][y][z]) % mod;
                 }
             }
+            
+            f = g;
         }
-        return answer;
-    }
-private:
-    int N;
-    long long f[5005][5][5][5];
-    const int GREEN = 0, RED = 1, BLUE = 2, MOD = 1e9+7;
-    bool valid(int last1, int last2, int last3, int cur1, int cur2, int cur3) {
-        if (cur1 == last1) return false;
-        if (cur2 == cur1 || cur2 == last2) return false;
-        if (cur3 == cur2 || cur3 == last3) return false;
         
-        return true;
-    }
-    long long dfs(int i, int last1, int last2, int last3) {
-        if (i == N) return 1;
-        if (f[i][last1][last2][last3] != -1) return f[i][last1][last2][last3];
-        
-        long long answer = 0;
-        for (int c = 0; c <= 2; c++) {
-            for (int j = 0; j <= 2; j++) {
-                for (int k = 0; k <= 2; k++) {
-                    if (valid(last1, last2, last3, c, j, k)) {
-                        answer += dfs(i + 1, c, j, k);
-                        answer %= MOD;
-                    }
-                }
-            }
+        ll ans = 0;
+        for (int a = 0; a < 3; a++) for (int b = 0; b < 3; b++) for (int c = 0; c < 3; c++) {
+            if (a == b || b == c) continue;
+            ans = (ans + f[a][b][c]) % mod;
         }
-        return f[i][last1][last2][last3] = answer;
+        return ans;
     }
 };

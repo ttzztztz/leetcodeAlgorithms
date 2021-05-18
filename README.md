@@ -108,6 +108,7 @@
 - 树状数组
   1. [493. Reverse Pairs](https://leetcode.com/problems/reverse-pairs/)
   2. [1782. Count Pairs Of Nodes](https://leetcode.com/problems/count-pairs-of-nodes/)
+  3. [1409. Queries on a Permutation With Key](https://leetcode.com/problems/queries-on-a-permutation-with-key/)
 - 链表
   1. [287. Find the Duplicate Number](https://leetcode.com/problems/find-the-duplicate-number/)
   2. [剑指 Offer 03. 数组中重复的数字](https://leetcode-cn.com/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/)
