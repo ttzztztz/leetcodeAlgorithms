@@ -1,41 +1,46 @@
 class Solution {
 public:
-    vector<vector<string>> answer;
-    int N;
-    void generate_string(const vector<int>& map) {
-        vector<string> oneAnswer;
-        for (int i = 0; i < N; i++) {
-            string current(N, '.');
-            current[map[i]] = 'Q';
-            oneAnswer.push_back(current);
-        }
-        answer.push_back(oneAnswer);
+    vector<vector<string>> solveNQueens(int n) {
+        this->n = n;
+        dfs();
+        return ans;
     }
-    bool isConflict(const vector<int>& map, int n) {
-        for (int i = 0; i < n; i++) {
-            if (map[i] == map[n] || fabs(map[i] - map[n]) == fabs(i - n)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    void dfs(vector<int>& map, int index) {
-        if (index >= N) {
-            generate_string(map);
+private:
+    vector<vector<string>> ans;
+    vector<int> state;
+    int n;
+    
+    void dfs() {
+        if (state.size() == n) {
+            ans.push_back(generate());
             return;
         }
-
-        for (int i = 0; i < N; i++) {
-            map[index] = i;
-            if (!isConflict(map, index)) {
-                dfs(map, index + 1);
-            }
+        
+        for (int i = 1; i <= n; i++) {
+            state.push_back(i);
+            if (valid(state.size())) dfs();
+            state.pop_back();
         }
     }
-    vector<vector<string>> solveNQueens(int n) {
-        N = n;
-        vector<int> map(N, 0);
-        dfs(map, 0);
-        return answer;
+    
+    vector<string> generate() {
+        vector<string> cur;
+        for (int i = 0; i < n; i++) {
+            string t(n, '.');
+            t[state[i] - 1] = 'Q';
+            cur.push_back(t);
+        }
+        return cur;
+    }
+    
+    bool valid(int t) {
+        for (int i = 0; i < t; i++) {
+            for (int j = i + 1; j < t; j++) {
+                if (state[i] == state[j] || abs(state[i] - state[j]) == abs(i - j)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 };
