@@ -143,6 +143,7 @@
     1. [785. Is Graph Bipartite?](https://leetcode.com/problems/is-graph-bipartite/)
   - NP 问题
     1. [753. Cracking the Safe](https://leetcode.com/problems/cracking-the-safe/)
+    2. [943. Find the Shortest Superstring](https://leetcode.com/problems/find-the-shortest-superstring/)
 - 数学
   - 最大公因数
     1. [1808. Maximize Number of Nice Divisors](https://leetcode.com/problems/maximize-number-of-nice-divisors/)
