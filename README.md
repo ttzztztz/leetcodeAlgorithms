@@ -103,6 +103,7 @@
     3. [1353. Maximum Number of Events That Can Be Attended](https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/)
   - 其他
     1. [767. Reorganize String](https://leetcode.com/problems/reorganize-string/)
+    2. [1405. Longest Happy String](https://leetcode.com/problems/longest-happy-string/)
 - 状态压缩
   1. [864. Shortest Path to Get All Keys](https://leetcode.com/problems/shortest-path-to-get-all-keys/)
 - 树状数组
