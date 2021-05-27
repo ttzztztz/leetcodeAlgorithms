@@ -28,6 +28,7 @@
 - 单调队列
   1. [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/)
   2. [683. K Empty Slots](https://leetcode.com/problems/k-empty-slots/)
+  3. [1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit](https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/)
 - 双指针
   1. [443. String Compression](https://leetcode.com/problems/string-compression/)
   2. [31. Next Permutation](https://leetcode.com/problems/next-permutation/)
