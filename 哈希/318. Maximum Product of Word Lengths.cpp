@@ -1,26 +1,19 @@
 class Solution {
 public:
     int maxProduct(vector<string>& words) {
-        int answer = 0;
         const int n = words.size();
-        vector<int> prepare(n, 0);
+        
+        vector<int> mask(n, 0);
+        int ans = 0;
         for (int i = 0; i < n; i++) {
-            const string& str = words[i];
-            int& cur = prepare[i];
-            
-            for (const char ch : str) {
-                cur |= (1 << (ch - 'a'));
-            }
+            int state = 0;
+            for (int j = 0; j < words[i].size(); j++) state |= (1 << (words[i][j] - 'a'));
+            mask[i] = state;
         }
         
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                if (prepare[i] & prepare[j]) continue;
-                
-                answer = max(answer, (int) (words[i].size() * words[j].size()));
-            }
+        for (int i = 0; i < n; i++) for (int j = i + 1; j < n; j++) {
+            if (!(mask[i] & mask[j])) ans = max<int>(ans, words[i].size() * words[j].size());
         }
-        
-        return answer;
+        return ans;
     }
 };

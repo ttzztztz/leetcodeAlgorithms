@@ -1,23 +1,20 @@
 class Solution {
 public:
     int countTriplets(vector<int>& arr) {
-        const int N = arr.size();
-        vector<int> f(N + 1);
-        for (int i = 1; i <= N; i++) f[i] = f[i - 1] ^ arr[i - 1];
+        const int n = arr.size();
         
-        auto prefix = [&](int i, int j) -> int {
-            return f[j + 1] ^ f[i];
-        };
-        
-        int answer = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = i + 1; j < N; j++) {
-                for (int k = j; k < N; k++) {
-                    const int a = prefix(i, j - 1), b = prefix(j, k);
-                    if (a == b) answer++;
-                }
+        int ans = 0, sum = 0;
+        for (int k = 1; k <= n; k++) {
+            sum ^= arr[k - 1]; // f[k]
+            
+            int t = 0;
+            for (int d = 0; d <= k; d++) { // f[i - 1], d = i - 1
+                if (d >= 1) t ^= arr[d - 1];
+                
+                if (t == sum) ans += max(0, k - d - 1);
             }
+            
         }
-        return answer;
+        return ans;
     }
 };

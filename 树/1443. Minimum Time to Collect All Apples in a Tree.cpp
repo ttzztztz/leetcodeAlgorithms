@@ -1,30 +1,36 @@
 class Solution {
 public:
     int minTime(int n, vector<vector<int>>& edges, vector<bool>& hasApple) {
-        edge = vector<vector<int>>(n, vector<int>{});
-        for (const auto& e : edges) edge[e[0]].push_back(e[1]), edge[e[1]].push_back(e[0]);
-        for (const bool b : hasApple) if (b) appleCount++;
+        edge = vector<vector<int>>(n);
+        has_apple = hasApple;
+        for (auto& e : edges) {
+            edge[e[0]].push_back(e[1]);
+            edge[e[1]].push_back(e[0]);
+        }
         
-        auto answer = dfs(hasApple, 0, -1);
-        return answer.first;
+        auto [have, cost] = dfs(0, -1);
+        
+        if (have) return cost - 2;
+        else return 0;
     }
 private:
     vector<vector<int>> edge;
-    int appleCount = 0;
-    pair<int, int> dfs(const vector<bool>& hasApple, int u, int parent) { // totalDist, appleCount
-        int totalDist = 0, appleCount = 0;
-        if (hasApple[u]) appleCount++;
+    vector<bool> has_apple;
+    
+    pair<bool, int> dfs(int u, int parent) {
+        bool have = false;
+        int cost = 2;
+        if (has_apple[u]) have = true;
         
         for (int v : edge[u]) {
             if (v == parent) continue;
             
-            auto child = dfs(hasApple, v, u);
-            if (child.second > 0) {
-                appleCount += child.second;
-                totalDist += child.first + 2;
+            auto [_have, _cost] = dfs(v, u);
+            if (_have) {
+                have = true;
+                cost += _cost;
             }
         }
-        
-        return {totalDist, appleCount};
+        return { have, cost };
     }
 };
