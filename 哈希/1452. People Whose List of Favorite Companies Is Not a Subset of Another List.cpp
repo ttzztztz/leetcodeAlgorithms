@@ -1,29 +1,33 @@
 class Solution {
 public:
     vector<int> peopleIndexes(vector<vector<string>>& favoriteCompanies) {
-        vector<int> answer;
-        const int N = favoriteCompanies.size();
-        vector<unordered_set<string>> f(N);
-        for (int i = 0; i < N; i++) f[i] = unordered_set<string>(favoriteCompanies[i].begin(), favoriteCompanies[i].end());
+        if (favoriteCompanies.empty()) return {};
         
-        for (int i = 0; i < N; i++) {
-            bool ok = false;
-            for (int j = 0; j < N; j++) {
+        const int n = favoriteCompanies.size();
+        vector<unordered_set<string>> hset;
+        for (int i = 0; i < n; i++) {
+            hset.push_back(unordered_set<string>(favoriteCompanies[i].begin(), favoriteCompanies[i].end()));
+        }
+        
+        vector<int> ans;
+        for (int i = 0; i < n; i++) {
+            bool flag = true;
+            for (int j = 0; j < n; j++) {
                 if (i == j) continue;
-                if (isSubset(favoriteCompanies[i], f[j])) {
-                    ok = true;
+                if (is_subset(favoriteCompanies[i], hset[j])) {
+                    flag = false;
                     break;
                 }
             }
             
-            if (!ok) answer.push_back(i);
+            if (flag) ans.push_back(i);
         }
-        return answer;
+        return ans;
     }
 private:
-    bool isSubset(vector<string>& sub, unordered_set<string>& all) {
-        for (const auto& s : sub) {
-            if (!all.count(s)) return false;
+    bool is_subset(const vector<string>& a, const unordered_set<string>& b) {
+        for (const string& x : a) {
+            if (!b.count(x)) return false;
         }
         return true;
     }
