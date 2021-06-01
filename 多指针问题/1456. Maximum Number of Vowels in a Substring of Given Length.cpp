@@ -1,31 +1,24 @@
 class Solution {
 public:
     int maxVowels(string s, int k) {
-        unordered_set<char> ok = {'a', 'e', 'i', 'o', 'u'};
+        int ans = 0;
         
-        const int N = s.size();
+        const int n = s.size();
         unordered_map<char, int> appear;
         
-        auto cnt = [&]() -> int {
-            int tmp = 0;
-            for (const auto& p : appear) {
-                if (ok.count(p.first)) tmp += p.second;
-            }
-            return tmp;
+        auto calc = [&]() -> int {
+            return appear['a'] + appear['e'] + appear['i'] + appear['o'] + appear['u'];
         };
         
-        for (int i = 0; i < k; i++) {
-            appear[s[i]]++;
+        for (int l = 0, r = 0; r < n; r++) {
+            appear[s[r]]++;
+            ans = max(ans, calc());
+            if (r - l + 1 == k) {
+                appear[s[l]]--;
+                l++;
+            }
         }
-        int answer = 0;
-        answer = max(answer, cnt());
         
-        for (int left = 0, right = k; right < N; left++, right++) {
-            appear[s[right]]++;
-            appear[s[left]]--;
-            
-            answer = max(answer, cnt());
-        }
-        return answer;
+        return ans;
     }
 };

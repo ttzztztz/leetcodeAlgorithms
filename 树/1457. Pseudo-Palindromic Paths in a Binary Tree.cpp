@@ -11,36 +11,35 @@
  */
 class Solution {
 public:
-    int answer = 0;
-    unordered_map<int, int> occur;
-    bool judge() {
-        int oddCnt = 0;
-        for (const auto& p : occur) {
-            if (p.second % 2 == 1) {
-                oddCnt++;
-                if (oddCnt >= 2) return false;
+    int pseudoPalindromicPaths (TreeNode* root) {
+        dfs(root);
+        return ans;
+    }
+private:
+    int ans = 0;
+    unordered_map<int, int> appear;
+    
+    bool is_palindrome() {
+        bool odd = false;
+        for (auto& [k, v] : appear) {
+            if (v % 2 == 1) {
+                if (odd) return false;
+                else odd = true;
             }
         }
         return true;
     }
-    void dfs(TreeNode* u) {
-        if (u == nullptr) return;
-        occur[u->val]++;
-        bool leaf = true;
-        if (u->left) {
-            dfs(u->left);
-            leaf = false;
-        }
-        if (u->right) {
-            dfs(u->right);
-            leaf = false;
-        }
+    
+    void dfs(TreeNode* root) {
+        if (root == nullptr) return;
         
-        if (leaf && judge()) answer++;
-        occur[u->val]--;
-    }
-    int pseudoPalindromicPaths (TreeNode* root) {
-        dfs(root);
-        return answer;
+        appear[root->val]++;
+        if (root->left == nullptr && root->right == nullptr) {
+            if (is_palindrome()) ans++;
+        } else {
+            dfs(root->left);
+            dfs(root->right);
+        }
+        appear[root->val]--;
     }
 };

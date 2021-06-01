@@ -1,78 +1,43 @@
 class TrieNode {
 public:
-    int flag;
+    vector<int> words;
     unordered_map<char, TrieNode*> next;
-    TrieNode() : flag(0) {};
-    TrieNode(bool flag) : flag(flag ? 1 : 0) {};
 };
 
 class Solution {
 public:
-    TrieNode* root;
-    vector<string> oneAnswer;
-
-    void insert(const string& word) {
-        TrieNode* curr = root;
-        for (const char ch : word) {
-            if (!curr->next.count(ch)) {
-                curr->next[ch] = new TrieNode();
-            }
-            curr = curr->next[ch];
-        }
-        curr->flag++;
-    }
-
-    void dfs(string& current, TrieNode* node) {
-        if (node->flag) {
-            for (int i = 0; i < node->flag; i++) {
-                oneAnswer.push_back(current);
-            }
-        }
-
-        for (const pair<char, TrieNode*>& dict : node->next) {
-            current.push_back(dict.first);
-            dfs(current, dict.second);
-            current.pop_back();
-        }
-    }
-
     vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) {
-        root = new TrieNode(false);
-        for (const string& product : products) {
-            insert(product);
+        sort(products.begin(), products.end());
+        for (int i = 0; i < products.size(); i++) {
+            insert(products[i], i);
         }
-
-        vector<vector<string>> answer;
-        string _searchWord;
-        for (const char& ch : searchWord) {
-            oneAnswer.clear();
-            _searchWord.push_back(ch);
-
-            TrieNode* curr = root;
-            bool isValid = true;
-            for (const char& c : _searchWord) {
-                if (!curr->next.count(c)) {
-                    isValid = false;
-                    break;
-                } else {
-                    curr = curr->next[c];
-                }
+        
+        vector<vector<string>> ans(searchWord.size());
+        TrieNode* cur = root;
+        for (int i = 0; i < searchWord.size(); i++) {
+            vector<string> res;
+            
+            cur = cur->next[searchWord[i]];
+            if (cur == nullptr) break;
+            
+            for (int i = 0; i < min<int>(cur->words.size(), 3); i++) {
+                res.push_back(products[cur->words[i]]);
             }
-
-            if (!isValid) {
-                answer.push_back(vector<string>());
-                continue;
-            }
-
-            string current = _searchWord;
-            dfs(current, curr);
-            sort(oneAnswer.begin(), oneAnswer.end());
-            if (oneAnswer.size() > 3) {
-                oneAnswer.resize(3);
-            }
-            answer.push_back(oneAnswer);
+            ans[i] = res;
         }
-
-        return answer;
+        return ans;
+    }
+private:
+    TrieNode* root = new TrieNode();
+    
+    void insert(const string& str, int idx) {
+        TrieNode* cur = root;
+        for (int i = 0; i < str.size(); i++) {
+            if (!cur->next.count(str[i])) {
+                cur->next[str[i]] = new TrieNode();
+            }
+            cur = cur->next[str[i]];
+            cur->words.push_back(idx);
+        }
     }
 };
