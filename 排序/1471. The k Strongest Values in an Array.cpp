@@ -1,20 +1,21 @@
 class Solution {
 public:
     vector<int> getStrongest(vector<int>& arr, int k) {
-        const int N = arr.size();
-        sort(arr.begin(), arr.end());
-        const int m = arr[(N - 1) / 2];
+        const int n = arr.size();
         
-        sort(arr.begin(), arr.end(), [&](const auto& $1, const auto& $2) -> bool{
-            const int a = abs($1 - m), b = abs($2 - m);
-            if (a == b) {
-                return $1 > $2;
-            } else {
-                return a > b;
+        const int median_idx = (n - 1) / 2;
+        nth_element(arr.begin(), arr.begin() + median_idx, arr.end());
+        const int median = arr[median_idx];
+        
+        nth_element(arr.begin(), arr.begin() + k, arr.end(), [&](int i, int j) -> bool {
+            if (abs(i - median) == abs(j - median)) {
+                return i > j;
             }
+            return abs(i - median) > abs(j - median);
         });
         
-        arr.resize(k);
-        return arr;
+        vector<int> ans(k);
+        for (int i = 0; i < k; i++) ans[i] = arr[i];
+        return ans;
     }
 };

@@ -1,35 +1,43 @@
 class Solution {
 public:
-    int minCost(vector<int>& houses, vector<vector<int>>& cost, int m, int n, int target) {
-        this->n = n, this->m = m, this->target = target;
-        memset(f, 0xff, sizeof f);
-        long long answer = dfs(houses, cost, 0, 0, target);
+    int minCost(vector<int>& houses, vector<vector<int>>& cost, int n, int m, int target) {
+        if (houses.empty()) return (target == 0) ? 0 : -1;
         
-        if (answer >= 99999999) return -1;
-        else return answer;
+        vector<vector<int>> f(m, vector<int>(target + 1, inf));
+        for (int i = n; i >= 1; i--) {
+            vector<vector<int>> g(m, vector<int>(target + 1, inf));
+            for (int j = 0; j < m; j++) for (int k = 0; k <= target; k++) {
+                int& val = g[j][k];
+                if (i == n) {
+                    val = (k == 0) ? 0 : inf;
+                    continue;
+                }
+
+                if (houses[i] != 0) { // have color
+                    if (j == houses[i] - 1) val = f[houses[i] - 1][k];
+                    else if (k >= 1) val = f[houses[i] - 1][k - 1];
+                } else {
+                    for (int c = 0; c < m; c++) {
+                        const int cos = cost[i][c];
+
+                        if (j == c) val = min(val, cos + f[c][k]);
+                        else if (k >= 1) val = min(val, cos + f[c][k - 1]);
+                    }
+                }
+            }
+            f = g;
+        }
+
+        int ans = inf;
+        if (houses[0] != 0) {
+            ans = f[houses[0] - 1][target - 1];
+        } else {
+            for (int i = 0; i < m; i++) ans = min(ans, cost[0][i] + f[i][target - 1]);
+        }
+
+        if (ans >= inf) return -1;
+        return ans;
     }
 private:
-    int n, m, target;
-    long long f[105][25][105];
-    long long dfs(vector<int>& houses, vector<vector<int>>& cost, int cur, int last, int remain) {
-        if (cur == m) {
-            if (remain == 0) return 0;
-            else return 99999999;
-        }
-        if (remain < 0) return 99999999;
-        long long& val = f[cur][last][remain];
-        if (val != -1) return val;
-        
-        if (houses[cur] != 0) {
-            if (last == houses[cur]) return val = dfs(houses, cost, cur + 1, houses[cur], remain);
-            else return val = dfs(houses, cost, cur + 1, houses[cur], remain - 1);
-        }
-        
-        long long answer = 99999999;
-        for (int k = 1; k <= n; k++) {
-            if (last == k) answer = min(answer, cost[cur][k - 1] + dfs(houses, cost, cur + 1, k, remain));
-            else answer = min(answer, cost[cur][k - 1] + dfs(houses, cost, cur + 1, k, remain - 1));
-        }
-        return val = answer;
-    }
+    const int inf = numeric_limits<int>::max() / 3;
 };

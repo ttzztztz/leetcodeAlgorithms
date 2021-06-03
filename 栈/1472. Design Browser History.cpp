@@ -1,40 +1,27 @@
 class BrowserHistory {
 public:
     BrowserHistory(string homepage) {
-        stk = {homepage};
+        history = { homepage };
         ptr = 0;
     }
     
     void visit(string url) {
         ptr++;
-        if (ptr >= stk.size()) stk.push_back(url);
-        else {
-            stk[ptr] = url;
-            while (stk.size() > ptr + 1) stk.pop_back();
-        }
+        history.resize(ptr + 1);
+        history[ptr] = url;
     }
     
     string back(int steps) {
-        if (steps > ptr) {
-            ptr = 0;
-            return stk[ptr];
-        } else {
-            ptr -= steps;
-            return stk[ptr];
-        }
+        ptr = max(0, ptr - steps);
+        return history[ptr];
     }
     
     string forward(int steps) {
-        if (ptr + steps >= stk.size()) {
-            ptr = stk.size() - 1;
-            return stk[ptr];
-        } else {
-            ptr += steps;
-            return stk[ptr];
-        }
+        ptr = min<int>(history.size() - 1, ptr + steps);
+        return history[ptr];
     }
 private:
-    vector<string> stk;
+    vector<string> history;
     int ptr = 0;
 };
 
