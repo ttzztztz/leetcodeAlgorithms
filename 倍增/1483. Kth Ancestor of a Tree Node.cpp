@@ -2,32 +2,30 @@ class TreeAncestor {
 public:
     TreeAncestor(int n, vector<int>& parent) {
         memset(f, 0xff, sizeof f);
-        for (int i = 0; i < parent.size(); i++) {
+        for (int i = 0; i < n; i++) {
             f[i][0] = parent[i];
         }
         
-        for (int j = 1; j <= 17; j++) {
-            for (int i = 0; i <= n; i++) {
-                const int t = f[i][j - 1];
-                if (t != -1) f[i][j] = f[t][j - 1];
-                else f[i][j] = -1;
+        for (int i = 1; i <= 30; i++) {
+            for (int u = 0; u < n; u++) {
+                const int t = f[u][i - 1];
+                if (t != -1) f[u][i] = f[t][i - 1];
             }
         }
     }
     
     int getKthAncestor(int node, int k) {
-        int cur = 0;
-        for (int i = 17; i >= 0; i--) {
-            if ((cur | (1 << i)) <= k) {
-                cur |= 1 << i;
-                node = f[node][i];
-                if (node == -1) return -1;
+        int u = node;
+        for (int i = 30; i >= 0; i--) {
+            if (k & (1 << i)) {
+                if (u == -1) return -1;
+                u = f[u][i];
             }
         }
-        return node;
+        return u;
     }
 private:
-    int f[50004][18];
+    int f[50005][31];
 };
 
 /**
