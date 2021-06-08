@@ -1,15 +1,14 @@
 class Solution {
 public:
     int minCostClimbingStairs(vector<int>& cost) {
-        int dp[cost.size() + 2];
-        std::memset(dp, 0x7f, sizeof(dp));
-        dp[0] = 0;
-        dp[1] = 0;
-        for (int i = 0; i < cost.size(); i++) {
-            int nowCost = cost[i];
-
-            dp[i + 2] = std::min(dp[i + 1], dp[i]) + nowCost;
+        const int n = cost.size();
+        
+        int f[1002];
+        memset(f, 0, sizeof f);
+        
+        for (int i = n - 1; i >= 0; i--) {
+            f[i] = cost[i] + min(f[i + 1], f[i + 2]);
         }
-        return std::min(dp[cost.size() + 1], dp[cost.size()]);
+        return min(f[0], f[1]);
     }
 };

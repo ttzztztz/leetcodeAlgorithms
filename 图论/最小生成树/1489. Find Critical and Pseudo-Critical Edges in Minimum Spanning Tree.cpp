@@ -1,64 +1,65 @@
 class Solution {
 public:
     vector<vector<int>> findCriticalAndPseudoCriticalEdges(int n, vector<vector<int>>& edges) {
-        parent = vector<int>(n + 5, 0);
         this->n = n;
-        vector<int> critical, pseudo;
-        
-        const int M = edges.size();
-        for (int i = 0; i < M; i++) {
+        for (int i = 0; i < edges.size(); i++) {
             edges[i].push_back(i);
         }
-        sort(edges.begin(), edges.end(), [](const auto& $1, const auto& $2) -> bool {
-            return $1[2] < $2[2];
+        sort(edges.begin(), edges.end(), [&](auto& lhs, auto& rhs) -> bool {
+            return lhs[2] < rhs[2];
         });
-        const int mst = MST(edges, -1, -1);
         
-        for (int i = 0; i < M; i++) {
-            if (MST(edges, -1, i) > mst) critical.push_back(i);
-            else if (MST(edges, i, -1) == mst) pseudo.push_back(i);
-        }
-        
-        return {critical, pseudo};
+        const int original = MST(edges, -1, -1);
+        vector<int> critical, pseudo;
+        for (auto& edge : edges) {
+            const int idx = edge[3];
+            if (MST(edges, -1, idx) > original) critical.push_back(idx);
+            else if (MST(edges, idx, -1) == original) pseudo.push_back(idx);
+        }        
+        return { critical, pseudo };
     }
 private:
-    int n;
+    int parent[101], n;
     void init() {
-        for (int i = 0; i <= n; i++) parent[i] = i;
+        for (int i = 0; i <= 100; i++) {
+            parent[i] = i;
+        }
     }
-    int findParent(int u) {
+    int find_parent(int u) {
         if (u == parent[u]) return u;
-        else return parent[u] = findParent(parent[u]);
+        else return parent[u] = find_parent(parent[u]);
     }
     void merge(int u, int v) {
-        const int pU = findParent(u), pV = findParent(v);
-        if (parent[pU] != pV) parent[pU] = pV;
+        const int pu = find_parent(u), pv = find_parent(v);
+        if (parent[pu] != pv) {
+            parent[pu] = pv;
+        }
     }
-    int MST(const vector<vector<int>>& edges, int forceInsert, int forceDelete) {
+    int MST(const vector<vector<int>>& edges, int force_insert, int force_delete) {
         init();
-        int answer = 0;
-        if (forceInsert != -1) {
-            for (const auto& e : edges) {
-                if (e[3] == forceInsert) {
-                    answer += e[2];
-                    merge(e[0], e[1]);
-                    break;
-                }
+        
+        int cnt = 0, ans = 0;
+        for (const auto& edge : edges) {
+            const int u = edge[0], v = edge[1], w = edge[2], idx = edge[3];
+            if (idx == force_insert) {
+                merge(u, v);
+                cnt++;
+                ans += w;
             }
         }
         
-        for (const auto& e : edges) {
-            if (forceDelete == e[3]) continue;
-            if (findParent(e[0]) == findParent(e[1])) continue;
+        for (const auto& edge : edges) {
+            const int u = edge[0], v = edge[1], w = edge[2], idx = edge[3];
+            if (idx == force_delete) continue;
             
-            answer += e[2];
-            merge(e[0], e[1]);
+            if (find_parent(u) != find_parent(v)) {
+                merge(u, v);
+                ans += w;
+                cnt++;
+            }
         }
         
-        for (int i = 1; i < n; i++) {
-            if (findParent(0) != findParent(i)) return 9999999;
-        }
-        return answer;
+        if (cnt != n - 1) return numeric_limits<int>::max();
+        else return ans;
     }
-    vector<int> parent;
 };

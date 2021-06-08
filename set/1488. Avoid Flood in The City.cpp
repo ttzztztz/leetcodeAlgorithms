@@ -1,42 +1,35 @@
 class Solution {
 public:
     vector<int> avoidFlood(vector<int>& rains) {
-        const int N = rains.size();
-        vector<int> answer(N);
-        set<int> chance;
+        const int n = rains.size();
         
-        unordered_map<int, int> used;
-        for (int i = 0; i < N; i++) {
+        unordered_map<int, int> appear;
+        vector<int> ans(n);
+        set<int> usable;
+        for (int i = 0; i < n; i++) {
             const int rain = rains[i];
             
-            if (rain > 0) {
-                if (used.count(rain)) {
-                    if (!chance.empty()) {
-                        const int k = used[rain];
-                        
-                        auto it = chance.lower_bound(k);
-                        if (it == chance.end()) return vector<int>{};
-                        const int top = *it;
-                        chance.erase(it);
-                        
-                        answer[top] = rain;
-                        used[rain] = i;
-                    } else {
-                        return vector<int>{};
-                    }
-                } else {
-                    used[rain] = i;
-                }
-                answer[i] = -1;
+            if (rain == 0) {
+                usable.insert(i);
+                ans[i] = 1;
             } else {
-                chance.insert(i);
+                if (!appear.count(rain)) {
+                    appear[rain] = i;
+                } else {
+                    const int t = appear[rain];
+                    appear[rain] = i;
+                    auto it = usable.lower_bound(t);
+                    
+                    if (it == usable.end()) {
+                        return {};
+                    } else {
+                        ans[*it] = rain;
+                        usable.erase(it);
+                    }
+                }
+                ans[i] = -1;
             }
         }
-        
-        for (int top : chance) {
-            answer[top] = 1;
-        }
-        
-        return answer;
+        return ans;
     }
 };
