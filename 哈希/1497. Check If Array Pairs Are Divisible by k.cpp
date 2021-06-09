@@ -1,23 +1,24 @@
 class Solution {
 public:
     bool canArrange(vector<int>& arr, int k) {
-        unordered_map<int, int> cnt;
-        for (int& i : arr) {
-            cnt[((i % k) + k) % k]++;
+        const int n = arr.size();
+        unordered_map<int, int> mod;
+        for (int i : arr) {
+            mod[((i % k) + k) % k]++;
         }
         
-        for (auto& p : cnt) {
-            if (p.first == 0) continue;
-            const int t = p.first;
-            const int r = k - t;
+        for (auto&[val, cnt] : mod) {
+            if (val == 0) continue;
             
-            if (t == r) {
-                if (cnt[t] % 2 == 1) return false;
+            if (k - val == val) {
+                if (cnt % 2 == 1) return false;
             } else {
-                if (cnt[t] != cnt[r]) return false;
+                if (cnt != mod[k - val]) {
+                    return false;
+                }
             }
         }
         
-        return true;
+        return mod[0] % 2 == 0;
     }
 };

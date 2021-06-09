@@ -32,6 +32,7 @@
 - 双指针
   1. [443. String Compression](https://leetcode.com/problems/string-compression/)
   2. [31. Next Permutation](https://leetcode.com/problems/next-permutation/)
+  3. [1498. Number of Subsequences That Satisfy the Given Sum Condition](https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/)
 - KMP
   1. [1392. Longest Happy Prefix](https://leetcode.com/problems/longest-happy-prefix/)
 - 字典树
@@ -160,6 +161,7 @@
 ## 有坑的问题
 1. [152. Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray)
 2. [665. Non-decreasing Array](https://leetcode.com/problems/non-decreasing-array/)
+3. [1497. Check If Array Pairs Are Divisible by k](https://leetcode.com/problems/check-if-array-pairs-are-divisible-by-k/)
 
 ## 冷门问题
 
