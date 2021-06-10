@@ -1,35 +1,35 @@
 class Solution {
 public:
     int numSubmat(vector<vector<int>>& mat) {
-        typedef pair<int, int> PII;
+        int ans = 0;
         
+        if (mat.empty()) return 0;
         const int n = mat.size(), m = mat[0].size();
-        vector<vector<int>> f(n + 1, vector<int>(m + 1, 0));
         
-        for (int i = 0; i < n; i++) {
-            for (int j = m - 1; j >= 0; j--) {
-                if (mat[i][j] == 1) f[i][j] = f[i][j + 1] + 1;
-                else f[i][j] = 0;
+        vector<vector<int>> f(n, vector<int>(m + 1, 0));
+        for (int i = 0; i < n; i++) for (int j = m - 1; j >= 0; j--) {
+            if (mat[i][j] == 1) {
+                f[i][j] = f[i][j + 1] + 1;
+            } else {
+                f[i][j] = 0;
             }
         }
         
-        int ans = 0;
         for (int j = 0; j < m; j++) {
+            vector<pair<int, int>> stk;
             int cur = 0;
-            
-            vector<PII> stk;
             for (int i = 0; i < n; i++) {
-                int width = 1;
+                int cnt = 1;
                 while (!stk.empty() && stk.back().first >= f[i][j]) {
-                    auto [_len, _width] = stk.back();
+                    auto[_len, _cnt] = stk.back();
                     stk.pop_back();
                     
-                    width += _width;
-                    cur -= _len * _width;
+                    cur -= _len * _cnt;
+                    cnt += _cnt;
                 }
                 
-                stk.emplace_back(f[i][j], width);
-                cur += width * f[i][j];
+                stk.emplace_back(f[i][j], cnt);
+                cur += cnt * f[i][j];
                 ans += cur;
             }
         }
