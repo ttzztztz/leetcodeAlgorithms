@@ -1,57 +1,52 @@
 class Solution {
 public:
     string minInteger(string num, int k) {
-        const int N = num.size();
+        const int n = num.size();
+        memset(data, 0, sizeof data);
         
-        string answer;
-        vector<vector<int>> digit(10, vector<int>{});
-        vector<int> order(10, 0);
-        init();
-        
-        for (int i = 0; i < N; i++) {
+        vector<vector<int>> pos(10);
+        for (int i = 0; i < n; i++) {
             const int d = num[i] - '0';
-            digit[d].push_back(i + 1);
+            pos[d].push_back(i);
         }
         
-        for (int i = 0; i < N; i++) {
-            const int d = num[i] - '0';
-            for (int a = 0; a <= 9; a++) {
-                if (order[a] >= digit[a].size()) continue;
+        string ans;
+        for (int i = 0; i < n; i++) {
+            for (int d = 0; d < 10; d++) {
+                if (pos[d].empty()) continue;
+                const int u = pos[d][0];
                 
-                const int pos = digit[a][order[a]];
-                const int cost = pos - query(pos) - 1;
+                const int cost = u - query(u);
                 if (cost <= k) {
                     k -= cost;
-                    inc(pos, 1);
-                    order[a]++;
-                    answer += '0' + a;
+                    pos[d].erase(pos[d].begin());
+                    ans += '0' + d;
+                    inc(u, 1);
                     break;
                 }
             }
         }
-        
-        return answer;
+        return ans;
     }
 private:
-    int f[30005];
-    void init() {
-        memset(f, 0, sizeof f);
+    int data[30005];
+    int lowbit(int u) {
+        return u&(-u);
     }
-    int lowbit(int x) {
-        return x & (-x);
-    }
-    int query(int x) {
-        int answer = 0;
-        while (x) {
-            answer += f[x];
-            x -= lowbit(x);
+    int query(int u) {
+        u++;
+        int ans = 0;
+        while (u) {
+            ans += data[u];
+            u -= lowbit(u);
         }
-        return answer;
+        return ans;
     }
-    void inc(int x, int y) {
-        while (x && x <= 30000) {
-            f[x] += y;
-            x += lowbit(x);
+    void inc(int u, int v) {
+        u++;
+        while (u && u <= 30001) {
+            data[u] += v;
+            u += lowbit(u);
         }
     }
 };

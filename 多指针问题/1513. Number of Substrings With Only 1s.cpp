@@ -1,20 +1,18 @@
 class Solution {
 public:
     int numSub(string s) {
-        const int MOD = 1e9+7;
-        const int N = s.size();
-
-        long long answer = 0;
+        typedef long long ll;
+        const int n = s.size(), mod = 1e9+7;
         
-        for (int l = 0, r = 0; r < N; r++) {
-            if (s[r] == '1') {
-                answer += r - l + 1;
-                answer %= MOD;
+        ll ans = 0;
+        for (int i = 0, cur = 0; i < n; i++) {
+            if (s[i] == '1') {
+                cur++;
+                ans = (ans + cur) % mod;
             } else {
-                l = r + 1;
+                cur = 0;
             }
         }
-        
-        return answer;
+        return ans;
     }
 };
