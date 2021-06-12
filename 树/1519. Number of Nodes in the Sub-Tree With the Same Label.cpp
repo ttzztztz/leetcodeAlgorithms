@@ -1,36 +1,34 @@
 class Solution {
 public:
-    vector<int> countSubTrees(int n, vector<vector<int>>& e, string labels) {
+    vector<int> countSubTrees(int n, vector<vector<int>>& edges, string labels) {
         this->labels = labels;
+        edge = vector<vector<int>>(n);
+        ans = vector<int>(n, 0);
         
-        emptyState = vector<int>(26, 0);
-        answer = vector<int>(n, 0);
-        edges = vector<vector<int>>(n, vector<int>{});
-        
-        for (const auto& p : e) {
-            edges[p[0]].push_back(p[1]);
-            edges[p[1]].push_back(p[0]);
+        for (auto& e : edges) {
+            edge[e[0]].push_back(e[1]);
+            edge[e[1]].push_back(e[0]);
         }
         
         dfs(0, -1);
-        return answer;
+        return ans;
     }
 private:
-    vector<int> emptyState, answer;
-    vector<vector<int>> edges;
     string labels;
+    vector<vector<int>> edge;
+    vector<int> ans;
+    
     vector<int> dfs(int u, int parent) {
-        vector<int> cur = emptyState;
-        cur[labels[u] - 'a']++;
+        vector<int> cnt(26, 0);
+        cnt[labels[u] - 'a']++;
         
-        for (int v : edges[u]) {
+        for (auto& v : edge[u]) {
             if (v == parent) continue;
-            
-            vector<int> f = dfs(v, u);
-            for (int x = 0; x < f.size(); x++) cur[x] += f[x];
+            auto next = dfs(v, u);
+            for (int i = 0; i < 26; i++) cnt[i] += next[i];
         }
         
-        answer[u] = cur[labels[u] - 'a'];
-        return std::move(cur);
+        ans[u] = cnt[labels[u] - 'a'];
+        return cnt;
     }
 };
