@@ -1,47 +1,49 @@
 class Solution {
 public:
-    bool check(vector<int>& nums, int length, const int state) {
-        for (int i = 0; i < nums.size(); i++) {
-            if (state & (1 << i)) {
-                length -= nums[i];
-            }
-
-            if (length < 0) {
-                return false;
-            }
+    bool makesquare(vector<int>& matchsticks) {
+        this->matchsticks = matchsticks;
+        n = matchsticks.size(), sum = accumulate(matchsticks.begin(), matchsticks.end(), 0);
+        mask = (1 << n) - 1;
+        if (sum % 4 != 0) return false;
+        
+        per = sum / 4;
+        memset(f, 0xff, sizeof f);
+        for (int i = 1; i < (1 << n); i++) {
+            if (acc(i) == per && dfs(1, i)) return true;
         }
-        return length == 0;
-    }
-    bool makesquare(vector<int>& nums) {
-        const int N = nums.size(), mask = (1 << N) - 1;
-        vector<bool> memo1(1 << N + 1, false), memo2(1 << N + 1, false);
-
-        int sum = 0;
-        for (int num : nums) sum += num;
-        if (sum % 4) return false;
-        const int length = sum / 4;
-
-        for (int state = 0; state <= (1 << N) - 1; state++) {
-            memo1[state] = check(nums, length, state);
-        }
-
-        for (int state = 0; state <= (1 << N) - 1; state++) {
-            if (!check(nums, sum / 2, state)) continue;
-
-            bool isOK = false;
-            for (int current = state; current; current = state & (current - 1)) {
-                if (memo1[current] && memo1[state ^ current]) {
-                    isOK = true;
-                    break;
-                }
-            }
-            memo2[state] = isOK;
-
-            if (memo2[mask ^ state] && memo2[state]) {
-                return true;
-            }
-        }
-
         return false;
+    }
+private:
+    vector<int> matchsticks;
+    int f[4][(1 << 15)];
+    int per = 0, n = 0, sum = 0, mask = 0;
+
+    int acc(int state) {
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            if (state & (1 << i)) ans += matchsticks[i];
+        }
+        return ans;
+    }
+    
+    bool dfs(int idx, int state) {
+        if (idx == 3) {
+            const int t = mask & (~state);
+            return acc(t) == per;
+        }
+        if (state == mask) return false;
+        
+        int& val = f[idx][state];
+        if (val != -1) return val;
+        
+        int ans = 0;
+        const int super = mask & (~state);
+        for (int i = super; i; i = (i - 1) & super) {
+            if (acc(i) == per && dfs(idx + 1, state | i)) {
+                ans = 1;
+                break;
+            }
+        }
+        return val = ans;
     }
 };

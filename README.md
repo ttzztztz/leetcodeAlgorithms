@@ -130,6 +130,7 @@
   2. [222. Count Complete Tree Nodes](https://leetcode.com/problems/count-complete-tree-nodes/)
   3. [958. Check Completeness of a Binary Tree](https://leetcode.com/problems/check-completeness-of-a-binary-tree/)
   4. [285. Inorder Successor in BST](https://leetcode.com/problems/inorder-successor-in-bst/)
+  5. [1530. Number of Good Leaf Nodes Pairs](https://leetcode.com/problems/number-of-good-leaf-nodes-pairs/)
 - 深度优先搜索
   1. [1254. Number of Closed Islands](https://leetcode.com/problems/number-of-closed-islands/)
 - 图论

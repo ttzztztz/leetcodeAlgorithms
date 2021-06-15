@@ -1,11 +1,16 @@
 class Solution {
 public:
     int minFlips(string target) {
-        const int N = target.size();
-        int answer = 0;
-        for (int i = 0; i < N; i++) {
-            if ((target[i] == '1' && answer % 2 == 0) || (target[i] == '0' && answer % 2 == 1)) answer++;
+        int ans = 0, cur = 0;
+        
+        const int n = target.size();
+        for (int i = 0; i < n; i++) {
+            const int d = target[i] - '0';
+            if (cur != d) {
+                cur ^= 1;
+                ans++;
+            }
         }
-        return answer;
+        return ans;
     }
 };
