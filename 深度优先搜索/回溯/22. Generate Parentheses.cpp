@@ -1,27 +1,29 @@
 class Solution {
 public:
-    vector<string> answer;
-    void dfs(int leftRemain, int rightRemain, string& state) {
-        if (leftRemain == rightRemain && leftRemain == 0) {
-            answer.push_back(state);
+    vector<string> generateParenthesis(int n) {
+        this->n = n;
+        dfs(0, 0);
+        return ans;
+    }
+private:
+    vector<string> ans;
+    string cur;
+    int n;
+    
+    void dfs(int idx, int balance) {
+        if (idx == 2 * n) {
+            if (balance == 0) ans.push_back(cur);
             return;
         }
-
-        if (leftRemain) {
-            state.push_back('(');
-            dfs(leftRemain - 1, rightRemain + 1, state);
-            state.pop_back();
+        
+        if (balance > 0) {
+            cur += ')';
+            dfs(idx + 1, balance - 1);
+            cur.pop_back();
         }
-        if (rightRemain) {
-            state.push_back(')');
-            dfs(leftRemain, rightRemain - 1, state);
-            state.pop_back();
-        }
-    }
-    vector<string> generateParenthesis(int n) {
-        string s;
-        dfs(n, 0, s);
-
-        return answer;
+        
+        cur += '(';
+        dfs(idx + 1, balance + 1);
+        cur.pop_back();
     }
 };
