@@ -1,22 +1,21 @@
 class Solution {
 public:
     char findKthBit(int n, int k) {
-        string all[25];
-        all[1] = "0";
+        string s = "0";
         for (int i = 2; i <= n; i++) {
-            string tmp = invert(all[i - 1]);
-            reverse(tmp.begin(), tmp.end());
-            all[i] = all[i - 1] + "1" + tmp;
+            s = s + "1" + reverse(invert(s));
         }
-        
-        return all[n][k - 1];
+        return s[k - 1];
     }
 private:
-    string invert(string x) {
-        for (int i = 0; i < x.size(); i++) {
-            if (x[i] == '1') x[i] = '0';
-            else x[i] = '1';
-        }
-        return x;
+    string invert(const string& str) {
+        string ans;
+        for (int i = 0; i < str.size(); i++) ans += (str[i] == '1' ? '0' : '1');
+        return ans;
+    }
+    string reverse(const string& str) {
+        string ans;
+        for (int i = str.size() - 1; i >= 0; i--) ans += str[i];
+        return ans;
     }
 };

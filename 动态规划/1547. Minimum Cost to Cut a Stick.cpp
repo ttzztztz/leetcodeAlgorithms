@@ -2,27 +2,23 @@ class Solution {
 public:
     int minCost(int n, vector<int>& cuts) {
         sort(cuts.begin(), cuts.end());
-        memset(f, 0xff, sizeof f);
+        const int m = cuts.size();
         
-        return dfs(cuts, 0, cuts.size() - 1, 0, n);
-    }
-private:
-    long long f[105][105];
-    long long dfs(vector<int>& cuts, int i, int j, int l, int r) {
-        if (i == j) return r - l;
-        if (i > j) return 0;
-        
-        long long& val = f[i][j];
-        if (val != -1) return val;
-        long long answer = 999999999;
-        
-        for (int k = i; k <= j; k++) {
-            long long lft = dfs(cuts, i, k - 1, l, cuts[k]);
-            long long rgt = dfs(cuts, k + 1, j, cuts[k], r);
-            long long cost = r - l;
-            answer = min(answer, cost + lft + rgt);
+        int f[105][105];
+        memset(f, 0x3f, sizeof f);
+        for (int len = 1; len <= m; len++) for (int i = 0; i + len - 1 < m; i++) {
+            const int j = i + len - 1;
+            
+            const int l = (i - 1 >= 0) ? cuts[i - 1] : 0;
+            const int r = (j + 1 < m) ? cuts[j + 1] : n;
+            const int cost = r - l;
+            
+            for (int k = i; k <= j; k++) {
+                f[i][j] = min(f[i][j], 
+                              (k - 1 >= i ? f[i][k - 1] : 0) + 
+                              (k + 1 <= j ? f[k + 1][j] : 0) + cost);
+            }
         }
-        
-        return val = answer;
+        return f[0][m - 1];
     }
 };
