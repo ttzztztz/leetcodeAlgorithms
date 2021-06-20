@@ -1,23 +1,31 @@
 class Solution {
 public:
     int kInversePairs(int n, int k) {
-        memset(f, 0, sizeof f);
-        memset(g, 0, sizeof g);
-        for (int i = 0; i <= n; i++) f[i][0] = g[i][0] = 1;
-        for (int i = 1; i <= k; i++) g[0][i] = 1;
-        
+        typedef long long ll;
         const int mod = 1e9+7;
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= k; j++) {
-                f[i][j] = (f[i][j] + g[i - 1][j]) % mod;
-                if (i <= j) f[i][j] = (f[i][j] - g[i - 1][j - i] + mod) % mod;
-                
-                g[i][j] = (g[i][j - 1] + f[i][j]) % mod;
-            }
+        
+        vector<ll> f(k + 1, 0), pref(k + 1, 0);
+        auto sum = [&](int j1, int j2) -> ll {
+            return (pref[min(k, j2)] -
+                (j1 >= 1 ? pref[j1 - 1] : 0) + mod) % mod;
+        };
+        
+        f[k] = 1;
+        for (int j = 0; j <= k; j++) {
+            pref[j] = (j >= 1 ? pref[j - 1] : 0) + f[j];
         }
         
-        return f[n][k];
+        for (int i = n; i >= 1; i--) {
+            vector<ll> nf(k + 1, 0), npref(k + 1, 0);
+            for (int j = 0; j <= k; j++) {
+                nf[j] = sum(j, j + i - 1);
+
+                npref[j] = (
+                    (j >= 1 ? npref[j - 1] : 0) + nf[j]
+                ) % mod;
+            }
+            f = nf, pref = npref;
+        }
+        return f[0];
     }
-private:
-    int f[1005][1005], g[1005][1005];
 };
