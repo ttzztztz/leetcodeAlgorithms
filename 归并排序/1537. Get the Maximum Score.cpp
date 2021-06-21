@@ -1,30 +1,28 @@
 class Solution {
 public:
     int maxSum(vector<int>& nums1, vector<int>& nums2) {
-        const int N = nums1.size(), M = nums2.size();
-        long long a = 0, b = 0, answer = 0;
-        const int mod = 1e9+7;
+        typedef long long ll;
         
-        int ptr1 = 0, ptr2 = 0;
-        while (ptr1 < N && ptr2 < M) {
-            if (nums1[ptr1] < nums2[ptr2]) {
-                a += nums1[ptr1++];
-            } else if (nums1[ptr1] > nums2[ptr2]) {
-                b += nums2[ptr2++];
+        const int mod = 1e9+7;
+        ll ans = 0;
+        ll a = 0, b = 0;
+        
+        const int n = nums1.size(), m = nums2.size();
+        int i = 0, j = 0;
+        while (i < n && j < m) {
+            if (nums1[i] < nums2[j]) {
+                a += nums1[i++];
+            } else if (nums1[i] > nums2[j]) {
+                b += nums2[j++];
             } else {
-                answer += max(a, b) + nums1[ptr1];
-                a = 0, b = 0;
-                ptr1++, ptr2++;
+                ans += max(a, b) + nums1[i];
+                a = b = 0;
+                i++, j++;
             }
         }
-        while (ptr1 < N) {
-            a += nums1[ptr1++];
-        }
-        while (ptr2 < M) {
-            b += nums2[ptr2++];
-        }
         
-        answer += max(a, b);
-        return answer % mod;
+        while (i < n) a += nums1[i++];
+        while (j < m) b += nums2[j++];
+        return (ans + max(a, b)) % mod;
     }
 };
