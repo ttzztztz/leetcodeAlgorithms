@@ -2,14 +2,10 @@ class Solution {
 public:
     int maxDistance(vector<int>& position, int m) {
         sort(position.begin(), position.end());
-        const int mi = *min_element(position.begin(), position.end()), mx = *max_element(position.begin(), position.end());;
-        int l = 1, r = mx - mi;
-        
+        int l = 1, r = position.back() - position.front();
         while (l <= r) {
             const int mid = (l + r) >> 1;
-            
-            const int s = solve(position, mid);
-            if (s < m) {
+            if (solve(position, mid) < m) {
                 r = mid - 1;
             } else {
                 l = mid + 1;
@@ -18,14 +14,14 @@ public:
         return r;
     }
 private:
-    int solve(const vector<int>& p, int m) {
-        int answer = 1, lst = p[0];
-        for (int i : p) {
-            if (abs(i - lst) >= m) {
-                answer++;
-                lst = i;
+    int solve(const vector<int>& position, int dist) {
+        int ans = 1, last = position[0];
+        for (int i = 1; i < position.size(); i++) {
+            if (position[i] - last >= dist) {
+                last = position[i];
+                ans++;
             }
         }
-        return answer;
+        return ans;
     }
 };

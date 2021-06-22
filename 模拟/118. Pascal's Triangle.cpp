@@ -1,21 +1,18 @@
 class Solution {
 public:
-    vector<vector<int>> generate(int numRows) {
-        vector<vector<int>> answer;
-        if (numRows == 0) return answer;
-        answer = {{1}};
-        for (int i = 1; i < numRows; i++) {
-            const vector<int>& prev = answer[i - 1];
-            vector<int> cur;
-            for (int k = 0; k <= i; k++) {
-                const int a = k >= prev.size() ? 0 : prev[k];
-                const int b = k - 1 >= 0 ? prev[k - 1] : 0;
-                
-                cur.push_back(a + b);
+    vector<vector<int>> generate(int n) {
+        vector<vector<int>> ans;
+        if (n == 0) return ans;
+        ans = { { 1 } };
+        for (int i = 1; i < n; i++) {
+            ans.push_back(vector<int>{});
+            for (int j = 0; j <= i; j++) {
+                ans.back().push_back(
+                    (j == i ? 0 : ans[i - 1][j])
+                    + (j == 0 ? 0 : ans[i - 1][j - 1])
+                );
             }
-            answer.push_back(cur);
         }
-        
-        return answer;
+        return ans;
     }
 };

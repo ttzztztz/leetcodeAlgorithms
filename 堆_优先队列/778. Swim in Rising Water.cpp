@@ -1,54 +1,36 @@
-class Point {
-public:
-    int x, y, height;
-    Point() : x(0), y(0), height(0) {};
-    Point(int a, int b, int h) : x(a), y(b), height(h) {};
-    bool operator<(const Point& $2) const {
-        return this->height > $2.height;
-    }
-};
-
 class Solution {
 public:
-    bool visited[51][51];
-    int N;
-    inline bool pointValid(int x, int y) {
-        return x >= 0 && y >= 0 && x < N && y < N && !visited[x][y];
-    }
     int swimInWater(vector<vector<int>>& grid) {
-        N = grid.size();
-        priority_queue<Point> heap;
-        std::memset(visited, 0, sizeof(visited));
-
-        heap.push(Point(0, 0, grid[0][0]));
-        int answer = 0;
+        if (grid.empty()) return 0;
+        const int n = grid.size(), m = grid[0].size();
+        
+        typedef tuple<int, int, int> State;
+        priority_queue<State, vector<State>, greater<>> heap;
+        vector<vector<int>> dist(n, vector<int>(m, numeric_limits<int>::max() / 2));
+        
+        dist[0][0] = grid[0][0];
+        heap.emplace(grid[0][0], 0, 0);
+        
+        const int dx[] = {0, 0, -1, 1};
+        const int dy[] = {-1, 1, 0, 0};
+        
+        auto point_valid = [&](int i, int j) -> bool {
+            return i >= 0 && j >= 0 && i < n && j < m;
+        };
+        
         while (!heap.empty()) {
-            Point p = heap.top();
+            auto [h, x, y] = heap.top();
             heap.pop();
-
-            answer = std::max(answer, p.height);
-            if (p.x == N - 1 && p.y == N - 1) {
-                return answer;
-            }
-
-            if (pointValid(p.x - 1, p.y)) {
-                visited[p.x - 1][p.y] = true;
-                heap.push(Point(p.x - 1, p.y, grid[p.x - 1][p.y]));
-            }
-            if (pointValid(p.x + 1, p.y)) {
-                visited[p.x + 1][p.y] = true;
-                heap.push(Point(p.x + 1, p.y, grid[p.x + 1][p.y]));
-            }
-            if (pointValid(p.x, p.y - 1)) {
-                visited[p.x][p.y - 1] = true;
-                heap.push(Point(p.x, p.y - 1, grid[p.x][p.y - 1]));
-            }
-            if (pointValid(p.x, p.y + 1)) {
-                visited[p.x][p.y + 1] = true;
-                heap.push(Point(p.x, p.y + 1, grid[p.x][p.y + 1]));
+            
+            if (x == n - 1 && y == m - 1) return h;
+            for (int k = 0; k < 4; k++) {
+                const int nx = x + dx[k], ny = y + dy[k];
+                if (point_valid(nx, ny) && dist[nx][ny] > max(h, grid[nx][ny])) {
+                    dist[nx][ny] = max(h, grid[nx][ny]);
+                    heap.emplace(dist[nx][ny], nx, ny);
+                }
             }
         }
-
-        return answer;
+        return -1; // never
     }
 };

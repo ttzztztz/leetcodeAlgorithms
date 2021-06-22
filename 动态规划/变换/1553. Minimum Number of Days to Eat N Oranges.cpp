@@ -1,15 +1,14 @@
 class Solution {
 public:
     int minDays(int n) {
-        return dfs(n);
+        if (n == 0) return 0;
+        if (memo.count(n)) return memo[n];
+        
+        int ans = n;
+        ans = min(ans, (n % 2) + 1 + minDays(n / 2));
+        ans = min(ans, (n % 3) + 1 + minDays(n / 3));
+        return memo[n] = ans;
     }
 private:
-    unordered_map<int, int> f;
-    int dfs(int u) {
-        if (u == 0) return 0;
-        if (u == 1) return 1;
-        if (f.count(u)) return f[u];
-        int ans = min(u, 1 + min((u % 2) + dfs(u / 2), (u % 3) + dfs(u / 3)));
-        return f[u] = ans;
-    }
+    unordered_map<int, int> memo;
 };
