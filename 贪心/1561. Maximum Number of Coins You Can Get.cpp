@@ -1,13 +1,12 @@
 class Solution {
 public:
     int maxCoins(vector<int>& piles) {
-        int answer = 0;
-        sort(piles.begin(), piles.end());
+        int ans = 0;
         const int n = piles.size();
-        
-        for (int i = n - 2, k = 0; i >= 0 && k < n / 3; i -= 2, k++) {
-            answer += piles[i];
+        sort(piles.begin(), piles.end());
+        for (int i = n - 2, j = 0; j < n / 3; j++, i -= 2) {
+            ans += piles[i];
         }
-        return answer;
+        return ans;
     }
 };
