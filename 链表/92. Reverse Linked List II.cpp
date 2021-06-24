@@ -3,34 +3,45 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
-    ListNode* reverseBetween(ListNode* head, int m, int n) {
-        if (head == nullptr) return nullptr;
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        ListNode* flag = new ListNode();
+        flag->next = head;
         
-        ListNode* cur = head, *prev = nullptr;
-        while (m > 1) {
+        ListNode* prev = flag, *cur = head;
+        for (int i = 0; i < left - 1; i++) {
             prev = cur;
             cur = cur->next;
-            m--, n--;
         }
+        ListNode* b = cur, *a = prev;
+        for (int i = left - 1; i < right; i++) {
+            prev = cur;
+            cur = cur->next;
+        }
+        ListNode* c = cur;
+        prev->next = nullptr;
+        a->next = reverse(b);
+        b->next = c;
         
-        ListNode* tail = cur, *first_con = prev;
-        while (n > 0) {
-            ListNode* tmp = cur->next;
+        ListNode* ans = flag->next;
+        delete flag;
+        return ans;
+    }
+private:
+    ListNode* reverse(ListNode* head) {
+        ListNode* cur = head, *prev = nullptr;
+        while (cur) {
+            ListNode* next = cur->next;
             cur->next = prev;
             prev = cur;
-            cur = tmp;
-            n--;
+            cur = next;
         }
-        
-        if (first_con == nullptr) head = prev;
-        else first_con->next = prev;
-        
-        tail->next = cur;
-        return head;
+        return prev;
     }
 };
