@@ -30,7 +30,6 @@ public:
             }
         }
         
-        if (ans.size() != s.size()) return "";
         return ans;
     }
 };

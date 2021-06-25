@@ -1,61 +1,53 @@
 class Solution {
 public:
     int numOfWays(vector<int>& nums) {
-        memset(frac, 0, sizeof frac);
-        frac[0] = inv[0] = 1;
-        for (int i = 1; i <= 2000; i++) {
-            frac[i] = (frac[i - 1] * i) % mod;
-            inv[i] = fastPow(frac[i], mod - 2);
-        }
-        
-        ll ans = dfs(nums);
-        ans--;
-        ans %= mod;
-        return ans;
+        init_frac();
+        return (dfs(nums) - 1 + mod) % mod;
     }
 private:
     typedef long long ll;
-    const int mod = 1e9 + 7;
-
-    ll dfs(const vector<int>& v) {
-        ll ans = 1;
-        if (v.empty()) return 1;
-        vector<int> l, r;
-        for (int i = 1; i < v.size(); i++) {
-            if (v[i] < v[0]) l.push_back(v[i]);
-            else r.push_back(v[i]);
-        }
-        
-        ans *= dfs(l);
-        ans %= mod;
-        ans *= dfs(r);
-        ans %= mod;
-        
-        ans *= C(l.size() + r.size(), l.size());
-        ans %= mod;
+    const int mod = 1e9+7;
+    ll frac[2001];
     
+    ll dfs(const vector<int>& arr) {
+        if (arr.empty()) return 1;
+        
+        const int t = arr[0];
+        vector<int> l, r;
+        for (int i = 1; i < arr.size(); i++) {
+            if (arr[i] < t) l.push_back(arr[i]);
+            else r.push_back(arr[i]); // arr[i] > t
+        }
+        const int n = l.size(), m = r.size();
+        ll ans = (dfs(l) * dfs(r)) % mod;
+        ans = (ans * C(n + m, m)) % mod;
         return ans;
     }
+    
     ll C(int a, int b) {
-        ll ans = frac[a] * inv[b];
-        ans %= mod;
-        ans *= inv[a - b];
-        ans %= mod;
-        return ans;
+        ll ans = (frac[a] * inverse(frac[b])) % mod;
+        return (ans * inverse(frac[a - b])) % mod;
     }
-    ll frac[2005], inv[2005];
-    ll fastPow(ll a, int b) {
-        ll ans = 1, base = a;
+    
+    ll inverse(ll a) {
+        return fast_pow(a, mod - 2);
+    }
+    
+    ll fast_pow(ll a, int b) {
+        ll ans = 1, cur = a;
         while (b) {
-            if (b & 1) {
-                ans *= base;
-                ans %= mod;
-            }
-            
-            base *= base;
-            base %= mod;
+            if (b & 1) ans = (ans * cur) % mod;
+            cur = (cur * cur) % mod;
             b >>= 1;
         }
         return ans;
+    }
+    
+    void init_frac() {
+        memset(frac, 0, sizeof frac);
+        frac[0] = frac[1] = 1;
+        for (int i = 2; i <= 2000; i++) {
+            frac[i] = (1ll * frac[i - 1] * i) % mod;
+        }
     }
 };

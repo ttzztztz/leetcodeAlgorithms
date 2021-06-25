@@ -1,78 +1,60 @@
 class Solution {
 public:
     int maxNumEdgesToRemove(int n, vector<vector<int>>& edges) {
-        int answer = 0, type3answer = 0;
-        typedef pair<int, int> PII;
-        vector<PII> edg[5];
-        for (auto& e : edges) {
-            edg[e[0]].emplace_back(e[1], e[2]);
-        }
+        const int t = merge_edges(n, edges, -1);
+        int ans = merge_edges(n, edges, 1) + merge_edges(n, edges, 2) - t;
         
-        init();
-        for (auto& p : edg[3]) {
-            int u, v;
-            tie(u, v) = p;
-            
-            if (findParent(u) != findParent(v)) {
-                merge(u, v);
-            } else {
-                type3answer++;
-            }
-        }
-        
-        for (auto& p : edg[1]) {
-            int u, v;
-            tie(u, v) = p;
-            
-            if (findParent(u) != findParent(v)) {
-                merge(u, v);
-            } else {
-                answer++;
-            }
-        }
-        
-        if (size[findParent(1)] != n) return -1;
-        init();
-        for (auto& p : edg[3]) {
-            int u, v;
-            tie(u, v) = p;
-            
-            if (findParent(u) != findParent(v)) {
-                merge(u, v);
-            }
-        }
-        
-        for (auto& p : edg[2]) {
-            int u, v;
-            tie(u, v) = p;
-            
-            if (findParent(u) != findParent(v)) {
-                merge(u, v);
-            } else {
-                answer++;
-            }
-        }
-        
-        if (size[findParent(1)] != n) return -1;
-        return answer + type3answer;
+        const int m = edges.size();
+        if (size[find_parent(1)] != n) return -1;
+        return m - ans;
     }
 private:
-    int parent[100005], size[100005];
-    void init() {
-        for (int i = 0; i <= 100000; i++) {
+    vector<int> parent, size;
+    void init(int n) {
+        parent = size = vector<int>(n + 1, 0);
+        for (int i = 0; i <= n; i++) {
             parent[i] = i;
             size[i] = 1;
         }
     }
-    int findParent(int u) {
-        if (u == parent[u]) return u;
-        else return parent[u] = findParent(parent[u]);
+    
+    int find_parent(int u) {
+        if (parent[u] == u) return u;
+        else return parent[u] = find_parent(parent[u]);
     }
+    
     void merge(int u, int v) {
-        const int pu = findParent(u), pv = findParent(v);
+        const int pu = find_parent(u), pv = find_parent(v);
         if (parent[pu] != pv) {
             parent[pu] = pv;
             size[pv] += size[pu];
         }
+    }
+    
+    int merge_edges(int n, vector<vector<int>>& edges, int type) {
+        int ans = 0;
+        init(n);
+        for (auto& e : edges) {
+            if (e[0] == 3) {
+                const int u = e[1], v = e[2];
+                if (find_parent(u) != find_parent(v)) {
+                    merge(u, v);
+                    ans++;
+                }
+            }
+        }
+        
+        if (type != -1) {
+            for (auto& e : edges) {
+                if (e[0] == type) {
+                    const int u = e[1], v = e[2];
+                    if (find_parent(u) != find_parent(v)) {
+                        merge(u, v);
+                        ans++;
+                    }
+                }
+            }
+        }
+        return ans;
     }
 };

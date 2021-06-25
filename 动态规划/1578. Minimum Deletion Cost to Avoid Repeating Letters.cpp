@@ -1,26 +1,34 @@
 class Solution {
 public:
     int minCost(string s, vector<int>& cost) {
-        memset(f, 0xff, sizeof f);
-        this->cost = cost;
-        this->s = s;
-        return dfs(0, 27);
-    }
-private:
-    int f[100005][28];
-    vector<int> cost;
-    string s;
-    int dfs(int i, int last) {
-        if (i == s.size()) return 0;
-        int& val = f[i][last];
-        if (val != -1) return val;
+        if (s.empty()) return 0;
         
-        int answer = numeric_limits<int>::max();
-        if (s[i] - 'a' == last) {
-            answer = min(answer, cost[i] + dfs(i + 1, last));
-        } else {
-            answer = min(cost[i] + dfs(i + 1, last), dfs(i + 1, s[i] - 'a'));
+        const int n = cost.size();
+        vector<int> f(27, numeric_limits<int>::max() / 2);
+        
+        for (int i = n; i >= 0; i--) {
+            vector<int> g(27, numeric_limits<int>::max() / 2);
+            for (int last = 0; last < 27; last++) {
+                int& val = g[last];
+                if (i == n) {
+                    val = 0;
+                    continue;
+                }
+
+                const int cur = s[i] - 'a';
+                if (last == 26) {
+                    val = min(f[26] + cost[i], f[cur]);
+                    continue;
+                }
+
+                if (last == cur) {
+                    val = cost[i] + f[last];
+                } else {
+                    val = min(cost[i] + f[last], f[cur]);
+                }
+            }
+            f = g;
         }
-        return val = answer;
+        return f[26];
     }
 };
