@@ -1,45 +1,41 @@
 class Solution {
 public:
-    vector<int> indexTree;
-    int lowbit(int x) {
-        return x & (-x);
-    }
-    int query(int x) {
-        int answer = 0;
-        while (x) {
-            answer += indexTree[x];
-            x -= lowbit(x);
-        }
-        return answer;
-    }
-    void increment(int x, int val) {
-        while (x && x < indexTree.size()) {
-            indexTree[x] += val;
-            x += lowbit(x);
-        }
-    }
-
     vector<int> countSmaller(vector<int>& nums) {
-        indexTree.resize((nums.size() + 1) * log2(nums.size() + 1));
-        for (int i = 0; i < indexTree.size(); i++) {
-            indexTree[i] = 0;
+        const int n = nums.size();
+        
+        memset(data, 0, sizeof data);
+        vector<int> ans(n, 0);
+        for (int i = n - 1; i >= 0; i--) {
+            ans[i] = query(nums[i] - 1);
+            inc(nums[i], 1);
         }
-
-        vector<int> rankNums = nums;
-        std::sort(rankNums.begin(), rankNums.end());
-        std::unique(rankNums.begin(), rankNums.end());
-        for (int& number: nums) {
-            int newNumber = std::lower_bound(rankNums.begin(), rankNums.end(), number) - rankNums.begin() + 1;
-            number = newNumber;
+        return ans;
+    }
+private:
+    const int base = 1e4+1, maxn = 50000;
+    int data[50001];
+    
+    int lowbit(int x) {
+        return x&(-x);
+    }
+    
+    int query(int u) {
+        u += base;
+        
+        int ans = 0;
+        while (u) {
+            ans += data[u];
+            u -= lowbit(u);
         }
-
-        for (int i = nums.size() - 1; i >= 0; i--) {
-            int number = nums[i];
-
-            nums[i] = query(number - 1);
-            increment(number, 1);
+        return ans;
+    }
+    
+    void inc(int u, int v) {
+        u += base;
+        
+        while (u && u < maxn) {
+            data[u] += v;
+            u += lowbit(u);
         }
-
-        return nums;
     }
 };
