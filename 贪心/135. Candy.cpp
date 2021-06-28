@@ -1,30 +1,22 @@
 class Solution {
 public:
     int candy(vector<int>& ratings) {
-        const int N = ratings.size();
-        int answer = 0;
-        vector<int> left(N, 0), right(N, 0);
-        left[0] = right[N - 1] = 1;
+        const int n = ratings.size();
+        if (n <= 1) return n;
         
-        for (int i = 1; i < N; i++) {
-            if (ratings[i] > ratings[i - 1]) {
-                left[i] = left[i - 1] + 1;
-            } else {
-                left[i] = 1;
-            }
+        vector<int> l(n, 1), r(n, 1);
+        for (int i = 1; i < n; i++) {
+            if (ratings[i - 1] < ratings[i]) l[i] = 1 + l[i - 1];
+            else l[i] = 1;
         }
         
-        for (int i = N - 2; i >= 0; i--) {
-            if (ratings[i] > ratings[i + 1]) {
-                right[i] = right[i + 1] + 1;
-            } else {
-                right[i] = 1;
-            }
+        for (int i = n - 2; i >= 0; i--) {
+            if (ratings[i] > ratings[i + 1]) r[i] = 1 + r[i + 1];
+            else r[i] = 1;
         }
         
-        for (int i = 0; i < N; i++) {
-            answer += max(left[i], right[i]);
-        }
-        return answer;
+        int ans = 0;
+        for (int i = 0; i < n; i++) ans += max(l[i], r[i]);
+        return ans;
     }
 };
