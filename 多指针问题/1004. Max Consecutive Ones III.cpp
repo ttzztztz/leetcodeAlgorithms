@@ -1,27 +1,16 @@
 class Solution {
 public:
-    int longestOnes(vector<int>& A, int K) {
-        int answer = 0;
-        const int N = A.size();
-
-        int left = 0, right = 0, current = 0;
-        while (right < N) {
-            if (A[right] == 0) {
-                current++;
+    int longestOnes(vector<int>& nums, int k) {
+        const int n = nums.size();
+        int ans = 0;
+        for (int l = 0, r = 0, cnt_0 = 0; r < n; r++) {
+            cnt_0 += (nums[r] == 0);
+            while (cnt_0 > k) {
+                cnt_0 -= (nums[l] == 0);
+                l++;
             }
-
-            while (current > K) {
-                if (A[left] == 0) {
-                    current--;
-                }
-                left++;
-            }
-
-            answer = max(answer, right - left + 1);
-            right++;
+            ans = max(ans, r - l + 1);
         }
-
-
-        return answer;
+        return ans;
     }
 };
