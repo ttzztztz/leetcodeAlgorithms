@@ -1,25 +1,31 @@
 class Solution {
 public:
     int visiblePoints(vector<vector<int>>& points, int angle, vector<int>& location) {
-        int ans = 0, ext = 0;
-        const int n = points.size();
-        const double PI = 3.14159265359, eps = 1e-9;
+        int ans = 0, extra = 0;
+        
+        const int x0 = location[0], y0 = location[1];
+        const double EPS = 1e-9;
+        
         vector<double> v;
-        for (int i = 0; i < n; i++) {
-            const int x = points[i][0], y = points[i][1];
-            if (x == location[0] && y == location[1]) ext++;
-            else v.push_back(atan2(y - location[1], x - location[0]) * 180.0 / PI);
+        const double PI = 3.14159265359;
+        for (auto& point : points) {
+            const int x = point[0], y = point[1];
+            if (x == x0 && y == y0) {
+                extra++;
+            } else {
+                const double alpha = atan2(y - y0, x - x0) * 180.0 / PI;
+                
+                v.push_back(alpha);
+                v.push_back(alpha + 360.0);
+            }
         }
         
-        for (int i = 0, m = v.size(); i < m; i++) {
-            v.push_back(v[i] + 360.0);
-        }
         sort(v.begin(), v.end());
-        
-        for (int l = 0, r = 0; r < v.size(); r++) {
-            while (l < r && v[r] - v[l] >= eps + angle) l++;
+        const int n = v.size();
+        for (int l = 0, r = 0; r < n; r++) {
+            while (v[r] - v[l] - EPS >= 1.0 * angle) l++;
             ans = max(ans, r - l + 1);
         }
-        return ans + ext;
+        return ans + extra;
     }
 };

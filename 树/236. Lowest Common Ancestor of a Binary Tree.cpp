@@ -11,26 +11,25 @@ class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
         vector<TreeNode*> path1, path2;
-        find(root, p, path1);
-        find(root, q, path2);
+        dfs(root, p, path1);
+        dfs(root, q, path2);
         
-        TreeNode *prev = root;
         for (int i = 0; i < min(path1.size(), path2.size()); i++) {
-            if (path1[i] != path2[i]) return prev;
-            prev = path1[i];
+            if (path1[i] == path2[i]) continue;
+            else return path1[i - 1];
         }
-        return prev;
+        return path1[min(path1.size(), path2.size()) - 1];
     }
 private:
-    bool find(TreeNode* u, TreeNode* target, vector<TreeNode*>& storage) {
-        if (u == nullptr) return false;
-        storage.push_back(u);
+    bool dfs(TreeNode* root, TreeNode* target, vector<TreeNode*>& path) {
+        if (root == nullptr) return false;
         
-        if (u == target) return true;
-        if (find(u->left, target, storage)) return true;
-        if (find(u->right, target, storage)) return true;
-        
-        storage.pop_back();
+        path.push_back(root);
+        if (root == target) return true;
+
+        if (dfs(root->left, target, path)) return true;
+        if (dfs(root->right, target, path)) return true;
+        path.pop_back();
         return false;
     }
 };
