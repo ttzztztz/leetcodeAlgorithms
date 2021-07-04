@@ -1,44 +1,73 @@
-const int MOD = 1000000007;
+class Solution {
+public:
+    int countVowelPermutation(int n) {
+        this->n = n;
+        memset(f, 0xff, sizeof f);
+        if (n == 0) return 1;
+        ll ans = 0;
+        for (int i = 0; i <= 4; i++) ans = (ans + dfs(1, i)) % mod;
+        return ans;
+    }
+private:
+    typedef long long ll;
+    const int mod = 1e9+7;
+    
+    ll f[20005][6];
+    int n;
+    // 0 -> a, 1 -> e, 2 -> i, 3 -> o, 4 -> u
+    vector<vector<int>> nxt = {
+        { 1 },
+        { 0, 2 },
+        { 0, 1, 3, 4 },
+        { 2, 4 },
+        { 0 }
+    };
+    
+    ll dfs(int idx, int last) {
+        if (idx == n) return 1;
+        ll& val = f[idx][last];
+        if (val != -1) return val;
+        
+        ll ans = 0;
+        for (int ne : nxt[last]) ans = (ans + dfs(idx + 1, ne)) % mod;
+        return val = ans;
+    }
+};
 
 class Solution {
 public:
-    int N;
-    long long dp[20005][6];
-    long long dfs(int i, int charIndex) {
-        if (i >= N) {
-            return 1;
-        }
-        if (dp[i][charIndex] != -1) {
-            return dp[i][charIndex];
-        }
-
-        long long currentAnswer = 0;
-        if (charIndex == 0) {
-            currentAnswer = (currentAnswer + dfs(i + 1, 1)) % MOD;
-        } else if (charIndex == 1) {
-            currentAnswer = (currentAnswer + dfs(i + 1, 0)) % MOD;
-            currentAnswer = (currentAnswer + dfs(i + 1, 2)) % MOD;
-        } else if (charIndex == 2) {
-            currentAnswer = (currentAnswer + dfs(i + 1, 0)) % MOD;
-            currentAnswer = (currentAnswer + dfs(i + 1, 1)) % MOD;
-            currentAnswer = (currentAnswer + dfs(i + 1, 3)) % MOD;
-            currentAnswer = (currentAnswer + dfs(i + 1, 4)) % MOD;
-        } else if (charIndex == 3) {
-            currentAnswer = (currentAnswer + dfs(i + 1, 2)) % MOD;
-            currentAnswer = (currentAnswer + dfs(i + 1, 4)) % MOD;
-        } else {
-            currentAnswer = (currentAnswer + dfs(i + 1, 0)) % MOD;
-        }
-        return dp[i][charIndex] = currentAnswer;
-    }
     int countVowelPermutation(int n) {
-        this->N = n - 1;
-        memset(dp, 0xff, sizeof(dp));
+        if (n == 0) return 1;
+        
+        ll f[20005][6];
+        memset(f, 0, sizeof f);
+        
+        for (int idx = n; idx >= 0; idx--) for (int last = 0; last <= 4; last++) {
+            ll& val = f[idx][last];
+            if (idx == n) {
+                val = 1;
+                continue;
+            }
 
-        long long zeroAnswer = 0;
-        for (int i = 0; i <= 4; i++) {
-            zeroAnswer = (zeroAnswer + dfs(0, i)) % MOD;
+            for (int ne : nxt[last]) {
+                val = (val + f[idx + 1][ne]) % mod;
+            }
         }
-        return (int)(zeroAnswer % MOD);
+        
+        ll ans = 0;
+        for (int i = 0; i <= 4; i++) ans = (ans + f[1][i]) % mod;
+        return ans;
     }
+private:
+    typedef long long ll;
+    const int mod = 1e9+7;
+    
+    // 0 -> a, 1 -> e, 2 -> i, 3 -> o, 4 -> u
+    vector<vector<int>> nxt = {
+        { 1 },
+        { 0, 2 },
+        { 0, 1, 3, 4 },
+        { 2, 4 },
+        { 0 }
+    };
 };
