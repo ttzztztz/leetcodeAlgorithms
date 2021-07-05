@@ -159,6 +159,8 @@
   2. [1253. Reconstruct a 2-Row Binary Matrix](https://leetcode.com/problems/reconstruct-a-2-row-binary-matrix/)
 - 基数排序
   1. [164. Maximum Gap](https://leetcode.com/problems/maximum-gap/)
+- 滚动哈希
+  1. [1923. Longest Common Subpath](https://leetcode.com/problems/longest-common-subpath/)
 
 ## 有坑的问题
 1. [152. Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray)
