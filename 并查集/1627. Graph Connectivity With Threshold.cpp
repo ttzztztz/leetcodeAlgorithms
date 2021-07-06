@@ -1,33 +1,38 @@
 class Solution {
 public:
     vector<bool> areConnected(int n, int threshold, vector<vector<int>>& queries) {
-        init(n);
-        for (int i = threshold + 1; i <= n; i++) {
-            for (int j = 1; j * i <= n; j++) {
-                merge(i * j, i);
+        init();
+        for (int j = threshold + 1; j <= n; j++) {
+            for (int i = 1; i * j <= n; i++) {
+                merge(j, i * j);
             }
         }
         
-        vector<bool> ans;
-        for (int i = 0; i < queries.size(); i++) {
-            const int pu = fp(queries[i][0]), pv = fp(queries[i][1]);
-            ans.push_back(pu == pv);
+        const int q = queries.size();
+        vector<bool> ans(q);
+        for (int i = 0; i < q; i++) {
+            const int x = queries[i][0], y = queries[i][1];
+            
+            if (threshold == 0) ans[i] = true;
+            else ans[i] = (query(x) == query(y));
         }
         return ans;
     }
 private:
-    int parent[10005];
-    void init(int n) {
-        for (int i = 0; i <= n; i++) parent[i] = i;
+    int parent[10001];
+    void init() {
+        for (int i = 0; i <= 10000; i++) parent[i] = i;
     }
+    
+    int query(int u) {
+        if (u == parent[u]) return u;
+        else return parent[u] = query(parent[u]);
+    }
+    
     void merge(int u, int v) {
-        const int pu = fp(u), pv = fp(v);
-        if (pu != pv) {
+        const int pu = query(u), pv = query(v);
+        if (parent[pu] != pv) {
             parent[pu] = pv;
         }
-    }
-    int fp(int u) {
-        if (parent[u] != u) return parent[u] = fp(parent[u]);
-        else return parent[u];
     }
 };
