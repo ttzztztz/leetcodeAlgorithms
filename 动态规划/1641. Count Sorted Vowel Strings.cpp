@@ -1,23 +1,23 @@
 class Solution {
 public:
     int countVowelStrings(int n) {
-        this->n = n;
-        memset(f, 0xff, sizeof f);
-        return dfs(0, 0);
-    }
-private:
-    vector<int> all = {'a','e','i','o','u'};
-    int f[55][6];
-    int n;
-    int dfs(int idx, int last) {
-        if (idx == n) return 1;
-        int& val = f[idx][last];
-        if (val != -1) return val;
+        typedef long long ll;
         
-        int ans = 0;
-        for (int k = last; k < all.size(); k++) {
-            ans += dfs(idx + 1, k);
+        vector<ll> f(6, 0);
+        for (int i = n; i >= 0; i--) {
+            vector<ll> g(6, 0);
+            for (int j = 0; j < 5; j++) {
+                if (i == n) {
+                    g[j] = 1;
+                    continue;
+                }
+
+                g[j] = f[j];
+                for (int k = j + 1; k < 5; k++) g[j] += f[k];
+            }
+            f = g;
         }
-        return val = ans;
+        
+        return f[0];
     }
 };

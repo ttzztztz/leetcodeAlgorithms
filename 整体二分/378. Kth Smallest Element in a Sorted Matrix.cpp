@@ -1,27 +1,29 @@
 class Solution {
 public:
-    int N, M;
-    int solve(vector<vector<int>>& matrix, int k) {
-        int answer = 0;
-        for (int i = 0; i < N; i++) {
-            auto it = std::upper_bound(matrix[i].begin(), matrix[i].end(), k);
-            answer += it - matrix[i].begin();
-        }
-        return answer;
-    }
     int kthSmallest(vector<vector<int>>& matrix, int k) {
-        N = matrix.size(), M = matrix[0].size();
-
-        long long left = matrix[0][0], right = matrix[N - 1][M - 1];
-        while (left <= right) {
-            long long middle = (left + right) >> 1;
-
-            if (solve(matrix, middle) >= k) {
-                right = middle - 1;
+        const int inf = 1e9;
+        int l = -inf, r = inf;
+        while (l <= r) {
+            const int mid = (l + r) / 2;
+            const int t = solve(matrix, mid);
+            
+            if (t < k) {
+                l = mid + 1;
             } else {
-                left = middle + 1;
+                r = mid - 1;
             }
         }
-        return right + 1;
+        
+        return l;
+    }
+private:
+    int solve(const vector<vector<int>>& mat, int target) {
+        int ans = 0;
+        const int n = mat.size(), m = mat[0].size();
+        for (int i = 0, j = m - 1; i < n; i++) {
+            while (j >= 0 && mat[i][j] > target) j--;
+            ans += j + 1;
+        }
+        return ans;
     }
 };
