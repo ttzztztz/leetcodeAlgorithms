@@ -1,25 +1,18 @@
 class Solution {
 public:
     int minDeletions(string s) {
+        unordered_map<char, int> appear;
+        for (const char ch : s) appear[ch]++;
+        
+        vector<int> all;
+        for (auto& [k, v] : appear) all.push_back(v);
+        sort(all.begin(), all.end());
+        
         int ans = 0;
-        
-        unordered_map<char, int> freq;
-        for (const char ch : s) freq[ch]++;
-        
-        multiset<int> vec;
-        for (const auto& p : freq) {
-            vec.insert(p.second);
-        }
-        
-        while (!vec.empty()) {
-            auto it = --vec.end();
-            int val = *it;
-            
-            vec.erase(it);
-            if (vec.count(val)) {
-                if (val - 1 > 0) vec.insert(val - 1);
-                ans++;
-            }
+        for (int i = all.size() - 1, last = s.size() + 5; i >= 0; i--) {
+            int t = max(0, min(last - 1, all[i]));
+            ans += all[i] - t;
+            last = t;
         }
         return ans;
     }
