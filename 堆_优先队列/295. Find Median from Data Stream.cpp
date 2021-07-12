@@ -1,31 +1,36 @@
 class MedianFinder {
 public:
     /** initialize your data structure here. */
-    priority_queue<int, vector<int>, greater<>> lowHeap;
-    priority_queue<int, vector<int>, less<>> highHeap;
     MedianFinder() {}
-
+    
     void addNum(int num) {
-        lowHeap.push(num);
-
-        highHeap.push(lowHeap.top());
-        lowHeap.pop();
-
-        while (lowHeap.size() < highHeap.size()) {
-            lowHeap.push(highHeap.top());
-            highHeap.pop();
+        big_heap.push(num);
+        const int n = big_heap.size() + small_heap.size();
+        
+        if (big_heap.size() > (n / 2)) {
+            auto t = big_heap.top();
+            big_heap.pop();
+            small_heap.push(t);
+        }
+        
+        while (!big_heap.empty() && !small_heap.empty() && big_heap.top() > small_heap.top()) {
+            auto a = big_heap.top(), b = small_heap.top();
+            big_heap.pop(), small_heap.pop();
+            big_heap.push(b), small_heap.push(a);
         }
     }
-
+    
     double findMedian() {
-        if (highHeap.size() != lowHeap.size()) {
-            // odd
-            return 1.0 * lowHeap.top();
+        const int n = big_heap.size() + small_heap.size();
+        if (n % 2 == 0) {
+            return 0.5 * (big_heap.top() + small_heap.top());
         } else {
-            // even
-            return 1.0 * (highHeap.top() + lowHeap.top()) / 2.0;
+            return small_heap.top();
         }
     }
+private:
+    priority_queue<int, vector<int>, less<>> big_heap;
+    priority_queue<int, vector<int>, greater<>> small_heap;
 };
 
 /**
