@@ -1,20 +1,15 @@
 class Solution {
 public:
     bool isIsomorphic(string s, string t) {
-        return solve(s, t) && solve(t, s);
+        return check(s, t) && check(t, s);
     }
 private:
-    bool solve(const string& s, const string& t) {
-        const int N = s.size(), M = t.size();
-        if (N != M) return false;
-        
-        unordered_map<char, char> replace;
-        for (int i = 0; i < N; i++) {
-            if (replace.count(s[i])) {
-                if (replace[s[i]] != t[i]) return false;
-            } else {
-                replace[s[i]] = t[i];
-            }
+    bool check(const string& s, const string& t) {
+        const int n = s.size();
+        unordered_map<char, char> m;
+        for (int i = 0; i < n; i++) {
+            if (m.count(s[i]) && m[s[i]] != t[i]) return false;
+            m[s[i]] = t[i];
         }
         return true;
     }
