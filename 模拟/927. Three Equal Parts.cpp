@@ -1,51 +1,44 @@
 class Solution {
 public:
-    vector<int> threeEqualParts(vector<int>& A) {
-        const int N = A.size();
-
-        vector<int> _1pos;
-        vector<int> answer{-1, -1};
-        for (int i = 0; i < N; i++) {
-            if (A[i] == 1) {
-                _1pos.push_back(i);
-            }
+    vector<int> threeEqualParts(vector<int>& arr) {
+        const int n = arr.size();
+        
+        vector<int> pos1;
+        for (int i = 0; i < n; i++) {
+            if (arr[i] == 1) pos1.push_back(i);
         }
-
-        if (_1pos.size() % 3) {
-            return answer;
-        }
-        if (_1pos.size() == 0) {
-            return vector<int>{0, 2};
-        }
-
-        const int partSize = _1pos.size() / 3;
-        int end1 = _1pos[partSize - 1], end2 = _1pos[2 * partSize - 1], end3 = _1pos[3 * partSize - 1];
-        const int endZeroCount = N - 1 - end3;
-
-        if (end2 + endZeroCount >= end3) {
-            return answer;
-        } else {
-            end2 += endZeroCount;
-        }
-
-        if (end1 + endZeroCount >= end2) {
-            return answer;
-        } else {
-            end1 += endZeroCount;
-        }
-
-        end3 = N - 1;
-
-        int ptr = 0;
-        while (end1 - ptr >= 0 && end2 - ptr > end1 && end3 - ptr > end2) {
-            if (A[end3 - ptr] == A[end2 - ptr] && A[end2 - ptr] == A[end1 - ptr]) {
-                ptr++;
+        
+        if (pos1.size() % 3 != 0) return { -1, -1 };
+        if (pos1.empty()) return { 0, 2 };
+        const int m = pos1.size();
+        
+        int a_end = pos1[(m / 3) - 1], b_end = pos1[(m / 3 * 2) - 1];
+        int b_start = pos1[m / 3], c_start = pos1[m / 3 * 2];
+        int c_end = n - 1;
+        
+        const int tail_zeros = n - pos1.back() - 1;
+        if (a_end + tail_zeros >= b_start) return { -1, -1 };
+        if (b_end + tail_zeros >= c_start) return { -1, -1 };
+        
+        for (
+            int delta = 0;
+            
+            a_end + tail_zeros - delta >= 0 
+            && b_end + tail_zeros - delta > a_end 
+            && c_end - delta > b_end;
+            
+            delta++
+        ) {
+            
+            if (
+                arr[a_end + tail_zeros - delta] == arr[b_end + tail_zeros - delta]
+                && arr[b_end + tail_zeros - delta] == arr[c_end - delta]
+            ) {
+                continue;
             } else {
-                return answer;
+                return { -1, -1 };
             }
         }
-
-        answer[0] = end1, answer[1] = end2 + 1;
-        return answer;
+        return { a_end + tail_zeros, b_end + tail_zeros + 1 };
     }
 };
