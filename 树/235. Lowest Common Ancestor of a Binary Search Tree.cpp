@@ -11,30 +11,32 @@
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        vector<TreeNode*> path1, path2;
         dfs(root, p, path1);
         dfs(root, q, path2);
         
-        int ptr = 0;
-        const int N = path1.size(), M = path2.size();
-        while (ptr < min(N, M)) {
-            if (path1[ptr] == path2[ptr]) {
-                ptr++;
-            } else {
-                return path1[ptr - 1];
+        if (path1.empty() || path2.empty()) return nullptr;
+        for (int i = min(path1.size(), path2.size()) - 1; i >= 0; i--) {
+            if (path1[i] == path2[i]) {
+                return path1[i];
             }
         }
-        
-        return path1[ptr - 1];
+        return path1[min(path1.size(), path2.size()) - 1];
     }
 private:
-    vector<TreeNode*> path1, path2;
-    bool dfs(TreeNode* u, const TreeNode* target, vector<TreeNode*>& path) {
-        if (u == nullptr) return false;
+    bool dfs(TreeNode* root, TreeNode* target, vector<TreeNode*>& path) {
+        if (root == nullptr) return false;
         
-        path.push_back(u);
-        if (u == target) return true;
-        if (dfs(u->left, target, path)) return true;
-        if (dfs(u->right, target, path)) return true;
+        path.push_back(root);
+        if (root == target) return true;
+        
+        if (root->val < target->val) {
+            if (dfs(root->right, target, path)) return true;
+        } else if (root->val == target->val) {
+            return true;
+        } else { // root->val > target->val
+            if (dfs(root->left, target, path)) return true;
+        }
         path.pop_back();
         return false;
     }
