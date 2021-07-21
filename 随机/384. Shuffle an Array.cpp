@@ -1,7 +1,7 @@
 class Solution {
 public:
     Solution(vector<int>& nums) {
-        this->data = nums;
+        data = nums;
     }
     
     /** Resets the array to its original configuration and return it. */
@@ -12,9 +12,9 @@ public:
     /** Returns a random shuffling of the array. */
     vector<int> shuffle() {
         vector<int> ans = data;
-        for (int i = ans.size() - 1; i >= 0; i--) {
-            uniform_int_distribution<int> d(0, i);
-            const int t = d(rd);
+        for (int i = data.size() - 1; i >= 0; i--) {
+            uniform_int_distribution<int> dis(0, i);
+            const int t = dis(rd);
             swap(ans[i], ans[t]);
         }
         return ans;
