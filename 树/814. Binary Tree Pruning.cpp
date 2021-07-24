@@ -16,18 +16,18 @@ public:
     }
 private:
     pair<TreeNode*, bool> dfs(TreeNode* u) {
-        if (u == nullptr) return {nullptr, true};
+        if (u == nullptr) return { nullptr, false };
         
-        auto [t1, b1] = dfs(u->left);
-        auto [t2, b2] = dfs(u->right);
+        auto [l_root, l_have1] = dfs(u->left);
+        auto [r_root, r_have1] = dfs(u->right);
         
-        if (u->val == 0 && b1 && b2) {
-            return {nullptr, true};
+        u->left = l_root;
+        u->right = r_root;
+        
+        if (u->val == 1 || l_have1 || r_have1) {
+            return { u, 1 };
+        } else {
+            return { nullptr, 0 };
         }
-        
-        u->left = t1;
-        u->right = t2;
-        
-        return {u, false};
     }
 };
