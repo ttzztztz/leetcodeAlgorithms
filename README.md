@@ -69,6 +69,7 @@
   - 数位 dp
     1. [902. Numbers At Most N Given Digit Set](https://leetcode.com/problems/numbers-at-most-n-given-digit-set/)
     2. [1067. Digit Count in Range](https://leetcode.com/problems/digit-count-in-range/)
+    3. [600. Non-negative Integers without Consecutive Ones](https://leetcode.com/problems/non-negative-integers-without-consecutive-ones/)
   - 倍增 dp
     1. [466. Count The Repetitions](https://leetcode.com/problems/count-the-repetitions/)
   - 划分 dp

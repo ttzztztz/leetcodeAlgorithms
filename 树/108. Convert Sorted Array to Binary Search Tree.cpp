@@ -12,17 +12,18 @@
 class Solution {
 public:
     TreeNode* sortedArrayToBST(vector<int>& nums) {
-        return build(nums, 0, nums.size() - 1);
+        const int n = nums.size();
+        return build(nums, 0, n - 1);
     }
 private:
-    TreeNode* build(const vector<int>& nums, int left, int right) {
-        if (left == right) return new TreeNode(nums[left]);
-        if (left > right) return nullptr;
+    TreeNode* build(const vector<int>& nums, int l, int r) {
+        if (l > r) return nullptr;
+        else if (l == r) return new TreeNode(nums[l]);
         
-        const int mid = (left + right) >> 1;
+        const int mid = (l + r) / 2;
         TreeNode* root = new TreeNode(nums[mid]);
-        root->left = build(nums, left, mid - 1);
-        root->right = build(nums, mid + 1, right);
+        root->left = build(nums, l, mid - 1);
+        root->right = build(nums, mid + 1, r);
         return root;
     }
 };

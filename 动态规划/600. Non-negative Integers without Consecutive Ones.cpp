@@ -1,41 +1,34 @@
 class Solution {
 public:
-    int dp[35][2][2];
-    int digit[35], digitLen;
-    int dfs(int length, int isSmall, int lastDigit) {
-        if (length == 0) {
-            return 1;
+    int findIntegers(int n) {
+        memset(f, 0xff, sizeof f);
+        memset(digit_arr, 0, sizeof digit_arr);
+        while (n) {
+            digit_arr[++digit_len] = (n & 1);
+            n >>= 1;
         }
-        if (dp[length][isSmall][lastDigit] != -1) {
-            return dp[length][isSmall][lastDigit];
-        }
-
-        int answer = 0;
-        // <-- fill 0
-        answer += dfs(
-                length - 1,
-                isSmall || digit[length] > 0,
-                0
-        );
-        // <-- fill 1
-        if (lastDigit != 1 && (isSmall || digit[length] == 1)) {
-            answer += dfs(
-                    length - 1,
-                    isSmall || digit[length] > 1,
-                    1
+        
+        return dfs(digit_len, 0, 0);
+    }
+private:
+    int f[35][2][2], digit_arr[35], digit_len = 0;
+    
+    int dfs(int idx, int is_small, int last) {
+        if (idx == 0) return 1;
+        int& val = f[idx][is_small][last];
+        if (val != -1) return val;
+        
+        int ans = 0;
+        for (int d = 0; d <= 1; d++) {
+            if (!is_small && d > digit_arr[idx]) continue;
+            if (last == 1 && d == 1) continue;
+            
+            ans += dfs(
+                idx - 1,
+                is_small || d < digit_arr[idx],
+                d
             );
         }
-
-        return dp[length][isSmall][lastDigit] = answer;
-    }
-    int findIntegers(int num) {
-        std::memset(dp, 0xff, sizeof(dp));
-        digitLen = 0;
-        int newNum = num;
-        while (newNum) {
-            digit[++digitLen] = (newNum & 1) ? 1 : 0;
-            newNum >>= 1;
-        }
-        return dfs(digitLen, 0, 0);
+        return val = ans;
     }
 };
