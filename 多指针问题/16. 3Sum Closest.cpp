@@ -1,30 +1,25 @@
 class Solution {
 public:
     int threeSumClosest(vector<int>& nums, int target) {
-        std::sort(nums.begin(), nums.end());
-
-        int answer = 0, lastDistance = 0x7fffffff;
-        for (int i = 0; i < nums.size(); i++) {
-            int leftPtr = i + 1, rightPtr = nums.size() - 1;
-            while (leftPtr < rightPtr) {
-                int sum = nums[i] + nums[leftPtr] + nums[rightPtr];
-
-                if (abs(sum - target) < lastDistance) {
-                    lastDistance = abs(sum - target);
-                    answer = sum;
-                    if (lastDistance == 0) {
-                        return answer;
-                    }
+        const int n = nums.size();
+        int ans = 0xafafafaf;
+        
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < n; i++) {
+            int l = i + 1, r = n - 1;
+            while (l < r) {
+                const int t = nums[i] + nums[l] + nums[r];
+                if (t > target) {
+                    r--;
+                } else if (t < target) {
+                    l++;
+                } else { // t == target
+                    return target;
                 }
-
-                if (sum > target) {
-                    rightPtr--;
-                } else {
-                    leftPtr++;
-                }
+                
+                if (abs(t - target) < abs(ans - target)) ans = t;
             }
         }
-
-        return answer;
+        return ans;
     }
 };
