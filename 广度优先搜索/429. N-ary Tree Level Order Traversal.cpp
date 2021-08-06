@@ -24,22 +24,20 @@ public:
         vector<vector<int>> ans;
         if (root == nullptr) return ans;
         
-        int layer = 0;
-        deque<Node*> q = {root};
+        deque<Node*> q = { root };
         while (!q.empty()) {
             const int cnt = q.size();
+            ans.push_back(vector<int>{});
+            
             for (int _ = 0; _ < cnt; _++) {
-                Node* u = q.front();
+                auto u = q.front();
                 q.pop_front();
+                ans.back().push_back(u->val);
                 
-                if (ans.size() <= layer) ans.resize(layer + 1);
-                ans[layer].push_back(u->val);
-                
-                for (Node* v : u->children) {
+                for (auto& v : u->children) {
                     q.push_back(v);
                 }
             }
-            layer++;
         }
         return ans;
     }
