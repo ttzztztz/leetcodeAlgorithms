@@ -1,23 +1,16 @@
 class Solution {
 public:
     vector<vector<string>> groupAnagrams(vector<string>& strs) {
-        vector<vector<string>> answer;
-        const int N = strs.size();
+        unordered_map<string, vector<string>> h;
         
-        map<vector<int>, int> f;
-        for (int i = 0; i < N; i++) {
-            vector<int> tmp(26, 0);
-            const string& str = strs[i];
-            for (const char ch: str) tmp[ch - 'a']++;
-            
-            if (f.count(tmp)) {
-                answer[f[tmp]].push_back(str);
-            } else {
-                f[tmp] = answer.size();
-                answer.push_back(vector<string>{str});
-            }
+        for (string str : strs) {
+            const string original = str;
+            sort(str.begin(), str.end());
+            h[str].push_back(original);
         }
         
-        return answer;
+        vector<vector<string>> ans;
+        for (auto& [_, v] : h) ans.push_back(v);
+        return ans;
     }
 };
