@@ -1,20 +1,20 @@
 class NumArray {
 public:
-    vector<int> prefixSum;
     NumArray(vector<int>& nums) {
-        prefixSum.resize(nums.size());
-        int currentSum = 0, index = 0;
-        for (int number : nums) {
-            currentSum += number;
-            prefixSum[index ++] = currentSum;
+        for (int i : nums) {
+            sum.push_back(sum.back() + i);
         }
     }
-
-    int sumRange(int i, int j) {
-        if (i == 0) {
-            return prefixSum[j];
-        } else {
-            return prefixSum[j] - prefixSum[i - 1];
-        }
+    
+    int sumRange(int left, int right) {
+        return sum[right + 1] - sum[left];
     }
+private:
+    vector<int> sum = { 0 };
 };
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray* obj = new NumArray(nums);
+ * int param_1 = obj->sumRange(left,right);
+ */
