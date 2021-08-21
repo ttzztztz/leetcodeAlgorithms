@@ -1,39 +1,40 @@
 class Solution {
 public:
     bool isValidSudoku(vector<vector<char>>& board) {
-        const int N = 9;
-        vector<vector<bool>> row(9, vector<bool>(10, 0)), col(9, vector<bool>(10, 0)), table(9, vector<bool>(10, 0));
-
-        const int startX[] = {0, 0, 0, 3, 3, 3, 6, 6, 6};
-        const int startY[] = {0, 3, 6, 0, 3, 6, 0, 3, 6};
-        for (int i = 0; i < 9; i++) {
-            for (int x = startX[i]; x < startX[i] + 3; x++) {
-                for (int y = startY[i]; y < startY[i] + 3; y++) {
-                    if (board[x][y] != '.') {
-                        const int num = board[x][y] - '0';
-
-                        if (col[y][num] == true) {
-                            return false;
-                        } else {
-                            col[y][num] = true;
-                        }
-
-                        if (row[x][num] == true) {
-                            return false;
-                        } else {
-                            row[x][num] = true;
-                        }
-
-                        if (table[i][num] == true) {
-                            return false;
-                        } else {
-                            table[i][num] = true;
-                        }
+        const int n = 9;
+        for (int i = 0; i < n; i++) {
+            int t = 0;
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] != '.') {
+                    const int d = board[i][j] - '0';
+                    if (t & (1 << d)) return false;
+                    t |= (1 << d);
+                }
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            int t = 0;
+            for (int j = 0; j < n; j++) {
+                if (board[j][i] != '.') {
+                    const int d = board[j][i] - '0';
+                    if (t & (1 << d)) return false;
+                    t |= (1 << d);
+                }
+            }
+        }
+        
+        for (int a = 0; a < n; a += 3) for (int b = 0; b < n; b += 3) {
+            int t = 0;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (board[a + i][b + j] != '.') {
+                        const int d = board[a + i][b + j] - '0';
+                        if (t & (1 << d)) return false;
+                        t |= (1 << d);
                     }
                 }
             }
         }
-
         return true;
     }
 };
