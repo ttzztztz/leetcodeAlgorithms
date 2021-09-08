@@ -4,48 +4,43 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
     vector<TreeNode*> generateTrees(int n) {
-        if (n == 0) {
-            return vector<TreeNode*> {};
-        }
-        
-        dp = vector<vector<vector<TreeNode*>>>(n + 5, vector<vector<TreeNode*>>(n + 5, vector<TreeNode*>{}));
+        this->n = n;
         return dfs(1, n);
     }
 private:
-    vector<vector<vector<TreeNode*>>> dp;
-    vector<TreeNode*> dfs(int left, int right) {
-        if (dp[left][right].size() != 0) {
-            return dp[left][right];
-        }
+    unordered_map<int, vector<TreeNode*>> memo;
+    int n;
+    int hash(int l, int r) {
+        return l * (n + 1) + r;
+    }
+    
+    vector<TreeNode*> dfs(int l, int r) {
+        if (l > r) return { nullptr };
+        else if (l == r) return { new TreeNode(l) };
+
+        const int h = hash(l, r);
+        if (memo.count(h)) return memo[h];
         
-        vector<TreeNode*> answer;
-        if (left > right) {
-            answer.push_back(nullptr);
-            return answer;
-        } else if (left == right) { 
-            TreeNode* cur = new TreeNode(left);
-            answer.push_back(cur);
-            return answer;
-        }
-        
-        for (int i = left; i <= right; i++) {
-            vector<TreeNode*> l = dfs(left, i - 1);
-            vector<TreeNode*> r = dfs(i + 1, right);
+        vector<TreeNode*> ans;
+        for (int u = l; u <= r; u++) {
+            auto left = dfs(l, u - 1);
+            auto right = dfs(u + 1, r);
             
-            for (int a = 0; a < l.size(); a++) {
-                for (int b = 0; b < r.size(); b++) {
-                    TreeNode* top = new TreeNode(i);
-                    top->left = l[a], top->right = r[b];
-                    answer.push_back(top);
-                }
+            for (auto& l_child : left) for (auto& r_child : right) {
+                TreeNode* cur = new TreeNode(u);
+                cur->left = l_child;
+                cur->right = r_child;
+                ans.push_back(cur);
             }
         }
-        return dp[left][right] = answer;
+        return memo[h] = ans;
     }
 };
