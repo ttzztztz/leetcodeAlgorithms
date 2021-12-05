@@ -193,6 +193,9 @@
     1. [Luogu P3386 【模板】二分图最大匹配](https://www.luogu.com.cn/problem/P3386)
   - Tarjan
     1. [1192. Critical Connections in a Network](https://leetcode.com/problems/critical-connections-in-a-network/)
+  - 欧拉回路
+    1. [2097. Valid Arrangement of Pairs](https://leetcode.com/problems/valid-arrangement-of-pairs/)
+    2. [332. Reconstruct Itinerary](https://leetcode.com/problems/reconstruct-itinerary/)
 - Manacher
   1. [5. Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)
 - 高斯消元
