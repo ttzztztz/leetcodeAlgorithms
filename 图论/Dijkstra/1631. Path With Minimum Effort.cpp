@@ -19,6 +19,7 @@ public:
         while (!heap.empty()) {
             auto [d, x, y] = heap.top();
             heap.pop();
+            if (d != dist[x][y]) continue;
             
             if (x == n - 1 && y == m - 1) return d;
             dist[x][y] = min(dist[x][y], d);

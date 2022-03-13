@@ -20,6 +20,7 @@ public:
         
         while (!heap.empty()) {
             auto [h, x, y] = heap.top();
+            if (h != dist[x][y]) continue;
             heap.pop();
             
             if (x == n - 1 && y == m - 1) return h;

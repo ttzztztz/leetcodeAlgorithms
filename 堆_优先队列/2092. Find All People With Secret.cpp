@@ -25,6 +25,8 @@ public:
         while (!q.empty()) {
             auto [t, u] = q.top();
             q.pop();
+            if (t != visited[u]) continue;
+
             if (!in_ans[u]) {
                 in_ans[u] = true;
                 ans.push_back(u);

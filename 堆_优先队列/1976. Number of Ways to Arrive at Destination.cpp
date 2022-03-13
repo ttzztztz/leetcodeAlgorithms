@@ -19,6 +19,7 @@ public:
         while (!heap.empty()) {
             auto[d, u] = heap.top();
             heap.pop();
+            if (d != dist[u]) continue;
             
             for (auto& [v, w] : edges[u]) {
                 if (d + w < dist[v]) {
