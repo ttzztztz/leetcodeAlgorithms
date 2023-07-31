@@ -2,11 +2,13 @@ class Solution {
 public:
     string removeDuplicates(string s) {
         string ans;
-        for (int i = 0; i < s.size(); i++) {
-            const char t = s[i];
-            bool insert = true;
-            while (!ans.empty() && ans.back() == t) insert = false, ans.pop_back();
-            if (insert) ans += t;
+        for (const char& ch : s) {
+            bool poped = false;
+            while (!ans.empty() && ans.back() == ch) {
+                ans.pop_back();
+                poped = true;
+            }
+            if (!poped) ans += ch;
         }
         return ans;
     }
