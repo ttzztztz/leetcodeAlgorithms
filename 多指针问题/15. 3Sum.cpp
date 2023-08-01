@@ -1,47 +1,32 @@
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> ans;
+        const int n = nums.size();
         sort(nums.begin(), nums.end());
-        int last = 1 << 32 - 1;
-
-        vector<vector<int>> result;
-        for (int i = 0; i < nums.size(); i++) {
-            if (nums[i] == last) {
-                continue;
-            }
-            if (nums[i] > 0) {
-                break;
-            }
-
-            int leftPtr = i + 1, rightPtr = nums.size() - 1;
-            while (leftPtr < rightPtr) {
-                int sum = nums[i] + nums[leftPtr] + nums[rightPtr];
-
-                if (sum < 0) {
-                    leftPtr++;
-                } else if (sum > 0) {
-                    rightPtr--;
-                } else if (sum == 0) {
-                    vector<int> answer;
-                    answer.push_back(nums[i]);
-                    answer.push_back(nums[leftPtr]);
-                    answer.push_back(nums[rightPtr]);
-                    result.emplace_back(answer);
-
-                    while (leftPtr < rightPtr && nums[leftPtr] == nums[leftPtr + 1]) {
-                        leftPtr++;
+        for (int i = 0; i < n; i = next(nums, i, 1)) {
+            const int target = -nums[i];
+            for (int j = i + 1, k = n - 1; j < k; j = next(nums, j, 1)) {
+                while (j < k && nums[j] + nums[k] >= target) {
+                    if (nums[j] + nums[k] == target) {
+                        ans.push_back({ nums[i], nums[j], nums[k] });
                     }
-                    while (leftPtr < rightPtr && nums[rightPtr] == nums[rightPtr - 1]) {
-                        rightPtr--;
-                    }
-
-                    leftPtr++;
-                    rightPtr--;
+                    k = next(nums, k, -1);
                 }
             }
-
-            last = nums[i];
         }
-        return result;
+        return ans;
+    }
+private:
+    int next(const vector<int>& nums, int k, int step) {
+        const int n = nums.size();
+        const int prev_num = nums[k];
+
+        int i = k;
+        while (0 <= i && i < n) {
+            if (nums[i] != prev_num) break;
+            i += step;
+        }
+        return i;
     }
 };

@@ -1,60 +1,45 @@
-class Point {
-public:
-    int x, y, h;
-    Point() : x(0), y(0), h(0) {};
-    Point(int _x, int _y, int _h) : x(_x), y(_y), h(_h) {};
-    bool operator< (const Point& $2) const {
-        return this->h > $2.h;
-    }
-};
-
 class Solution {
 public:
-    int m, n;
-    bool pointValid(int x, int y) {
-        return x >= 0 && y >= 0 && x < m && y < n;
-    }
     int trapRainWater(vector<vector<int>>& heightMap) {
-        if (heightMap.size() <= 2 || heightMap[0].size() <= 2) {
-            return 0;
-        }
+        const int n = heightMap.size();
+        const int m = heightMap[0].size();
 
-        m = heightMap.size(), n = heightMap[0].size();
-        vector<vector<bool>> visited(m, vector<bool>(n, false));
-        priority_queue<Point> heap;
-        int answer = 0;
+        int ans = 0, mx = 0;
+        typedef tuple<int, int, int> State;
 
-        const int dx[] = {0, 0, 1, -1};
-        const int dy[] = {1, -1, 0, 0};
+        priority_queue<State, vector<State>, greater<>> heap;
+        const int dx[] = {0, 0, -1, 1};
+        const int dy[] = {-1, 1, 0, 0};
+        auto point_valid = [&](int i, int j) -> bool {
+            return i >= 0 && j >= 0 && i < n && j < m;
+        };
 
-        for (int i = 0; i < m; i++) {
-            heap.push(Point(i, 0, heightMap[i][0]));
-            heap.push(Point(i, n - 1, heightMap[i][n - 1]));
-
-            visited[i][0] = visited[i][n - 1] = true;
-        }
+        vector<vector<bool>> visited(n, vector<bool>(m, false));
         for (int i = 0; i < n; i++) {
-            heap.push(Point(0, i, heightMap[0][i]));
-            heap.push(Point(m - 1, i, heightMap[m - 1][i]));
-
-            visited[0][i] = visited[m - 1][i] = true;
+            heap.emplace(heightMap[i][0], i, 0);
+            heap.emplace(heightMap[i][m - 1], i, m - 1);
+            visited[i][0] = visited[i][m - 1] = true;
+        }
+        for (int i = 1; i < m - 1; i++) {
+            heap.emplace(heightMap[0][i], 0, i);
+            heap.emplace(heightMap[n - 1][i], n - 1, i);
+            visited[0][i] = visited[n - 1][i] = true;
         }
 
         while (!heap.empty()) {
-            Point p = heap.top();
+            auto [h, i, j] = heap.top();
             heap.pop();
 
-            for (int i = 0; i < 4; i++) {
-                const int nextX = p.x + dx[i], nextY = p.y + dy[i];
-
-                if (pointValid(nextX, nextY) && !visited[nextX][nextY]) {
-                    visited[nextX][nextY] = true;
-                    answer += std::max(0, p.h - heightMap[nextX][nextY]);
-                    heap.push(Point(nextX, nextY, std::max(p.h, heightMap[nextX][nextY])));
+            mx = max(mx, h);
+            ans += max(0, mx - h);
+            for (int k = 0; k < 4; k++) {
+                const int nx = i + dx[k], ny = j + dy[k];
+                if (point_valid(nx, ny) && !visited[nx][ny]) {
+                    visited[nx][ny] = true;
+                    heap.emplace(heightMap[nx][ny], nx, ny);
                 }
             }
         }
-
-        return answer;
+        return ans;
     }
 };
