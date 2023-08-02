@@ -3,62 +3,64 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
     ListNode* sortList(ListNode* head) {
-        if (head == nullptr) return nullptr;
-        if (head->next == nullptr) return head;
-        ListNode* mid = middle(head);
-        
-        ListNode* second = mid->next;
-        mid->next = nullptr;
-        
-        ListNode* $1 = sortList(head);
-        ListNode* $2 = sortList(second);
-        
-        return merge($1, $2);
+        if (head == nullptr) return nullptr; // len = 0
+        if (head->next == nullptr) return head; // len = 1
+
+        ListNode* middle = find_middle(head);
+        ListNode* next_head = middle->next;
+        middle->next = nullptr;
+
+        ListNode* left = sortList(head);
+        ListNode* right = sortList(next_head);
+        return merge_list(left, right);
     }
 private:
-    ListNode* middle(ListNode* start) {
-        ListNode *fast = start, *slow = start;
+    ListNode* find_middle(ListNode* head) {
+        ListNode *fast = head, *slow = head;
         while (fast) {
-            if (fast->next) fast = fast->next;
+            if (fast->next != nullptr) fast = fast->next;
             else return slow;
-            
-            if (fast->next) fast = fast->next;
+
+            if (fast->next != nullptr) fast = fast->next;
             else return slow;
-            
+
             slow = slow->next;
         }
         return slow;
     }
-    ListNode* merge(ListNode* $1, ListNode* $2) {
-        ListNode* flag = new ListNode(0);
-        
+
+    ListNode* merge_list(ListNode* left, ListNode* right) {
+        ListNode* flag = new ListNode();
         ListNode* cur = flag;
-        while ($1 && $2) {
-            if ($1->val < $2->val) {
-                cur->next = $1;
+        while (left != nullptr && right != nullptr) {
+            if (left->val <= right->val) {
+                cur->next = left;
                 cur = cur->next;
-                $1 = $1->next;
+                left = left->next;
             } else {
-                cur->next = $2;
+                cur->next = right;
                 cur = cur->next;
-                $2 = $2->next;
+                right = right->next;
             }
         }
-        if ($1) {
-            cur->next = $1;
+
+        if (left != nullptr) {
+            cur->next = left;
         }
-        if ($2) {
-            cur->next = $2;
+
+        if (right != nullptr) {
+            cur->next = right;
         }
-        
-        ListNode* answer = flag->next;
+        ListNode* ans = flag->next;
         delete flag;
-        return answer;
+        return ans;
     }
 };

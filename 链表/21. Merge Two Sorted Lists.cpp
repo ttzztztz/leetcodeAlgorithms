@@ -3,50 +3,36 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-
 class Solution {
 public:
-    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        ListNode* head = nullptr, * curr = nullptr;
-
-        while (l1 != nullptr && l2 != nullptr) {
-            if (l1->val < l2->val) {
-                if (head == nullptr) {
-                    curr = head = l1;
-                } else {
-                    curr->next = l1;
-                    curr = l1;
-                }
-                l1 = l1->next;
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        ListNode* flag = new ListNode();
+        ListNode* cur = flag;
+        while (list1 != nullptr && list2 != nullptr) {
+            if (list1->val <= list2->val) {
+                cur->next = list1;
+                list1 = list1->next;
+                cur = cur->next;
             } else {
-                if (head == nullptr) {
-                    curr = head = l2;
-                } else {
-                    curr->next = l2;
-                    curr = l2;
-                }
-                l2 = l2->next;
+                cur->next = list2;
+                list2 = list2->next;
+                cur = cur->next;
             }
         }
 
-        if (l1 != nullptr) {
-            if (head == nullptr) {
-                head = curr = l1;
-            } else {
-                curr->next = l1;
-            }
+        if (list1 != nullptr) {
+            cur->next = list1;
         }
-        if (l2 != nullptr) {
-            if (head == nullptr) {
-                head = curr = l2;
-            } else {
-                curr->next = l2;
-            }
+        if (list2 != nullptr) {
+            cur->next = list2;
         }
-
-        return head;
+        ListNode* ans = flag->next;
+        delete flag;
+        return ans;
     }
 };
