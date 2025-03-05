@@ -4,23 +4,19 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
-    int answer;
-    void dfs(TreeNode* node, int height) {
-        answer = std::max(answer, height);
-        if(node != nullptr) {
-            dfs(node->left, height + 1);
-            dfs(node->right, height + 1);
-        }
-    }
-
     int maxDepth(TreeNode* root) {
-        answer = 0;
-        dfs(root, 0);
-        return answer;
+        if (root == nullptr) return 0;
+
+        const int l = maxDepth(root->left);
+        const int r = maxDepth(root->right);
+
+        return max(l, r) + 1;
     }
 };

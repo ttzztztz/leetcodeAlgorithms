@@ -1,27 +1,27 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        const int N = s.size();
-        
-        unordered_map<char, int> hm;
-        
-        auto judge = [&]() -> bool {
-            for (auto& p : hm) {
-                if (p.second > 1) return true;
-            }
-            return false;
-        };
-        
-        int answer = 0;
-        for (int l = 0, r = 0; r < N; r++) {
-            hm[s[r]]++;
-            while (judge()) {
-                hm[s[l]]--;
-                if (hm[s[l]] == 0) hm.erase(s[l]);
+        int ans = 0;
+        unordered_map<char, int> cnt;
+        for (int l = 0, r = 0; r < s.size(); r++) {
+            cnt[s[r]]++;
+            while (has_duplicate(cnt)) {
+                cnt[s[l]]--;
+                if (cnt[s[l]] == 0) {
+                    cnt.erase(s[l]);
+                }
                 l++;
             }
-            answer = max(answer, r - l + 1);
+
+            ans = max(ans, r - l + 1);
         }
-        return answer;
+        return ans;
+    }
+private:
+    bool has_duplicate(unordered_map<char, int>& hmap) {
+        for (auto [k, v] : hmap) {
+            if (v >= 2) return true;
+        }
+        return false;
     }
 };

@@ -2,20 +2,15 @@ class Solution {
 public:
     int maxAscendingSum(vector<int>& nums) {
         int ans = 0;
-        vector<int> pref = {0};
-        for (int i : nums) pref.push_back(i + pref.back());
-        
-        auto is_up = [&](int i, int j) -> bool {
-            for (int t = i + 1; t <= j; t++) {
-                if (nums[t - 1] >= nums[t]) return false;
+        const int n = nums.size();
+
+        for (int i = 0; i < n; i++) {
+            int cur = nums[i];
+            while (i + 1 < n && nums[i] < nums[i + 1]) {
+                cur += nums[i + 1];
+                i++;
             }
-            return true;
-        };
-        
-        for (int j = 1; j <= nums.size(); j++) {
-            for (int i = 0; i < j; i++) {
-                if (is_up(i, j - 1)) ans = max(ans, pref[j] - pref[i]);
-            }
+            ans = max(ans, cur);
         }
         return ans;
     }

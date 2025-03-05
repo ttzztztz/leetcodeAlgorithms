@@ -1,38 +1,31 @@
 class Solution {
 public:
-    vector<vector<int>> multiply(vector<vector<int>>& A, vector<vector<int>>& B) {
-        const int n = A.size(), m = A[0].size(), k = B[0].size();
-        vector<vector<int>> ans(n, vector<int>(k, 0));
+    vector<vector<int>> multiply(vector<vector<int>>& mat1, vector<vector<int>>& mat2) {
+        if (mat1.empty() || mat1[0].empty() || mat2.empty() || mat2[0].empty()) return {};
+        const int n = mat1.size(), t = mat1[0].size(), m = mat2[0].size();
 
-        vector<vector<int>> a(n), b(m);
+        const vector<vector<pair<int, int>>> m1 = compress_matrix(mat1);
+        const vector<vector<pair<int, int>>> m2 = compress_matrix(mat2);
+
+        vector<vector<int>> ans(n, vector<int>(m, 0));
+        for (int i = 0; i < n; i++) for (auto [k, val1] : m1[i]) {
+            for (auto [j, val2] : m2[k]) {
+                ans[i][j] += val1 * val2;
+            }
+        }
+        return ans;
+    }
+private:
+    vector<vector<pair<int, int>>> compress_matrix(const vector<vector<int>>& mat) {
+        if (mat.empty()) return {};
+
+        const int n = mat.size(), m = mat[0].size();
+        vector<vector<pair<int, int>>> ans;
         for (int i = 0; i < n; i++) {
+            ans.push_back({});
             for (int j = 0; j < m; j++) {
-                if (A[i][j] != 0) a[i].emplace_back(j);
-            }
-        }
-        
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < k; j++) {
-                if (B[i][j] != 0) b[j].emplace_back(i);
-            }
-        }
-        
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < k; j++) {
-                // for (int x = 0; x < m; x++) {
-                    // ans[i][j] += A[i][x] * B[x][j];
-                // }
-                
-                int ptr1 = 0, ptr2 = 0;
-                while (ptr1 < a[i].size() && ptr2 < b[j].size()) {
-                    if (a[i][ptr1] == b[j][ptr2]) {
-                        ans[i][j] += A[i][a[i][ptr1]] * B[b[j][ptr2]][j];
-                        ptr1++, ptr2++;
-                    } else if (a[i][ptr1] < b[j][ptr2]) {
-                        ptr1++;
-                    } else { // a[i][ptr1] > b[j][ptr2]
-                        ptr2++;
-                    }
+                if (mat[i][j] != 0) {
+                    ans.back().emplace_back(j, mat[i][j]);
                 }
             }
         }

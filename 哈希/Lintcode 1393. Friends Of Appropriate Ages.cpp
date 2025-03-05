@@ -1,25 +1,21 @@
 class Solution {
 public:
-    /**
-     * @param ages: 
-     * @return: nothing
-     */
-    int numFriendRequests(vector<int> &ages) {
-        unordered_map<int, int> v;
-        for (int a : ages) v[a]++;
-        
+    int numFriendRequests(vector<int>& ages) {
+        vector<int> cnt(125, 0);
+        for (int age : ages) cnt[age]++;
+
         int ans = 0;
-        for (auto& p1 : v) {
-            for (auto& p2 : v) {
-                if (ok(p1.first, p2.first)) {
-                    ans += (p1.second - (p1.first == p2.first)) * p2.second;
-                }
+        for (int age1 = 1; age1 <= 120; age1++) for (int age2 = 1; age2 <= 120; age2++) {
+            if ((age2 <= 0.5 * age1 + 7) || (age2 > age1) || (age2 > 100 && age1 < 100)) {
+                continue;
+            }
+
+            if (age1 == age2) {
+                ans += cnt[age1] * (cnt[age1] - 1);
+            } else {
+                ans += cnt[age1] * cnt[age2];
             }
         }
         return ans;
-    }
-private:
-    bool ok(int a, int b) {
-        return !(b <= 0.5 * a + 7 || b > a || (b > 100 && a < 100));
     }
 };

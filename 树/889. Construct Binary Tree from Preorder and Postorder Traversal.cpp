@@ -11,31 +11,23 @@
  */
 class Solution {
 public:
-    TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {
-        if (pre.empty()) return nullptr;
-        
-        TreeNode* root = new TreeNode(pre[0]);
-        pre.erase(pre.begin());
-        post.pop_back();
+    TreeNode* constructFromPrePost(vector<int>& preorder, vector<int>& postorder) {
+        for (int i = 0; i < postorder.size(); i++) post_idx[postorder[i]] = i;
+        return dfs(preorder, postorder, 0, preorder.size() - 1, 0, postorder.size() - 1);
+    }
+private:
+    unordered_map<int, int> post_idx;
 
-        const int n = pre.size();
-        vector<int> pre1, pre2, post1, post2;
-
-        int i = 0;
-        for (; i < n; i++) {
-            pre1.push_back(pre[i]);
-            post1.push_back(post[i]);
-            
-            if (pre1.front() == post1.back()) break;
+    TreeNode* dfs(const vector<int>& pre, const vector<int>& post, int pre_left, int pre_right, int post_left, int post_right) {
+        if (pre_left > pre_right || post_left > post_right) return nullptr;
+        TreeNode* node = new TreeNode(pre[pre_left]);
+        if (pre_left == pre_right || post_left == post_right) {
+            return node;
         }
 
-        for (i = i + 1; i < n; i++) {
-            pre2.push_back(pre[i]);
-            post2.push_back(post[i]);
-        }
-        
-        root->left = constructFromPrePost(pre1, post1);
-        root->right = constructFromPrePost(pre2, post2);
-        return root;
+        int i = post_idx[pre[pre_left + 1]] - post_left;
+        node->left = dfs(pre, post, pre_left + 1, pre_left + 1 + i, post_left, post_left + i);
+        node->right = dfs(pre, post, pre_left + i + 2, pre_right, post_left + i + 1, post_right - 1);
+        return node;
     }
 };

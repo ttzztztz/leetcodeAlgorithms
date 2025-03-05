@@ -1,30 +1,27 @@
 class Solution {
 public:
     int minSubarray(vector<int>& nums, int p) {
-        typedef long long ll;
-        vector<ll> pref = {0};
-        const int n = nums.size();
-        ll sum = 0;
-        for (int i = 0; i < n; i++) {
-            pref.push_back(1ll * nums[i] + pref[i]);
-            sum += nums[i];
+        int target_mod = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            target_mod = (target_mod + nums[i]) % p;
         }
-        
-        int ans = n + 5;
-        const int rest = sum % p;
-        if (rest == 0) return 0;
-        const int need1 = rest;
-        
-        unordered_map<int, int> memo = { {0, 0} };
-        for (int i = 1; i <= n; i++) {
-            if (memo.count((pref[i] - need1 + p) % p)) {
-                ans = min(ans, i - memo[(pref[i] - need1 + p) % p]);
+        if (target_mod == 0) return 0;
+
+        int ans = nums.size(), cur = 0;
+        unordered_map<int, int> last;
+        last[0] = -1;
+
+        for (int i = 0; i < nums.size(); i++) {
+            cur = (cur + nums[i]) % p;
+
+            const int target = ((cur - target_mod) % p + p) % p;
+            if (last.count(target)) {
+                ans = min(ans, i - last[target]);
             }
-            
-            memo[pref[i] % p] = i;
+            last[cur] = i;
         }
-        
-        if (ans >= n) return -1;
-        else return ans;
+
+        if (ans == nums.size()) return -1;
+        return ans;
     }
 };

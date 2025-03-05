@@ -1,43 +1,36 @@
 class Solution {
 public:
-    int N;
-    bool check(const vector<int>& weights, int capacity, int D) {
-        int sum = 0, answer = 0;
+    int shipWithinDays(vector<int>& weights, int days) {
+        const int sum = accumulate(weights.begin(), weights.end(), 0);
 
-        for (int i = 0; i < N; i++) {
-            if (sum + weights[i] > capacity) {
-                answer++;
-                sum = weights[i];
+        int l = *max_element(weights.begin(), weights.end()), r = sum;
+        // [> > = = < <]
+        while (l <= r) {
+            const int mid = (l + r) / 2;
+
+            if (transport(weights, mid) <= days) {
+                r = mid - 1;
             } else {
-                sum += weights[i];
+                l = mid + 1;
             }
         }
-
-        if (sum > 0) {
-            answer++;
-        }
-        return answer > D;
+        return l;
     }
+private:
+    int transport(const vector<int>& weights, int capacity) {
+        const int n = weights.size();
 
-    int shipWithinDays(vector<int>& weights, int D) {
-        N = weights.size();
-        int sum = 0, minWeight = 0;
-        for (int weight : weights) {
-            sum += weight;
-            minWeight = max(minWeight, weight);
-        }
-
-        int left = minWeight, right = sum;
-        while (left <= right) {
-            const int middle = (left + right) >> 1;
-
-            if (check(weights, middle, D)) {
-                left = middle + 1;
+        int ans = 0, cur = 0;
+        for (int i = 0; i < n; i++) {
+            if (cur + weights[i] > capacity) {
+                cur = weights[i];
+                ans++;
             } else {
-                right = middle - 1;
+                cur += weights[i];
             }
         }
 
-        return left;
+        if (cur > 0) ans++;
+        return ans;
     }
 };

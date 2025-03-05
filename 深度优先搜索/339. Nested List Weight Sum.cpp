@@ -30,21 +30,18 @@
 class Solution {
 public:
     int depthSum(vector<NestedInteger>& nestedList) {
-        for (auto& i : nestedList) {
-            dfs(i, 1);
-        }
-        return ans;
+        return dfs(1, nestedList);
     }
 private:
-    int ans = 0;
-    
-    void dfs(NestedInteger& i, int deep) {
-        if (i.isInteger()) {
-            ans += deep * i.getInteger();
-        } else {
-            for (auto& v : i.getList()) {
-                dfs(v, deep + 1);
+    int dfs(int level, vector<NestedInteger>& nestedList) {
+        int ans = 0;
+        for (auto& item : nestedList) {
+            if (item.isInteger()) {
+                ans += level * item.getInteger();
+            } else {
+                ans += dfs(level + 1, item.getList());
             }
         }
+        return ans;
     }
 };

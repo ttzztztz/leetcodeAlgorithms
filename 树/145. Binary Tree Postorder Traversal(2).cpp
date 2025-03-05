@@ -12,20 +12,21 @@
 class Solution {
 public:
     vector<int> postorderTraversal(TreeNode* root) {
+        if (root == nullptr) return {};
+
+        vector<pair<TreeNode*, bool>> stk = { { root, false } };
         vector<int> ans;
-        
-        if (root == nullptr) return ans;
-        vector<pair<int, TreeNode*>> stk = {{0, root}};
         while (!stk.empty()) {
-            auto [color, u] = stk.back();
+            auto [node, visited] = stk.back();
             stk.pop_back();
-            
-            if (color == 0) {
-                stk.emplace_back(1, u);
-                if (u->right) stk.emplace_back(0, u->right);
-                if (u->left) stk.emplace_back(0, u->left);
-            } else { // color == 1
-                ans.push_back(u->val);
+
+            if (visited) {
+                ans.push_back(node->val);
+            } else {
+                // left right root
+                stk.emplace_back(node, true);
+                if (node->right) stk.emplace_back(node->right, false);
+                if (node->left) stk.emplace_back(node->left, false);
             }
         }
         return ans;

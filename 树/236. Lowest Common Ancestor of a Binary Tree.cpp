@@ -10,26 +10,24 @@
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        vector<TreeNode*> path1, path2;
-        dfs(root, p, path1);
-        dfs(root, q, path2);
-        
-        for (int i = 0; i < min(path1.size(), path2.size()); i++) {
-            if (path1[i] == path2[i]) continue;
-            else return path1[i - 1];
-        }
-        return path1[min(path1.size(), path2.size()) - 1];
+        if (root == nullptr) return nullptr;
+        return get<0>(dfs(root, p, q));
     }
 private:
-    bool dfs(TreeNode* root, TreeNode* target, vector<TreeNode*>& path) {
-        if (root == nullptr) return false;
-        
-        path.push_back(root);
-        if (root == target) return true;
+    tuple<TreeNode*, bool, bool> dfs(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (root == nullptr) return { nullptr, false, false };
 
-        if (dfs(root->left, target, path)) return true;
-        if (dfs(root->right, target, path)) return true;
-        path.pop_back();
-        return false;
+        auto [l_ans, l_p_find, l_q_find] = dfs(root->left, p, q);
+        auto [r_ans, r_p_find, r_q_find] = dfs(root->right, p, q);
+
+        if (l_ans != nullptr) return { l_ans, true, true };
+        if (r_ans != nullptr) return { r_ans, true, true };
+
+        const bool p_find = l_p_find || r_p_find || root == p;
+        const bool q_find = l_q_find || r_q_find || root == q;
+
+        if (p_find && q_find) return { root, true, true };
+
+        return { nullptr, p_find, q_find };
     }
 };

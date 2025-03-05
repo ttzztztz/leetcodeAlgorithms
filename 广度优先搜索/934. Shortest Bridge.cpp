@@ -1,113 +1,78 @@
 class Solution {
 public:
-    int N;
-    bool pointValid(int x, int y) {
-        return x >= 0 && y >= 0 && x < N && y < N;
-    }
-    bool isBorder(const vector<vector<int>>& A, int x, int y) {
-        const int dx[] = {-1, 1, 0, 0};
-        const int dy[] = {0, 0, -1, 1};
-        
-        for (int k = 0; k < 4; k++) {
-            const int nx = x + dx[k], ny = y + dy[k];
-            if (pointValid(nx, ny) && A[nx][ny] == 0) return true;
+    int shortestBridge(vector<vector<int>>& grid) {
+        if (grid.empty()) return 0;
+
+        const int n = grid.size(), m = grid[0].size();
+        int s_i, s_j;
+        for (int i = 0; i < n; i++) {
+            bool flag = false;
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 1) {
+                    s_i = i, s_j = j;
+                    flag = true;
+                    break;
+                }
+            }
+
+            if (flag) break;
         }
-        
-        return false;
-    }
-    int parent[10005];
-    void init() {
-        for (int i = 0; i <= 10000; i++) {
-            parent[i] = i;
+
+        typedef pair<int, int> Point;
+        const int dx[] = {0, 0, -1, 1};
+        const int dy[] = {-1, 1, 0, 0};
+        auto point_valid = [&](int i, int j) -> bool {
+            return i >= 0 && j >= 0 && i < n && j < m;
+        };
+
+        deque<Point> q = { { s_i, s_j } };
+        while (!q.empty()) {
+            auto [i, j] = q.front();
+            q.pop_front();
+
+            grid[i][j] = 2;
+            for (int k = 0; k < 4; k++) {
+                const int ni = i + dx[k];
+                const int nj = j + dy[k];
+
+                if (!point_valid(ni, nj) || grid[ni][nj] != 1) continue;
+                q.emplace_back(ni, nj);
+                grid[ni][nj] = 2;
+            }
         }
-    }
-    int findParent(int u) {
-        if (parent[u] == u) {
-            return parent[u];
-        } else {
-            return parent[u] = findParent(parent[u]);
+
+        vector<vector<bool>> visited(n, vector<bool>(m, false));
+
+        for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) {
+            if (grid[i][j] == 2) {
+                q.emplace_back(i, j);
+                visited[i][j] = true;
+            }
         }
-    }
-    void merge(int u, int v) {
-        const int parentU = findParent(u), parentV = findParent(v);
-        
-        if (parentU != parentV) {
-            parent[parentU] = parentV;
-        }
-    }
-    int ID(int x, int y) {
-        return x * N + y;
-    }
-    int shortestBridge(vector<vector<int>>& A) {
-        const int dx[] = {-1, 1, 0, 0};
-        const int dy[] = {0, 0, -1, 1};
-        N = A.size();
-        init();
-        
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (A[i][j] != 1) continue;
+
+
+        int ans = 0;
+        while (!q.empty()) {
+            const int cnt = q.size();
+            for (int c = 0; c < cnt; c++) {
+                auto [i, j] = q.front();
+                q.pop_front();
+
+                if (grid[i][j] == 1) return ans - 1;
+                visited[i][j] = true;
+
                 for (int k = 0; k < 4; k++) {
-                    const int nx = i + dx[k], ny = j + dy[k];
-                    
-                    if (pointValid(nx, ny) && A[nx][ny] == 1) {
-                        merge(ID(i, j), ID(nx, ny));
-                    }
+                    const int ni = i + dx[k];
+                    const int nj = j + dy[k];
+
+                    if (!point_valid(ni, nj) || visited[ni][nj]) continue;
+                    visited[ni][nj] = true;
+                    q.emplace_back(ni, nj);
                 }
             }
+            ans++;
         }
-        
-        map<int, int> islandMap;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (A[i][j] != 1) continue;
-                islandMap[findParent(ID(i, j))] = ID(i, j);
-            }
-        }
-        
-        vector<int> IDs;
-        vector<int> parents;
-        for (auto p : islandMap) {
-            IDs.push_back(p.second);
-            parents.push_back(p.first);
-        }
-        
-        set<pair<int, int>> visited;
-        deque<pair<int, int>> queue;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (A[i][j] != 1 || findParent(ID(i, j)) != parents[0]) continue;
-                if (isBorder(A, i, j)) {
-                    queue.emplace_back(i, j);
-                    visited.emplace(i, j);
-                }
-            }
-        }
-        
-        int answer = 0;
-        while (!queue.empty()) {
-            int size = queue.size();
-            while (size--) {
-                int x, y;
-                tie(x, y) = queue.front();
-                queue.pop_front();
-                
-                for (int k = 0; k < 4; k++) {
-                    const int nx = x + dx[k], ny = y + dy[k];
-                    
-                    if (pointValid(nx, ny) && !visited.count({nx, ny})) {
-                        if (A[nx][ny] == 1 && findParent(ID(nx, ny)) == parents[1]) {
-                            return answer;
-                        }
-                        
-                        visited.emplace(nx, ny);
-                        queue.emplace_back(nx, ny);
-                        merge(ID(x, y), ID(nx, ny));
-                    }
-                }
-            }
-            answer++;
-        }
-        return answer;
+
+        return -1;
     }
 };

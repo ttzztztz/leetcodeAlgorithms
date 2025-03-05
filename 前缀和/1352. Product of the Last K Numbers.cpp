@@ -1,27 +1,27 @@
 class ProductOfNumbers {
 public:
     ProductOfNumbers() {
-        
+        product = { 1 };
     }
     
     void add(int num) {
         if (num == 0) {
-            last_zero = n;
-            pref.push_back(1);
-        } else {
-            pref.push_back(pref.back() * num);
+            product = { 1 };
+            return;
         }
-        n++;
+
+        product.push_back(product.back() * num);
     }
     
     int getProduct(int k) {
-        const int l = n - k;
-        if (l <= last_zero) return 0;
-        return pref.back() / pref[l];
+        const int n = product.size();
+        if (n - k - 1 < 0) return 0;
+
+        return product[n - 1] / product[n - k - 1];
     }
 private:
-    vector<int> pref = {1};
-    int last_zero = -1, n = 0;
+    typedef long long ll;
+    vector<ll> product;
 };
 
 /**

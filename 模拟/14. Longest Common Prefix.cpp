@@ -1,35 +1,21 @@
 class Solution {
 public:
     string longestCommonPrefix(vector<string>& strs) {
-        if (strs.size() == 0) {
-            return "";
-        } else if (strs.size() == 1) {
-            return strs[0];
+        if (strs.empty()) return "";
+
+        string ans;
+        const int n = strs.size();
+        int min_length = strs[0].size();
+        for (int j = 0; j < n; j++) {
+            min_length = min<int>(min_length, strs[j].size());
         }
 
-        int ptr = 0, minLen = 0x7fffffff;
-        for (int i = 0; i < strs.size(); i++) {
-            int len = strs[i].size();
-            minLen = std::min(minLen, len);
-        }
-
-        int i = 0;
-        for (i = 0; i < minLen; i++) {
-            char ch = strs[0][i];
-
-            bool shouldBreakFlag = false;
-            for (int j = 1; j < strs.size(); j++) {
-                if (strs[j][i] != ch) {
-                    shouldBreakFlag = true;
-                    break;
-                }
+        for (int i = 0; i < min_length; i++) {
+            for (int j = 1; j < n; j++) {
+                if (strs[0][i] != strs[j][i]) return ans;
             }
-
-            if (shouldBreakFlag) {
-                break;
-            }
+            ans += strs[0][i];
         }
-
-        return strs[0].substr(0, i);
+        return ans;
     }
 };

@@ -3,30 +3,31 @@ public:
     vector<int> asteroidCollision(vector<int>& asteroids) {
         vector<int> ans;
         const int n = asteroids.size();
+
         for (int i = 0; i < n; i++) {
-            const int t = asteroids[i];
-            
-            if (t > 0) ans.push_back(t);
-            else { // t < 0
-                bool add = true;
+            const int m = asteroids[i];
+
+            if (m > 0) {
+                ans.push_back(m);
+            } else if (m < 0) {
+                bool explode = false;
                 while (!ans.empty() && ans.back() > 0) {
-                    if (-t == ans.back()) { // both remove
-                        ans.pop_back();
-                        add = false;
-                        break;
-                    } else if (-t < ans.back()) { // remove t
-                        add = false;
-                        break;
-                    } else { // remove ans
+                    const int u = ans.back();
+
+                    if (abs(m) >= u) {
                         ans.pop_back();
                     }
-                }
-                
-                if (add) ans.push_back(t);
-            }
 
+                    if (abs(m) <= u) {
+                        explode = true;
+                        break; // explode
+                    }
+                }
+
+                if (!explode) ans.push_back(m);
+            }
         }
-        
+
         return ans;
     }
 };

@@ -1,47 +1,35 @@
 /**
- * Definition of TreeNode:
- * class TreeNode {
- * public:
+ * Definition for a binary tree node.
+ * struct TreeNode {
  *     int val;
- *     TreeNode *left, *right;
- *     TreeNode(int val) {
- *         this->val = val;
- *         this->left = this->right = NULL;
- *     }
- * }
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
  */
-
-#include <list>
-
 class Solution {
 public:
-    /**
-     * @param root: the given BST
-     * @param target: the given target
-     * @param k: the given k
-     * @return: k values in the BST that are closest to the target
-     */
-    list<int> temp;
-    double target;
-    int k;
-    vector<int> closestKValues(TreeNode * root, double target, int k) {
-        this->target = target, this->k = k;
-        dfs(root);
-        return vector<int>(temp.begin(), temp.end());
-    }
-private:
-    void dfs(TreeNode* node) {
-        if (node == nullptr) return;
+    int closestValue(TreeNode* root, double target) {
+        if (root == nullptr) return 0;
+        int result = numeric_limits<int>::min();
         
-        dfs(node->left);
-        if (temp.size() < k) {
-            temp.push_back(node->val);
-        } else {
-            if (abs(temp.front() * 1.0 - target) > abs(node->val - target)) {
-                temp.pop_front();
-                temp.push_back(node->val);
+        TreeNode* cur = root;
+        while (cur != nullptr) {
+            const int val = cur->val;
+
+            if (abs(result - target) > abs(val - target)
+                || (abs(result - target) == abs(val - target) && val < result)) {
+                result = val;
+            }
+
+            if (val < target) {
+                cur = cur->right;
+            } else {
+                cur = cur->left;
             }
         }
-        dfs(node->right);
+        return result;
     }
 };

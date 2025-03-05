@@ -14,30 +14,27 @@ public:
     bool isEvenOddTree(TreeNode* root) {
         if (root == nullptr) return true;
 
+        deque<TreeNode*> q = { root };
         int layer = 0;
-        deque<TreeNode*> q = {root};
         while (!q.empty()) {
             const int cnt = q.size();
+
             int last = -1;
-
-            for (int idx = 0; idx < cnt; idx++) {
-                auto u = q.front();
+            for (int i = 0; i < cnt; i++) {
+                TreeNode* u = q.front();
                 q.pop_front();
-                
-                const int val = u->val;
-                if (layer % 2 == 0) {
-                    if (val % 2 == 0 || (idx >= 1 && last >= val)) return false;
-                } else { // layer % 2 == 1
-                    if (val % 2 == 1 || (idx >= 1 && last <= val)) return false;
-                }
-                last = val;
-                
-                if (u->left) q.push_back(u->left);
-                if (u->right) q.push_back(u->right);
-            }
 
+                if ((u->val % 2) == (layer % 2)) return false;
+                if (i > 0 && layer % 2 == 0 && last >= u->val) return false;
+                if (i > 0 && layer % 2 == 1 && last <= u->val) return false;
+                last = u->val;
+
+                if (u->left != nullptr) q.push_back(u->left);
+                if (u->right != nullptr) q.push_back(u->right);
+            }
             layer++;
         }
+
         return true;
     }
 };

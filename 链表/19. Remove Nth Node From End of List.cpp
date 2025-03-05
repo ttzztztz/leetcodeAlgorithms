@@ -3,29 +3,31 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        ListNode *ptr1 = head, *ptr2 = head, *ptr3 = head;
-        for (int i = 1; i < n; i++) {
-            ptr1 = ptr1->next;
+        if (head == nullptr) return nullptr;
+
+        ListNode *prev_slow = nullptr, *slow = head, *fast = head;
+        for (int i = 0; i < n - 1; i++) fast = fast->next;
+        while (fast->next != nullptr) {
+            prev_slow = slow;
+            slow = slow->next;
+            fast = fast->next;
         }
 
-        bool isFirst = true;
-        while (ptr1->next != nullptr) {
-            ptr1 = ptr1->next;
-            ptr2 = ptr2->next;
-            if (isFirst) {
-                isFirst = false;
-            } else {
-                ptr3 = ptr3->next;
-            }
+        if (prev_slow == nullptr) {
+            ListNode* ans = head->next;
+            delete head;
+            return ans;
         }
-
-        ptr3->next = ptr2->next;
-        return head == ptr2 ? ptr2->next : head;
+        prev_slow->next = slow->next;
+        delete slow;
+        return head;
     }
 };

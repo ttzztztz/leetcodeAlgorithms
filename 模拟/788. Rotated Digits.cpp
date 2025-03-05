@@ -1,19 +1,29 @@
 class Solution {
 public:
-    int rotatedDigits(int N) {
-        int answer = 0;
-        for (int i = 1; i <= N; i++) {
-            if (valid(i)) answer++;
+    int rotatedDigits(int n) {
+        int ans = 0;
+        for (int i = 1; i <= n; i++) {
+            ans += is_good_digits(to_string(i));
         }
-        return answer;
+        return ans;
     }
 private:
-    bool valid(int x, bool ok = false) {
-        if (x == 0) return ok;
-        
-        const int d = x % 10;
-        if (d == 3 || d == 4 || d == 7) return false;
-        if (d == 0 || d == 1 || d == 8) return valid(x / 10, ok);
-        return valid(x / 10, true);
+    bool is_good_digits(const string& s) {
+        unordered_map<char, char> mapping {
+            {'0', '0'},
+            {'1', '1'},
+            {'2', '5'},
+            {'5', '2'},
+            {'6', '9'},
+            {'8', '8'},
+            {'9', '6'},
+        };
+
+        string new_number;
+        for (int i = 0; i < s.size(); i++) {
+            if (!mapping.count(s[i])) return false;
+            new_number.push_back(mapping[s[i]]);
+        }
+        return s != new_number;
     }
 };

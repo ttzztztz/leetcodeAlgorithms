@@ -8,38 +8,26 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-
-struct Comp {
-    bool operator()(ListNode* lhs, ListNode* rhs) const {
-        return lhs->val > rhs->val;
-    }
-};
-
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        priority_queue<ListNode*, vector<ListNode*>, Comp> heap;
-        for (auto& list : lists) {
-            if (list) heap.push(list);
+        typedef pair<int, ListNode*> Value;
+        priority_queue<Value, vector<Value>, greater<>> heap;
+        for (auto list : lists) {
+            if (list != nullptr) heap.emplace(list->val, list);
         }
-        
-        ListNode* flag = new ListNode(0);
-        ListNode* cur = flag;
+
+        ListNode* head = nullptr, *cur = nullptr;
         while (!heap.empty()) {
-            ListNode* u = heap.top();
+            auto[_, node] = heap.top();
             heap.pop();
-            
-            cur->next = u;
-            cur = cur->next;
-            
-            ListNode* next = u->next;
-            if (next) {
-                heap.push(next);
-            }
+
+            if (head == nullptr) head = node;
+            if (cur != nullptr) cur->next = node;
+            cur = node;
+
+            if (node->next != nullptr) heap.emplace(node->next->val, node->next);
         }
-        
-        ListNode* ans = flag->next;
-        delete flag;
-        return ans;
+        return head;
     }
 };

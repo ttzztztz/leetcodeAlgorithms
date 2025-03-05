@@ -12,20 +12,23 @@
 class Solution {
 public:
     bool isValidBST(TreeNode* root) {
-        traverse(root);
-        
-        for (int i = 1; i < it.size(); i++) {
-            if (it[i] <= it[i - 1]) return false;
-        }
-        return true;
+        return validate(root);
     }
 private:
-    void traverse(TreeNode* root) {
-        if (root == nullptr) return;
-        
-        traverse(root->left);
-        it.push_back(root->val);
-        traverse(root->right);
+    bool is_first = true;
+    int last_val = 0;
+
+    bool validate(TreeNode* root) {
+        if (root == nullptr) return true;
+
+        bool result = true;
+
+        result = result && validate(root->left);
+        if (!is_first && last_val >= root->val) return false;
+        is_first = false;
+        last_val = root->val;
+        result = result && validate(root->right);
+
+        return result;
     }
-    vector<int> it;
 };

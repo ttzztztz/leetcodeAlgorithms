@@ -1,43 +1,38 @@
 class LRUCache {
 public:
-    int capacity, size;
-    list<int> keyList;
-    unordered_map<int, pair<std::list<int>::iterator, int>> kvMap;
     LRUCache(int capacity) {
         this->capacity = capacity;
-        this->size = 0;
     }
-
+    
     int get(int key) {
-        if (kvMap.count(key)) {
-            auto it = kvMap[key].first;
-            keyList.erase(it);
-            keyList.push_front(key);
+        if (!data.count(key)) return -1;
 
-            kvMap[key].first = keyList.begin();
-            return kvMap[key].second;
-        } else {
-            return -1;
-        }
+        auto [val, it] = data[key];
+        time.erase(it);
+        time.push_front(key);
+        data[key] = { val, time.begin() };
+        return val;
     }
-
+    
     void put(int key, int value) {
-        int previousValue = get(key);
-        if (previousValue == -1) {
-            size++;
-
-            if (size > capacity) {
-                int oldKey = keyList.back();
-                keyList.pop_back();
-                kvMap.erase(oldKey);
-                size--;
-            }
-
-            keyList.push_front(key);
+        const int old_val = get(key);
+        if (data.count(key)) {
+            data[key] = { value, time.begin() };
+            return;
         }
 
-        kvMap[key] = std::make_pair(keyList.begin(), value);
+        if (time.size() >= capacity) {
+            const int removed_key = time.back();
+            time.pop_back();
+            data.erase(data.find(removed_key));
+        }
+        time.push_front(key);
+        data[key] = { value, time.begin() };
     }
+private:
+    int capacity;
+    list<int> time;
+    unordered_map<int, pair<int, list<int>::iterator>> data;
 };
 
 /**

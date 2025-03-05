@@ -1,21 +1,23 @@
 class Solution {
 public:
     int countSubstrings(string s) {
-        int answer = 0;
-        const int N = s.size();
-        for (int i = 0; i < N; i++) {
-            answer += extend(s, i, i);
-            answer += extend(s, i, i + 1);
+        int ans = 0;
+        for (int i = 0; i < s.size(); i++) {
+            ans += count(s, i, i);
+            if (i + 1 < s.size()) ans += count(s, i, i + 1);
         }
-        return answer;
+        return ans;
     }
-    int extend(const string& s, int i, int j) {
-        int answer = 0;
-        const int N = s.size();
-        while (i >= 0 && j < N && s[i] == s[j]) {
-            answer++;
-            i--, j++;
+private:
+    int count(const string& s, int i, int j) {
+        int ans = 0;
+        while (i >= 0 && j < s.size()) {
+            if (s[i] == s[j]) {
+                i--, j++, ans++;
+            } else {
+                break;
+            }
         }
-        return answer;
+        return ans;
     }
 };

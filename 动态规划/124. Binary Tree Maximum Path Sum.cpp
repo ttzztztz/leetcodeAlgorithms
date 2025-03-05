@@ -4,30 +4,29 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
-    int total = -99999999;
-    int solve(TreeNode* root) {
-        if (nullptr == root) {
-            return 0;
-        }
-        int answer = 0;
-
-        int left = std::max(0, solve(root->left));
-        int right = std::max(0, solve(root->right));
-
-        answer = left + right + root->val;
-        total = std::max(total, answer);
-
-        return root->val + std::max(left, right);
-    }
-
     int maxPathSum(TreeNode* root) {
-        solve(root);
+        if (root == nullptr) return ans;
 
-        return total;
+        dfs(root);
+        return ans;
+    }
+private:
+    int ans = numeric_limits<int>::min();
+
+    int dfs(TreeNode* cur) {
+        if (cur == nullptr) return 0;
+
+        const int l_val = dfs(cur->left);
+        const int r_val = dfs(cur->right);
+
+        ans = max(ans, max(cur->val + l_val + r_val, max(cur->val, max(cur->val + l_val, cur->val + r_val))));
+        return max(cur->val, cur->val + max(l_val, r_val));
     }
 };

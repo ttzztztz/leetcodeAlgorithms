@@ -11,36 +11,46 @@
  */
 class Solution {
 public:
-    TreeNode* recoverFromPreorder(string S) {
-        this->s_ = S;
-        this->idx = 0;
-        return dfs(0);
+    TreeNode* recoverFromPreorder(string traversal) {
+        if (traversal.empty()) return nullptr;
+        vector<pair<int, int>> records = parse_string(traversal);
+        return dfs(records, 0);
     }
 private:
-    int idx;
-    string s_;
-    
-    TreeNode* dfs(int depth) {
-        if (idx == s_.size()) return nullptr;
-        int i = idx;
-        int cur_dep = 0;
-        for (; i < s_.size(); i++) {
-            if (s_[i] == '-') cur_dep++;
-            else break;
+    int idx = 0;
+
+    TreeNode* dfs(const vector<pair<int, int>>& records, int depth) {
+        if (idx >= records.size()) return nullptr;
+        const auto [cur_depth, val] = records[idx];
+        if (cur_depth != depth) return nullptr;
+        idx++;
+
+        TreeNode* cur = new TreeNode(val);
+        cur->left = dfs(records, depth + 1);
+        cur->right = dfs(records, depth + 1);
+        return cur;
+    }
+
+    vector<pair<int, int>> parse_string(const string& str) {
+        vector<pair<int, int>> ans;
+        const int n = str.size();
+        for (int i = 0; i < n; i++) {
+            int depth = 0;
+            if (str[i] == '-') {
+                depth = 1;
+                while (i + 1 < n && str[i + 1] == '-') {
+                    i++, depth++;
+                }
+                i++;
+            }
+
+            int val = str[i] - '0';
+            while (i + 1 < n && '0' <= str[i + 1] && str[i + 1] <= '9') {
+                val = val * 10 + str[i + 1] - '0';
+                i++;
+            }
+            ans.push_back({ depth, val });
         }
-        if (cur_dep != depth) return nullptr;
-        
-        idx = i;
-        int val = 0;
-        for (; i < s_.size(); i++) {
-            if (s_[i] == '-') break;
-            val = val * 10 + (s_[i] - '0');
-        }
-        TreeNode* root = new TreeNode(val);
-        idx = i;
-        
-        root->left = dfs(depth + 1);
-        root->right = dfs(depth + 1);
-        return root;
+        return ans;
     }
 };

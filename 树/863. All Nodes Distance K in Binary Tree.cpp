@@ -9,40 +9,67 @@
  */
 class Solution {
 public:
-    vector<int> distanceK(TreeNode * root, TreeNode * target, int K) {
-        dfs(root, nullptr);
-        
-        vector<int> ans;
-        deque<TreeNode*> q = {target};
-        unordered_set<TreeNode*> visited;
-        int layer = 0;
-        while (!q.empty()) {
-            if (layer > K) break;
-            const int cnt = q.size();
-            for (int _ = 0; _ < cnt; _++) {
-                TreeNode* u = q.front();
-                if (layer == K) {
-                    ans.push_back(u->val);
-                }
-                q.pop_front();
-                visited.insert(u);
-                
-                if (parent[u] && !visited.count(parent[u])) q.push_back(parent[u]), visited.insert(parent[u]);
-                if (u->left && !visited.count(u->left)) q.push_back(u->left), visited.insert(u->left);
-                if (u->right && !visited.count(u->right)) q.push_back(u->right), visited.insert(u->right);
-            }
-            layer++;
-        }
-        
-        return ans;
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        if (root == nullptr || target == nullptr) return {};
+
+        unordered_map<TreeNode*, TreeNode*> parent;
+        dfs_parent(parent, root);
+        return bfs_k_dist_nodes(parent, target, k);
     }
 private:
-    unordered_map<TreeNode*, TreeNode*> parent;
-    void dfs(TreeNode* u, TreeNode* par) {
-        if (u == nullptr) return;
-        
-        parent[u] = par;
-        dfs(u->left, u);
-        dfs(u->right, u);
+    void dfs_parent(unordered_map<TreeNode*, TreeNode*>& parent, TreeNode* root) {
+        if (root == nullptr) return;
+
+        if (root->left != nullptr) {
+            parent[root->left] = root;
+            dfs_parent(parent, root->left);
+        }
+
+        if (root->right != nullptr) {
+            parent[root->right] = root;
+            dfs_parent(parent, root->right);
+        }
+    }
+
+    vector<int> bfs_k_dist_nodes(unordered_map<TreeNode*, TreeNode*>& parent, TreeNode* target, int k) {
+        vector<int> ans;
+        int len = 0;
+        deque<TreeNode*> q = {target};
+        unordered_set<TreeNode*> visited;
+        visited.insert(target);
+
+        while (!q.empty()) {
+            const int cnt = q.size();
+
+            for (int i = 0; i < cnt; i++) {
+                TreeNode* cur = q.front();
+                q.pop_front();
+
+                if (len == k) {
+                    ans.push_back(cur->val);
+                }
+
+                if (cur->left && !visited.count(cur->left)) {
+                    q.push_back(cur->left);
+                    visited.insert(cur->left);
+                }
+                if (cur->right && !visited.count(cur->right)) {
+                    q.push_back(cur->right);
+                    visited.insert(cur->right);
+                }
+
+                if (parent.count(cur) && !visited.count(parent[cur])) {
+                    q.push_back(parent[cur]);
+                    visited.insert(parent[cur]);
+                }
+            }
+
+            if (len == k) {
+                break;
+            }
+            len++;
+        }
+
+        return ans;
     }
 };

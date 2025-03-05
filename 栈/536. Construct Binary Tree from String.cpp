@@ -13,31 +13,37 @@ class Solution {
 public:
     TreeNode* str2tree(string s) {
         if (s.empty()) return nullptr;
-        TreeNode* flag = new TreeNode(0);
-        vector<TreeNode*> stk = {flag};
-        
-        string tmp;
-        for (int i = 0; i < s.size(); i++) {
+        const int n = s.size();
+
+        vector<TreeNode*> stk = { new TreeNode(0) };
+        for (int i = 0; i < n; i++) {
             if (s[i] == '(') {
-                continue;
+                TreeNode* new_node = new TreeNode(0);
+                if (!stk.empty()) {
+                    TreeNode* back = stk.back();
+
+                    if (back->left == nullptr) back->left = new_node;
+                    else if (back->right == nullptr) back->right = new_node;
+                }
+                stk.push_back(new_node);
             } else if (s[i] == ')') {
                 stk.pop_back();
             } else {
-                tmp += s[i];
-                if (s[i + 1] == '(' || s[i + 1] == ')' || s[i + 1] == '\0') {
-                    TreeNode* cur = new TreeNode(stoi(tmp));
-                    tmp.clear();
+                bool negative = false;
+                int val = 0;
 
-                    if (stk.back()->left) stk.back()->right = cur;
-                    else stk.back()->left = cur;
+                if (s[i] == '-') negative = true;
+                else val = s[i] - '0';
 
-                    stk.push_back(cur);
+                while (i + 1 < n && '0' <= s[i + 1] && s[i + 1] <= '9') {
+                    val = val * 10 + s[i + 1] - '0';
+                    i++;
                 }
+
+                if (negative) val = -val;
+                stk.back()->val = val;
             }
         }
-        
-        TreeNode* ans = flag->left;
-        delete flag;
-        return ans;
+        return stk.back();
     }
 };

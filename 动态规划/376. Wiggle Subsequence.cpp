@@ -19,3 +19,34 @@ public:
         return answer;
     }
 };
+
+class Solution {
+public:
+    int wiggleMaxLength(vector<int>& nums) {
+        if (nums.empty()) return 0;
+        n = nums.size();
+        memo = vector<vector<int>>(n, vector<int>(2, -1));
+
+        int ans = 0;
+        for (int i = 0; i < n; i++) ans = max(ans, max(dfs(nums, i, 0), dfs(nums, i, 1)));
+        return ans;
+    }
+private:
+    int n;
+    vector<vector<int>> memo;
+
+    int dfs(const vector<int>& nums, int i, int ord) {
+        if (memo[i][ord] != -1) return memo[i][ord];
+
+        int ans = 1;
+        for (int j = i + 1; j < n; j++) {
+            if (
+                (ord == 0 && nums[i] < nums[j])
+                || (ord == 1 && nums[i] > nums[j])
+            ) {
+                ans = max(ans, 1 + dfs(nums, j, ord ^ 1));
+            }
+        }
+        return memo[i][ord] = ans;
+    }
+};

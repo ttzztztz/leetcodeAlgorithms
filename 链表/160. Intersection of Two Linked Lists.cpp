@@ -9,22 +9,14 @@
 class Solution {
 public:
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        if (headA == nullptr || headB == nullptr) return nullptr;
-        
-        auto ptrA = headA, ptrB = headB;
-        while (ptrA != ptrB) {
-            if (ptrA == nullptr) {
-                ptrA = headB;
-            } else {
-                ptrA = ptrA->next;
-            }
-            
-            if (ptrB == nullptr) {
-                ptrB = headA;
-            } else {
-                ptrB = ptrB->next;
-            }
+        ListNode *p = headA, *q = headB;
+        while (p != q) {
+            if (p == nullptr) p = headB;
+            else p = p->next;
+
+            if (q == nullptr) q = headA;
+            else q = q->next;
         }
-        return ptrA;
+        return p;
     }
 };

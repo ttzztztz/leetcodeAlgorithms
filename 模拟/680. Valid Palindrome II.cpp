@@ -1,20 +1,22 @@
 class Solution {
 public:
     bool validPalindrome(string s) {
-        const int N = s.size();
-        return dfs(s, 0, N - 1, 0);
+        if (s.empty()) return true;
+
+        const int s_len = s.size();
+        int i = 0, j = s_len - 1;
+        while (i < j) {
+            if (s[i] != s[j]) return is_palindrome(s, i, j - 1) || is_palindrome(s, i + 1, j);
+            i++, j--;
+        }
+        return true;
     }
 private:
-    bool dfs(const string& s, int l, int r, int cnt) {
-        for (; l < r;) {
-            if (s[l] == s[r]) {
-                l++, r--;
-            } else {
-                if (cnt == 1) return false;
-                else return dfs(s, l + 1, r, 1) || dfs(s, l, r - 1, 1);
-            }
+    bool is_palindrome(const string& s, int i, int j) {
+        while (i < j) {
+            if (s[i] != s[j]) return false;
+            i++, j--;
         }
-        
         return true;
     }
 };

@@ -1,20 +1,18 @@
 class Solution {
 public:
     int minMeetingRooms(vector<vector<int>>& intervals) {
+        int ans = 0;
+
         sort(intervals.begin(), intervals.end());
-        const int n = intervals.size();
-        
         priority_queue<int, vector<int>, greater<>> heap;
-        for (int i = 0; i < n; i++) {
-            const int l = intervals[i][0], r = intervals[i][1] - 1;
-            
-            if (heap.empty() || l <= heap.top()) {
-                heap.push(r);
-            } else {
-                heap.pop();
-                heap.push(r);
-            }
+        for (const auto& interval : intervals) {
+            const int start = interval[0];
+            const int end = interval[1];
+
+            while (!heap.empty() && heap.top() <= start) heap.pop();
+            heap.push(end);
+            ans = max<int>(ans, heap.size());
         }
-        return heap.size();
+        return ans;
     }
 };

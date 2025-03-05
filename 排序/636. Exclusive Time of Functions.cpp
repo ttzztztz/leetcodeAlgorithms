@@ -1,35 +1,42 @@
 class Solution {
 public:
     vector<int> exclusiveTime(int n, vector<string>& logs) {
-        vector<int> answer(n);
-        
-        int lastTimeStamp = 0;
+        vector<int> ans(n, 0);
         vector<int> stk;
-        for (const string& log : logs) {
-            string id, type, timestamp;
-            auto idx1 = log.find(':');
-            auto idx2 = log.find(':', idx1 + 1);
-            id = log.substr(0, idx1);
-            type = log.substr(idx1 + 1, idx2 - idx1 - 1);
-            timestamp = log.substr(idx2 + 1);
-            
-            int _id = stoi(id);
-            int _timestamp = stoi(timestamp);
-            if (type == "start") {
-                if (!stk.empty()) {
-                    answer[stk.back()] += _timestamp - lastTimeStamp;
-                }
-                stk.push_back(_id);
-                lastTimeStamp = _timestamp;
-            } else { // end
-                answer[stk.back()] += _timestamp - lastTimeStamp + 1;
+
+        int last_ts = 0;
+        for (auto& log : logs) {
+            auto [function_id, kind, ts] = parse_log(log);
+
+            if (kind == fn_start) {
+                if (!stk.empty()) ans[stk.back()] += ts - last_ts;
+                stk.push_back(function_id);
+            } else {
+                auto fn = stk.back();
                 stk.pop_back();
-                lastTimeStamp = _timestamp + 1;
+                ans[fn] += ts - last_ts;
             }
-            // for (int i : answer) cout << i << " ";
-            // cout << endl;
+            last_ts = ts;
         }
-        
-        return answer;
+        return ans;
+    }
+private:
+    const int fn_start = 0;
+    const int fn_end = 1;
+    // {function_id, start|end, ts}
+    tuple<int, int, int> parse_log(const string& str) {
+        vector<string> ans;
+        string buf;
+        for (int i = 0; i < str.size(); i++) {
+            if (str[i] != ':') buf += str[i];
+
+            if (str[i] == ':' || i == str.size() - 1) {
+                ans.push_back(buf);
+                buf.clear();
+            }
+        }
+
+        if (ans[1] == "start") return { stoi(ans[0]), fn_start, stoi(ans[2]) };
+        return { stoi(ans[0]), fn_end, stoi(ans[2]) + 1 };
     }
 };

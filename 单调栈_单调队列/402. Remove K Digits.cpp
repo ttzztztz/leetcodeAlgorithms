@@ -1,36 +1,32 @@
 class Solution {
 public:
     string removeKdigits(string num, int k) {
-        if (k == num.size()) {
-            return "0";
-        }
-        string stack;
-        stack.push_back(num[0]);
-        for (int i = 1; i < num.size(); i++) {
-            const char& currentChar = num[i];
-
-            while (k && stack.size() && stack[stack.size() - 1] > currentChar) {
-                stack.pop_back();
+        string ans;
+        for (int i = 0; i < num.size(); i++) {
+            while (k > 0 && !ans.empty() && ans.back() > num[i]) {
                 k--;
+                ans.pop_back();
             }
 
-            stack.push_back(currentChar);
+            ans += num[i];
         }
 
-        while (k) {
-            stack.pop_back();
+        while (k > 0 && !ans.empty()) {
+            ans.pop_back();
             k--;
         }
-        bool begin = true;
-        int answerStartPtr = 0;
-        for (int i = 0; i < stack.size(); i++) {
-            if (begin && stack[i] == '0') {
-                answerStartPtr++;
-                continue;
+
+        int leading_zero_cnt = 0;
+        for (int i = 0; i < ans.size(); i++) {
+            if (ans[i] == '0') {
+                leading_zero_cnt++;
+            } else {
+                break;
             }
-            break;
         }
-        stack = stack.substr(answerStartPtr);
-        return stack == "" ? "0" : stack;
+        
+        string final_ans = ans.substr(leading_zero_cnt);
+        if (final_ans.empty()) return "0";
+        return final_ans;
     }
 };

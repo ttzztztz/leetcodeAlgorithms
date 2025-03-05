@@ -1,41 +1,31 @@
 class Solution {
 public:
-    int N;
-    unordered_map<int, vector<string>> dp;
-    vector<string> dfs(const string& s, const unordered_set<string>& wordSet, int index) {
-        if (index == N) {
-            return vector<string>(1, "");
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        string cur;
+        dict = unordered_set<string>(wordDict.begin(), wordDict.end());
+        dfs(s, cur, 0);
+        return ans;
+    }
+private:
+    vector<string> ans;
+    unordered_set<string> dict;
+    
+    void dfs(const string& s, string& cur, int idx) {
+        if (idx >= s.size()) {
+            ans.push_back(cur);
+            return;
         }
 
-        if (dp.count(index)) {
-            return dp[index];
-        }
-
-        vector<string> answer;
-        for (int i = index; i < N; i++) {
-            const string str = s.substr(index, i - index + 1);
-            if (wordSet.count(str)) {
-                vector<string> temp = dfs(s, wordSet, i + 1);
-
-                for (const string& t : temp) {
-                    if (t == "") {
-                        answer.push_back(str);
-                    } else {
-                        answer.push_back(str + " " + t);
-                    }
-                }
+        string tmp;
+        for (int j = idx; j < s.size(); j++) {
+            tmp += s[j];
+            if (dict.count(tmp)) {
+                const string prev_cur = cur;
+                if (idx != 0) cur += " ";
+                cur += tmp;
+                dfs(s, cur, j + 1);
+                cur = prev_cur;
             }
         }
-        return dp[index] = answer;
-    }
-
-    vector<string> wordBreak(string s, vector<string>& wordDict) {
-        unordered_set<string> wordSet;
-        for (const string& word : wordDict) {
-            wordSet.insert(word);
-        }
-        N = s.size();
-
-        return dfs(s, wordSet, 0);
     }
 };

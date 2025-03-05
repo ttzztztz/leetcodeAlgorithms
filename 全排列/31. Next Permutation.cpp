@@ -1,28 +1,16 @@
-// class Solution {
-// public:
-//     void nextPermutation(vector<int>& nums) {
-//         std::next_permutation(nums.begin(), nums.end());
-//     }
-// };
-
 class Solution {
 public:
     void nextPermutation(vector<int>& nums) {
+        if (nums.empty()) return;
         const int n = nums.size();
-        int i = n - 2;
-        while (i >= 0) {
-            if (nums[i] < nums[i + 1]) break;
-            else i--;
+
+        int ptr1 = n - 1;
+        while (ptr1 >= 1 && nums[ptr1 - 1] >= nums[ptr1]) ptr1--;
+        if (ptr1 >= 1) {
+            int ptr2 = n - 1;
+            while (ptr1 < ptr2 && nums[ptr1 - 1] >= nums[ptr2]) ptr2--;
+            swap(nums[ptr1 - 1], nums[ptr2]);
         }
-        
-        if (i >= 0) {
-            int j = n - 1;
-            while (j >= 0) {
-                if (nums[i] < nums[j]) break;
-                else j--;
-            }
-            swap(nums[i], nums[j]);
-        }
-        reverse(nums.begin() + i + 1, nums.end());
+        reverse(nums.begin() + ptr1, nums.end());
     }
 };

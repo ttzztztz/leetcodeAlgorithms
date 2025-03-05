@@ -1,46 +1,47 @@
 class Solution {
 public:
     vector<string> addOperators(string num, int target) {
-        this->target = target;
-        long long cur = 0;
-        for (int i = 0; i < num.size(); i++) {
-            if (i == 1 && num[0] == '0') break;
-            cur *= 10;
-            cur += num[i] - '0';
-            
-            string str = to_string(cur);
-            dfs(num, i + 1, cur, cur, str);
-        }
-        return answer;
+        string cur;
+        dfs(num, target, 0, cur, 0, 0);
+        return ans;
     }
 private:
-    vector<string> answer;
-    int target;
-    void dfs(const string& num, int index, long long total, long long pre, string& state) {
-        if (index == num.size()) {
-            if (target == total) answer.push_back(state);
+    vector<string> ans;
+    typedef long long ll;
+
+    void dfs(const string& num, ll target, ll res, string& cur, int idx, ll last) {
+        if (idx >= num.size()) {
+            if (target == res) ans.push_back(cur);
             return;
         }
-        long long cur = 0;
-        for (int i = index; i < num.size(); i++) {
-            if (i == index + 1 && num[index] == '0') break;
-            cur *= 10;
-            cur += num[i] - '0';
-            
-            string cur_str = "+" + to_string(cur);
-            state += cur_str;
-            dfs(num, i + 1, total + cur, cur, state);
-            for (int _ = 0; _ < cur_str.size(); _++) state.pop_back();
-            
-            cur_str = "-" + to_string(cur);
-            state += cur_str;
-            dfs(num, i + 1, total - cur, -cur, state);
-            for (int _ = 0; _ < cur_str.size(); _++) state.pop_back();
-            
-            cur_str = "*" + to_string(cur);
-            state += cur_str;
-            dfs(num, i + 1, total - pre + pre * cur, pre * cur, state);
-            for (int _ = 0; _ < cur_str.size(); _++) state.pop_back();
+
+        ll buf = 0;
+        for (int j = idx; j < num.size(); j++) {
+            if (buf == 0 && j > idx) break; // remove leading 0
+            buf = buf * 10 + num[j] - '0';
+
+            const string cur_number = to_string(buf);
+            const string prev_cur = cur;
+            if (idx == 0) {
+                cur += cur_number;
+                dfs(num, target, buf, cur, j + 1, buf);
+                cur = prev_cur;
+                continue;
+            }
+
+            // add +
+            cur += '+' + cur_number;
+            dfs(num, target, res + buf, cur, j + 1, buf);
+            cur = prev_cur;
+            // add -
+            cur += '-' + cur_number;
+            dfs(num, target, res - buf, cur, j + 1, -buf);
+            cur = prev_cur;
+
+            // add *
+            cur += '*' + cur_number;
+            dfs(num, target, res - last + buf * last, cur, j + 1, buf * last);
+            cur = prev_cur;
         }
     }
 };

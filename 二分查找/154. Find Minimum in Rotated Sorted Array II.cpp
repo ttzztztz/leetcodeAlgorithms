@@ -1,25 +1,17 @@
 class Solution {
 public:
     int findMin(vector<int>& nums) {
-        const int N = nums.size();
+        const int n = nums.size();
 
-        int left = 0, right = N - 1;
-        if (nums.size() == 1 || nums[0] < nums[N - 1]) {
-            return nums[0];
+        int l = 0, r = n - 1;
+        while (l <= r) {
+            const int mid = (l + r) / 2;
+
+            if (nums[mid] < nums[r]) r = mid;
+            else if (nums[mid] > nums[r]) l = mid + 1;
+            else r--;
         }
 
-        while (left < right) {
-            const int middle = (left + right) >> 1;
-
-            if (nums[middle] > nums[right]) {
-                left = middle + 1;
-            } else if (nums[middle] < nums[right]) {
-                right = middle;
-            } else {
-                right--;
-            }
-        }
-
-        return nums[right];
+        return nums[l];
     }
 };

@@ -1,20 +1,18 @@
 class Solution {
 public:
-    int minAddToMakeValid(string S) {
-		int balance = 0;
-		int ans = 0;
-		const int n = S.size();
+    int minAddToMakeValid(string s) {
+        if (s.empty()) return 0;
+        const int n = s.size();
 
-		for (int i = 0; i < n; i++) {
-			if (S[i] == '(') {
-				balance++;
-            } else { // S[i] == ')'
-                if (balance == 0) ans++;
-                else balance--;
+        int ans = 0, balance = 0;
+        for (int i = 0; i < n; i++) {
+            if (s[i] == '(') {
+                balance++;
+            } else if (s[i] == ')') {
+                balance--;
+                if (balance < 0) ans++, balance = 0;
             }
         }
-		return ans + balance;
+        return ans + balance;
     }
 };
-
-

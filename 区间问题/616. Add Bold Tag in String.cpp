@@ -1,62 +1,33 @@
 class Solution {
 public:
-    string addBoldTag(string s, vector<string>& dict) {
-        vector<pair<int, int>> intervals = preprocess(s, dict);
-        return generate_answer(s, merge_intervals(intervals));
-    }
-private:
-    string generate_answer(const string& s, const vector<pair<int, int>>& intervals) {
-        string ans;
-        for (int i = 0, ptr = 0; i < s.size(); i++) {
-            if (ptr < intervals.size() && intervals[ptr].first == i) {
-                ans += "<b>";
-            }
-            ans += s[i];
-            if (ptr < intervals.size() && intervals[ptr].second - 1 == i) {
-                ans += "</b>";
-                ptr++;
+    string addBoldTag(string s, vector<string>& words) {
+        vector<vector<int>> intervals;
+        for (const string& word : words) {
+            int last_pos = 0;
+            while ((last_pos = s.find(word, last_pos)) != string::npos) {
+                const int end_pos = last_pos + word.size() - 1;
+                intervals.push_back(vector<int>{ last_pos, end_pos });
+                last_pos += 1;
             }
         }
-        return ans;
-    }
-    
-    vector<pair<int, int>> preprocess(const string& s, const vector<string>& dict) {
-        vector<pair<int, int>> ans;
-        for (const string& word : dict) {
-            int ptr = 0;
-            while ((ptr = s.find(word, ptr)) != string::npos) {
-                ans.emplace_back(ptr, ptr + word.size());
-                ptr++;
-            }
-        }
-        return ans;
-    }
-    
-    vector<pair<int, int>> merge_intervals(vector<pair<int, int>>& intervals) {
-        const pair<int, int> kInvalid = {-1, -1};
-        vector<pair<int, int>> ans;
-        
-        pair<int, int> cur = kInvalid;
+
         sort(intervals.begin(), intervals.end());
+        vector<vector<int>> merged;
         for (int i = 0; i < intervals.size(); i++) {
-            auto [l, r] = intervals[i];
-            
-            if (cur == kInvalid) {
-                cur = intervals[i];
-            } else {
-                auto& [_l, _r] = cur;
-                if (max(l, _l) <= min(r, _r)) {
-                    _l = min(_l, l);
-                    _r = max(_r, r);
-                } else {
-                    ans.push_back(cur);
-                    cur = intervals[i];
-                }
+            int l = intervals[i][0], r = intervals[i][1];
+            while (i + 1 < intervals.size() && max(l, intervals[i + 1][0]) - 1 <= min(r, intervals[i + 1][1])) {
+                l = min(l, intervals[i + 1][0]);
+                r = max(r, intervals[i + 1][1]);
+                i++;
             }
+            merged.push_back(vector<int>{ l, r });
         }
-        
-        if (cur != kInvalid) {
-            ans.push_back(cur);
+
+        string ans;
+        for (int pos = 0, i = 0; i < s.size(); i++) {
+            if (pos < merged.size() && merged[pos][0] == i) ans += "<b>";
+            ans += s[i];
+            if (pos < merged.size() && merged[pos][1] == i) ans += "</b>", pos++;
         }
         return ans;
     }

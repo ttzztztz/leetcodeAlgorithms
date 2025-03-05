@@ -20,26 +20,28 @@
 class Solution {
 public:
     void cleanRoom(Robot& robot) {
-        visited_.insert(Hash(0, 0));
-        Dfs(0, 0, 0, robot);
+        visited.insert(hash(0, 0));
+        dfs(robot, 0, 0, 0);
     }
 private:
-    string Hash(int i, int j) {
-        return to_string(i) + "," + to_string(j);
+    unordered_set<string> visited;
+
+    string hash(int x, int y) {
+        return to_string(x) + "," + to_string(y);
     }
-    unordered_set<string> visited_;
-    
-    void Dfs(int i, int j, int dir, Robot& robot) {
+
+    void dfs(Robot& robot, int i, int j, int dir) {
         robot.clean();
-        const int kDx[] = {0, 1, 0, -1};
-        const int kDy[] = {1, 0, -1, 0};
-        
+
+        const int dx[] = { 0, 1, 0, -1 };
+        const int dy[] = { -1, 0, 1, 0 };
         for (int k = 0; k < 4; k++) {
-            const int nx = i + kDx[(dir + k) % 4], ny = j + kDy[(dir + k) % 4];
-            
-            if (!visited_.count(Hash(nx, ny)) && robot.move()) {
-                visited_.insert(Hash(nx, ny));
-                Dfs(nx, ny, (dir + k) % 4, robot);
+            const int next_dir = (dir + k) % 4;
+            const int next_x = i + dx[next_dir], next_y = j + dy[next_dir];
+
+            if (!visited.count(hash(next_x, next_y)) && robot.move()) {
+                visited.insert(hash(next_x, next_y));
+                dfs(robot, next_x, next_y, next_dir);
                 robot.turnRight();
                 robot.turnRight();
                 robot.move();

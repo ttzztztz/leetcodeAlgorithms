@@ -1,27 +1,30 @@
 class Solution {
 public:
     Solution(vector<int>& nums) {
-        data = nums;
+        this->nums = nums;
     }
     
-    /** Resets the array to its original configuration and return it. */
     vector<int> reset() {
-        return data;
+        return nums;
     }
     
-    /** Returns a random shuffling of the array. */
     vector<int> shuffle() {
-        vector<int> ans = data;
-        for (int i = data.size() - 1; i >= 0; i--) {
-            uniform_int_distribution<int> dis(0, i);
-            const int t = dis(rd);
-            swap(ans[i], ans[t]);
+        vector<int> ans = nums;
+
+        const int n = ans.size();
+        random_device rd;
+        mt19937 gen(rd());
+
+        for (int i = 0; i < n; i++) {
+            uniform_int_distribution<int> d(i, n - 1);
+
+            const int j = d(gen);
+            swap(ans[i], ans[j]);
         }
         return ans;
     }
 private:
-    vector<int> data;
-    mt19937 rd{ random_device{}() };
+    vector<int> nums;
 };
 
 /**

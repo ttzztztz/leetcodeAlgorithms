@@ -11,26 +11,27 @@
  */
 class Solution {
 public:
-    int pathSum(TreeNode* root, int t) {
+    int pathSum(TreeNode* root, int targetSum) {
         if (root == nullptr) return 0;
-        this->t = t;
-        f[0] = 1;
-        return dfs(root, 0);
+        cnt[0]++;
+        dfs(root, 0, targetSum);
+        return ans;
     }
 private:
-    unordered_map<int, int> f;
-    int t;
-    int dfs(TreeNode* u, int sum) {
-        const int cur = u->val + sum;
-        int answer = 0;
-        if (f.count(cur - t)) answer += f[cur - t];
-        
-        f[cur]++;
-        if (u->left) answer += dfs(u->left, cur);
-        if (u->right) answer += dfs(u->right, cur);
-        
-        f[cur]--;
-        if (f[cur] == 0) f.erase(cur);
-        return answer;
+    typedef long long ll;
+    unordered_map<ll, int> cnt;
+    int ans = 0;
+
+    void dfs(TreeNode* root, ll cur, const int target_sum) {
+        if (root == nullptr) return;
+
+        cur += root->val;
+        if (cnt.count(cur - target_sum)) ans += cnt[cur - target_sum];
+
+        cnt[cur]++;
+        dfs(root->left, cur, target_sum);
+        dfs(root->right, cur, target_sum);
+        cnt[cur]--;
+        if (cnt[cur] == 0) cnt.erase(cur);
     }
 };

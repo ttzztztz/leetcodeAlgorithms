@@ -1,26 +1,27 @@
 class Solution {
 public:
     vector<vector<string>> groupStrings(vector<string>& strings) {
-        unordered_multiset<string> all(strings.begin(), strings.end());
-        
         vector<vector<string>> ans;
-        for (const string& str : strings) {
-            if (!all.count(str)) continue;
-            vector<string> cur;
-            for (int k = 0; k < 26; k++) {
-                string nxt = str;
-                for (char& ch : nxt) {
-                    const int d = ch - 'a';
-                    ch = 'a' + (d + k) % 26;
-                }
+        unordered_map<string, vector<string>> hmap;
+        for (const auto& str : strings) {
+            const string group_key = group_by_key(str);
+            hmap[group_key].push_back(str);
+        }
 
-                while (all.count(nxt)) {
-                    all.erase(all.find(nxt));
-                    cur.push_back(nxt);
-                }
-            }
-            ans.push_back(cur);
+        for (auto& [_, vec] : hmap) {
+            ans.push_back(vec);
         }
         return ans;
+    }
+private:
+    string group_by_key(string str) {
+        const int delta = str[0] - 'a';
+
+        for (int i = 0; i < str.size(); i++) {
+            int cur = str[i] - 'a';
+            cur = (cur - delta + 26) % 26;
+            str[i] = 'a' + cur;
+        }
+        return str;
     }
 };

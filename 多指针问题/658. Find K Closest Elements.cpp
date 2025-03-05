@@ -1,33 +1,22 @@
 class Solution {
 public:
     vector<int> findClosestElements(vector<int>& arr, int k, int x) {
-        deque<int> ans;
         const int n = arr.size();
-        
-        auto it = lower_bound(arr.begin(), arr.end(), x);
-        int r = it - arr.begin(), l = r - 1;
-        while (l >= 0 && r < n && ans.size() < k) {
-            if (
-                abs(arr[l] - x) < abs(arr[r] - x) 
-                || (abs(arr[l] - x) == abs(arr[r] - x) && l < r)
-            ) {
+    
+        deque<int> ans;
+        auto it = upper_bound(arr.begin(), arr.end(), x);
+        int r = it - arr.begin();
+        int l = r - 1;
+
+        for (int i = 0; i < k; i++) {
+            if (r >= n || (l >= 0 && r < n && abs(arr[l] - x) <= abs(arr[r] - x))) {
                 ans.push_front(arr[l]);
                 l--;
-            } else {
+            } else if (l < 0 || (l >= 0 && r < n && abs(arr[l] - x) > abs(arr[r] - x))) {
                 ans.push_back(arr[r]);
                 r++;
             }
         }
-        
-        while (l >= 0 && ans.size() < k) {
-            ans.push_front(arr[l]);
-            l--;
-        }
-        while (r < n && ans.size() < k) {
-            ans.push_back(arr[r]);
-            r++;
-        }
-        
         return vector<int>(ans.begin(), ans.end());
     }
 };

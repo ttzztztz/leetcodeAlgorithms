@@ -1,61 +1,33 @@
 class Solution {
 public:
-    unordered_map<char, int> charList;
-    unordered_set<char> charSet;
-    
     string minWindow(string s, string t) {
-        for (const char& ch : t) {
-            charList[ch]++;
-            charSet.insert(ch);
-        }
-        int needMatch = charSet.size();
+        unordered_map<char, int> cur, target;
+        for (const char ch : t) target[ch]++;
 
-        const int T = t.size(), S = s.size();
-        int left = 0, right = 0, minLen = 99999999, answerLeft = -1;
-        
-        unordered_map<char, int> windowChar = charList;
-        // init window
-        for (right = 0; right < T; right++) {
-            if (charSet.count(s[right])) {
-                windowChar[s[right]]--;
-                if (windowChar[s[right]] == 0) {
-                    needMatch--;
+        int ans_l = -1, ans_r = -1;
+        for (int l = 0, r = 0; r < s.size(); r++) {
+            cur[s[r]]++;
+            while (judge(cur, target)) {
+                if (ans_l == -1 || (r - l < ans_r - ans_l)) {
+                    ans_l = l, ans_r = r;
                 }
+
+                cur[s[l]]--;
+                if (cur[s[l]] == 0) cur.erase(s[l]);
+                l++;
             }
         }
-        right--;
-        
-        while (right <= S) {
-            const bool valid = needMatch == 0;
-            if (valid) {
-                if (minLen > right - left + 1) {
-                    minLen = right - left + 1;
-                    answerLeft = left;
-                }
-                
-                if (charSet.count(s[left])) {
-                    windowChar[s[left]]++;
-                    if (windowChar[s[left]] > 0) {
-                        needMatch++;
-                    }
-                }
-                
-                left++;
-            } else {
-                right++;
-                if (right < S && charSet.count(s[right])) {
-                    windowChar[s[right]]--;
-                    if (windowChar[s[right]] == 0) {
-                        needMatch--;
-                    }
-                }
-            }
+
+        if (ans_l == -1) return "";
+        string ans;
+        for (int i = ans_l; i <= ans_r; i++) ans += s[i];
+        return ans;
+    }
+private:
+    bool judge(unordered_map<char, int>& cur, unordered_map<char, int>& target) {
+        for (auto& [ch, cnt] : target) {
+            if (!cur.count(ch) || cur[ch] < cnt) return false;
         }
-        
-        if (answerLeft == -1) {
-            return "";
-        } else {
-            return s.substr(answerLeft, minLen);
-        }
+        return true;
     }
 };

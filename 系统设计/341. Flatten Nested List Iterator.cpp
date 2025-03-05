@@ -16,29 +16,37 @@
  * };
  */
 
-class NestedIterator {
+ class NestedIterator {
 public:
     NestedIterator(vector<NestedInteger> &nestedList) {
-        for (const auto& p : nestedList) dfs(p);
+        for (int i = nestedList.size() - 1; i >= 0; i--) {
+            data.push_back(nestedList[i]);
+        }
     }
     
     int next() {
-        return data[ptr++];
+        if (!hasNext()) return -1;
+
+        const int val = data.back().getInteger();
+        data.pop_back();
+        return val;
     }
     
     bool hasNext() {
-        return ptr < data.size();
+        while (!data.empty() && !data.back().isInteger()) {
+            NestedInteger item = data.back();
+            data.pop_back();
+
+            vector<NestedInteger> next = item.getList();
+            for (int i = next.size() - 1; i >= 0; i--) {
+                data.push_back(next[i]);
+            }
+        }
+
+        return !data.empty();
     }
 private:
-    vector<int> data;
-    int ptr = 0;
-    void dfs(const NestedInteger& it) {
-        if (it.isInteger()) {
-            data.push_back(it.getInteger());
-        } else {
-            for (const auto& p : it.getList()) dfs(p);
-        }
-    }
+    vector<NestedInteger> data;
 };
 
 /**

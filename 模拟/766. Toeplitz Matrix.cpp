@@ -1,24 +1,21 @@
 class Solution {
 public:
     bool isToeplitzMatrix(vector<vector<int>>& matrix) {
-        const int N = matrix.size(), M = matrix[0].size();
-        for (int i = 0; i < N; i++) {
-            int x = i, y = 0;
-            const int val = matrix[x][y];
-            while (x < N && y < M) {
-                if (matrix[x][y] != val) return false;
-                x++, y++;
-            }
+        if (matrix.empty()) return true;
+
+        n = matrix.size(), m = matrix[0].size();
+
+        for (int i = 0; i < n; i++) if (!judge(matrix, i, 0)) return false;
+        for (int i = 1; i < m; i++) if (!judge(matrix, 0, i)) return false;
+
+        return true;
+    }
+private:
+    int n, m;
+    bool judge(const vector<vector<int>>& matrix, int i, int j) {
+        for (int x = 1; i + x < n && j + x < m; x++) {
+            if (matrix[i][j] != matrix[i + x][j + x]) return false;
         }
-        for (int j = 0; j < M; j++) {
-            int x = 0, y = j;
-            const int val = matrix[x][y];
-            while (x < N && y < M) {
-                if (matrix[x][y] != val) return false;
-                x++, y++;
-            }
-        }
-        
         return true;
     }
 };

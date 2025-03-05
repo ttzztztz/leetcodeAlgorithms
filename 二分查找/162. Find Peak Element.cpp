@@ -1,24 +1,20 @@
 class Solution {
 public:
     int findPeakElement(vector<int>& nums) {
+        if (nums.empty()) return -1;
         const int n = nums.size();
-        const int infl = numeric_limits<int>::min();
-        
-        nums.insert(nums.begin(), infl);
-        nums.insert(nums.end(), infl);
-        
-        int l = 1, r = n;
+        int l = 0, r = n - 1;
         while (l <= r) {
             const int mid = (l + r) / 2;
             
-            const int l_val = nums[mid - 1], r_val = nums[mid + 1];
-            if (l_val <= nums[mid] && nums[mid] >= r_val) {
-                return mid - 1;
-            } else if (l_val <= nums[mid] && nums[mid] <= r_val) {
-                l = mid + 1;
-            } else {
-                r = mid - 1;
-            }
+            const int val = nums[mid];
+            const int lval = mid - 1 >= 0 ? nums[mid - 1] : numeric_limits<int>::min();
+            const int rval = mid + 1 < n ? nums[mid + 1] : numeric_limits<int>::min();
+
+            if (lval <= val && val >= rval) return mid;
+
+            if (lval <= val && val <= rval) l = mid + 1;
+            else r = mid - 1;
         }
         return -1;
     }

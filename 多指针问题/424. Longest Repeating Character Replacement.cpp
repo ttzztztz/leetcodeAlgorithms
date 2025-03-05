@@ -1,35 +1,28 @@
 class Solution {
 public:
-    int count(int* statics) {
-        int total = 0;
-
-        int maxCount = 0;
-        for (int i = 0; i < 26; i++) {
-            total += statics[i];
-            maxCount = max(maxCount, statics[i]);
-        }
-
-        return total - maxCount;
-    }
-
     int characterReplacement(string s, int k) {
-        int answer = 0;
-        const int N = s.size();
+        const int n = s.size();
+        unordered_map<char, int> cnt;
+        int ans = 0;
+        for (int l = 0, r = 0; r < n; r++) {
+            cnt[s[r]]++;
 
-        int left = 0, right = 0, statics[26];
-        memset(statics, 0, sizeof(statics));
-        while (right < N) {
-            const int index = s[right] - 'A';
-            statics[index]++;
-
-            while (count(statics) > k) {
-                statics[s[left] - 'A']--;
-                left++;
+            while (replace_cnt(cnt) > k) {
+                cnt[s[l]]--;
+                l++;
             }
 
-            answer = max(right - left + 1, answer);
-            right++;
+            ans = max(ans, r - l + 1);
         }
-        return answer;
+        return ans;
+    }
+private:
+    int replace_cnt(unordered_map<char, int>& cnt) {
+        int sum = 0, majority_sum = 0;
+        for (auto& [k, v] : cnt) {
+            majority_sum = max(majority_sum, v);
+            sum += v;
+        }
+        return sum - majority_sum;
     }
 };

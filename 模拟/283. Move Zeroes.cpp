@@ -1,16 +1,14 @@
 class Solution {
 public:
-    void moveZeroes(vector<int>& arr) {
-        const int N = arr.size();
+    void moveZeroes(vector<int>& nums) {
+        const int n = nums.size();
+        int zero_cnt = 0, w_ptr = 0;
 
-        int ptr = 0;
-        for (int i = 0; i < N; i++) {
-            if (arr[i] != 0) {
-                arr[ptr] = arr[i];
-                ptr++;
-            }
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == 0) zero_cnt++;
+            else nums[w_ptr] = nums[i], w_ptr++;
         }
 
-        for (int i = ptr; i < N; i++) arr[i] = 0;
+        for (int i = 0; i < zero_cnt; i++) nums[n - 1 - i] = 0;
     }
 };

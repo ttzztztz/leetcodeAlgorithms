@@ -1,22 +1,17 @@
 class Solution {
 public:
     int subarraySum(vector<int>& nums, int k) {
-        int answer = 0;
-        unordered_map<int, int> map;
+        if (nums.empty()) return 0;
+        const int n = nums.size();
 
-        int sum[nums.size() + 1];
-        std::memset(sum, 0, sizeof(sum));
-
-        for (int i = 1; i <= nums.size(); i++) {
-            sum[i] = sum[i - 1] + nums[i - 1];
+        unordered_map<int, int> cnt;
+        cnt[0] = 1;
+        int sum = 0, ans = 0;
+        for (int i : nums) {
+            sum += i;
+            if (cnt.count(sum - k)) ans += cnt[sum - k];
+            cnt[sum]++;
         }
-
-        for (int i = 0; i <= nums.size(); i++) {
-            int delta = map.count(sum[i]);
-            answer += map[sum[i]];
-            map[sum[i] + k]++;
-        }
-
-        return answer;
+        return ans;
     }
 };

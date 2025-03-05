@@ -12,35 +12,32 @@
 class Solution {
 public:
     vector<TreeNode*> generateTrees(int n) {
-        this->n = n;
-        return dfs(1, n);
+        return build(1, n);
     }
 private:
-    unordered_map<int, vector<TreeNode*>> memo;
-    int n;
-    int hash(int l, int r) {
-        return l * (n + 1) + r;
-    }
-    
-    vector<TreeNode*> dfs(int l, int r) {
-        if (l > r) return { nullptr };
-        else if (l == r) return { new TreeNode(l) };
+    unordered_map<string, vector<TreeNode*>> memo;
 
-        const int h = hash(l, r);
-        if (memo.count(h)) return memo[h];
-        
+    string hash(int i, int j) {
+        return to_string(i) + "," + to_string(j);
+    }
+
+    vector<TreeNode*> build(int l, int r) {
+        if (l > r) return {};
+        if (l == r) return { new TreeNode(l) };
+        if (memo.count(hash(l, r))) return memo[hash(l, r)];
+
         vector<TreeNode*> ans;
         for (int u = l; u <= r; u++) {
-            auto left = dfs(l, u - 1);
-            auto right = dfs(u + 1, r);
-            
-            for (auto& l_child : left) for (auto& r_child : right) {
-                TreeNode* cur = new TreeNode(u);
-                cur->left = l_child;
-                cur->right = r_child;
-                ans.push_back(cur);
+            vector<TreeNode*> left_nodes = build(l, u - 1);
+            vector<TreeNode*> right_nodes = build(u + 1, r);
+
+            if (left_nodes.empty()) left_nodes.push_back(nullptr);
+            if (right_nodes.empty()) right_nodes.push_back(nullptr);
+
+            for (TreeNode* x : left_nodes) for (TreeNode* y : right_nodes) {
+                ans.push_back(new TreeNode(u, x, y));
             }
         }
-        return memo[h] = ans;
+        return memo[hash(l, r)] = ans;
     }
 };

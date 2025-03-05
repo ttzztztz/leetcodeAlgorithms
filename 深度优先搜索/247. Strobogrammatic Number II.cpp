@@ -1,45 +1,45 @@
 class Solution {
 public:
     vector<string> findStrobogrammatic(int n) {
-        if (n == 0) return ans_;
-        n_ = n;
-        dfs("");
-        for (int i : kValid) {
-            dfs(to_string(i));
-        }
-        
-        return ans_;
-    }
-private:
-    const unordered_set<int> kValid = { 0, 1, 8 };
-    vector<string> ans_;
-    int n_;
-    
-    bool valid(const string& str) {
-        if (str.size() <= 1) return true;
-        for (int i = 0; i < str.size(); i++) {
-            if (str[i] == '0') {
-                return false;
-            } else {
-                break;
+        if (n == 0) return {};
+
+        mapping = unordered_map<char, char>{
+            { '0', '0' },
+            { '1', '1' },
+            { '6', '9' },
+            { '8', '8' },
+            { '9', '6' }
+        };
+
+        string cur;
+        dfs(n, 0, cur);
+
+        for (auto& [k, v] : mapping) {
+            if (k == v) {
+                string t;
+                t += k;
+                dfs(n, 1, t);
             }
         }
-        return true;
+        return ans;
     }
-    
-    void dfs(const string& s) {
-        if (s.size() > n_) {
+private:
+    vector<string> ans;
+    unordered_map<char, char> mapping;
+
+    void dfs(const int n, int cnt, string& cur) {
+        if (cnt > n) return;
+        if (cnt == n) {
+            if (cur[0] == '0' && n >= 2) return;
+            ans.push_back(cur);
             return;
         }
-        if (s.size() == n_) {
-            if (valid(s)) ans_.push_back(s);
-            return;
+
+        for (auto [k, v] : mapping) {
+            const string prev_cur = cur;
+            cur = k + cur + v;
+            dfs(n, cnt + 2, cur);
+            cur = prev_cur;
         }
-        
-        for (int i : kValid) {
-            dfs(to_string(i) + s + to_string(i));
-        }
-        dfs("6" + s + "9");
-        dfs("9" + s + "6");
     }
 };

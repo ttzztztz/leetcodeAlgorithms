@@ -1,35 +1,23 @@
 class Solution {
 public:
     Solution(vector<int>& w) {
-        for (int i = 0; i < w.size(); i++) {
-            pref.push_back((pref.empty() ? 0 : pref.back()) + w[i]);
-        }
-        total = pref.back();
-        N = w.size();
-        uni = uniform_int_distribution<int>(0, total - 1);
+        prefix.push_back(0);
+        for (int i : w) prefix.push_back(prefix.back() + i);
+
+        gen = mt19937(rd());
+        d = uniform_int_distribution<int>(0, prefix.back() - 1);
     }
     
     int pickIndex() {
-        const int r = random();
-        int left = 0, right = pref.size() - 1;
-        while (left <= right) {
-            const int mid = (left + right) >> 1;
-            
-            if (pref[mid] <= r) left = mid + 1;
-            else right = mid - 1;
-        }
-        return left;
+        const int random_number = d(gen);
+        auto it = upper_bound(prefix.begin(), prefix.end(), random_number);
+        return it - prefix.begin() - 1;
     }
 private:
-    vector<int> pref;
-    int N, total;
-    
-    mt19937 rng{random_device{}()};
-    uniform_int_distribution<int> uni;
-    
-    int random() {
-        return uni(rng);
-    }
+    random_device rd;
+    mt19937 gen;
+    uniform_int_distribution<int> d;
+    vector<int> prefix;
 };
 
 /**

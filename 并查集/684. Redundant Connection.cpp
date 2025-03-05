@@ -1,33 +1,42 @@
 class Solution {
 public:
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        vector<int> ans;
+        n = edges.size();
         init();
-        for (auto& e : edges) {
-            const int u = e[0], v = e[1];
+
+        for (const vector<int>& edge : edges) {
+            const int u = edge[0];
+            const int v = edge[1];
+
             if (find_parent(u) == find_parent(v)) {
-                return e;
-            } else {
-                merge(u, v);
+                ans = { u, v };
+                break;
             }
+
+            merge(u, v);
         }
-        return {}; // never reach this branch
+
+        return ans;
     }
 private:
-    int parent[1005];
-    
+    int n;
+    vector<int> parent;
+
     void init() {
-        for (int i = 0; i <= 1000; i++) parent[i] = i;
+        parent = vector<int>(n + 1, -1);
+        for (int i = 0; i <= n; i++) parent[i] = i;
     }
-    
+
     int find_parent(int u) {
         if (u == parent[u]) return u;
-        else return parent[u] = find_parent(parent[u]);
+        return parent[u] = find_parent(parent[u]);
     }
-    
+
     void merge(int u, int v) {
-        const int pu = find_parent(u), pv = find_parent(v);
-        if (pu != pv) {
-            parent[pu] = pv;
-        }
+        const int parent_u = find_parent(u);
+        const int parent_v = find_parent(v);
+
+        parent[parent_u] = parent_v;
     }
 };

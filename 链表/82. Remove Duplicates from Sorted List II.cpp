@@ -3,44 +3,32 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
     ListNode* deleteDuplicates(ListNode* head) {
-        ListNode* flag = new ListNode(10005);
-        flag->next = head;
-        unordered_set<int> willDelete;
-
-        ListNode* cur = head, *prev = flag;
-        while (cur != nullptr) {
-            if (cur->val == prev->val) { // delete
-                willDelete.insert(cur->val);
+        if (head == nullptr) return nullptr;
+        ListNode* ans = nullptr, *prev = nullptr, *cur = head;
+        while (cur) {
+            bool duplicated = false;
+            while (cur->next != nullptr && cur->val == cur->next->val) {
+                duplicated = true;
+                cur = cur->next;
             }
 
-            prev = cur;
+            if (!duplicated) {
+                if (ans == nullptr) ans = cur;
+                if (prev != nullptr) prev->next = cur;
+                prev = cur;
+            }
             cur = cur->next;
         }
 
-        cur = head;
-        prev = flag;
-
-        while (cur != nullptr) {
-            if (willDelete.count(cur->val)) {
-                ListNode* tmp = cur->next;
-                ListNode* willDelete = cur;
-                delete willDelete;
-                prev->next = tmp;
-                cur = tmp;
-            } else {
-                prev = cur;
-                cur = cur->next;
-            }
-        }
-
-        ListNode* answer = flag->next;
-        delete flag;
-        return answer;
+        if (prev != nullptr) prev->next = nullptr;
+        return ans;
     }
 };

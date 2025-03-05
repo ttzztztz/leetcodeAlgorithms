@@ -1,39 +1,40 @@
 class RandomizedSet {
 public:
-    /** Initialize your data structure here. */
     RandomizedSet() {
-        
+        gen = mt19937(rd());
     }
     
-    /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
     bool insert(int val) {
-        if (kv.count(val)) return false;
-        
-        kv[val] = data.size();
+        if (hmap.count(val)) return false;
+
+        hmap[val] = data.size();
         data.push_back(val);
         return true;
     }
     
-    /** Removes a value from the set. Returns true if the set contained the specified element. */
     bool remove(int val) {
-        if (!kv.count(val)) return false;
-        
-        const int index = kv[val];
-        kv[data[data.size() - 1]] = index;
-        kv.erase(val);
-        swap(data[index], data[data.size() - 1]);
+        if (!hmap.count(val)) return false;
+
+        const int prev_idx = hmap[val];
+        const int last_val = data.back();
+        swap(data[data.size() - 1], data[prev_idx]);
+        hmap[last_val] = prev_idx;
+
         data.pop_back();
-        
+        hmap.erase(hmap.find(val));
         return true;
     }
     
-    /** Get a random element from the set. */
     int getRandom() {
-        return data[rand() % data.size()];
+        uniform_int_distribution<int> d(0, data.size() - 1);
+        return data[d(gen)];
     }
 private:
-    unordered_map<int, int> kv;
     vector<int> data;
+    unordered_map<int, int> hmap;
+
+    random_device rd;
+    mt19937 gen;
 };
 
 /**

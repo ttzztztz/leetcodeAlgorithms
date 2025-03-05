@@ -12,24 +12,25 @@
 class Solution {
 public:
     vector<int> largestValues(TreeNode* root) {
-        vector<int> answer;
-        if (root == nullptr) return answer;
-        
+        vector<int> ans;
+        if (root == nullptr) return ans;
+
         deque<TreeNode*> q = {root};
         while (!q.empty()) {
             const int cnt = q.size();
-            int mx = numeric_limits<int>::min();
-            for (int _ = 0; _ < cnt; _++) {
-                const auto f = q.front();
+            int num = numeric_limits<int>::min();
+
+            for (int j = 0; j < cnt; j++) {
+                TreeNode* cur = q.front();
                 q.pop_front();
-                
-                mx = max(mx, f->val);
-                if (f->left) q.push_back(f->left);
-                if (f->right) q.push_back(f->right);
+
+                num = max(num, cur->val);
+
+                if (cur->left != nullptr) q.push_back(cur->left);
+                if (cur->right != nullptr) q.push_back(cur->right);
             }
-            answer.push_back(mx);
+            ans.push_back(num);
         }
-        
-        return answer;
+        return ans;
     }
 };

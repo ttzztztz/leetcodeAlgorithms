@@ -1,33 +1,35 @@
 class Solution {
 public:
     string decodeString(string s) {
-        const int N = s.size();
+        string buf;
+        vector<int> stk;
+        vector<string> ans = { "" };
+        const int n = s.size();
 
-        string currentNumber;
-        string currentString;
-        vector<pair<string, int>> leftStack;
-        for (int i = 0; i < N; i++) {
-            if (s[i] >= '0' && s[i] <= '9') {
-                currentNumber += s[i];
+        for (int i = 0; i < n; i++) {
+            if ('a' <= s[i] && s[i] <= 'z') {
+                ans.back() += s[i];
+            } else if ('0' <= s[i] && s[i] <= '9') {
+                buf += s[i];
             } else if (s[i] == '[') {
-                leftStack.emplace_back(currentString, stoi(currentNumber));
-                currentNumber = "", currentString = "";
+                stk.push_back(stoi(buf));
+                ans.push_back("");
+                buf.clear();
             } else if (s[i] == ']') {
-                pair<string, int> top = leftStack.back();
-                leftStack.pop_back();
+                const int repeat_cnt = stk.back();
+                stk.pop_back();
 
-                string prev_string = currentString;
-                for (int k = 0; k < top.second - 1; k++) {
-                    currentString += prev_string;
+                const string repeat_str = ans.back();
+                ans.pop_back();
+
+                for (int i = 0; i < repeat_cnt; i++) {
+                    ans.back() += repeat_str;
                 }
-
-                currentString = top.first + currentString;
-            } else {
-                currentString += s[i];
             }
         }
 
-
-        return currentString;
+        string res;
+        for (const string& s : ans) res += s;
+        return res;
     }
 };

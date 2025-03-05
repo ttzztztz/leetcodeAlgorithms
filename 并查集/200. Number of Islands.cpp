@@ -1,65 +1,58 @@
 class Solution {
 public:
-    int parent[1000002];
-    int N, M, totalIslands = 0;
-    void init() {
-        for (int i = 0; i <= 1000001; i++) {
-            parent[i] = i;
-        }
-    }
-    int ID(int x, int y) {
-        return x * M + y;
-    }
-    int findParent(int u) {
-        if (parent[u] == u) {
-            return parent[u];
-        } else {
-            return parent[u] = findParent(parent[u]);
-        }
-    }
-    void merge(int u, int v) {
-        int parentU = findParent(u), parentV = findParent(v);
-        if (parentU != parentV) {
-            parent[parentU] = parentV;
-            totalIslands--;
-        }
-    }
     int numIslands(vector<vector<char>>& grid) {
-        if (0 == grid.size()) {
-            return 0;
-        }
+        if (grid.empty() || grid[0].empty()) return 0;
 
+        const int dx[] = {0, 0, -1, 1};
+        const int dy[] = {-1, 1, 0, 0};
+
+        n = grid.size(), m = grid[0].size();
         init();
-        N = grid.size(), M = grid[0].size();
-        for (int i = 0; i < grid.size(); i++) {
-            for (int j = 0; j < grid[i].size(); j++) {
-                if (grid[i][j] == '1') {
-                    totalIslands++;
+        for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) {
+            if (grid[i][j] != '1') continue;
+            
+            for (int k = 0; k < 4; k++) {
+                const int nx = i + dx[k], ny = j + dy[k];
+                if (valid_point(nx, ny) && grid[nx][ny] == '1') {
+                    merge(id(nx, ny), id(i, j));
                 }
             }
         }
 
-        for (int i = 0; i < grid.size(); i++) {
-            for (int j = 0; j < grid[i].size(); j++) {
-                if (grid[i][j] == '1') {
-                    grid[i][j] = '0';
-
-                    if (i - 1 >= 0 && grid[i - 1][j] == '1') {
-                        merge(ID(i, j), ID(i - 1, j));
-                    }
-                    if (i + 1 < N && grid[i + 1][j] == '1') {
-                        merge(ID(i, j), ID(i + 1, j));
-                    }
-                    if (j - 1 >= 0 && grid[i][j - 1] == '1') {
-                        merge(ID(i, j), ID(i, j - 1));
-                    }
-                    if (j + 1 < M && grid[i][j + 1] == '1') {
-                        merge(ID(i, j), ID(i, j + 1));
-                    }
-                }
-            }
+        unordered_set<int> ans;
+        for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) {
+            if (grid[i][j] != '1') continue;
+            ans.insert(find_parent(id(i, j)));
         }
+        return ans.size();
+    }
+private:
+    int n, m;
+    vector<int> parent;
 
-        return totalIslands;
+    bool valid_point(int x, int y) {
+        return x >= 0 && y >= 0 && x < n && y < m;
+    }
+
+    int id(int x, int y) {
+        return x * m + y;
+    }
+
+    void init() {
+        for (int i = 0; i < n * m; i++) {
+            parent.push_back(i);
+        }
+    }
+
+    int find_parent(int u) {
+        if (parent[u] == u) return u;
+        return parent[u] = find_parent(parent[u]);
+    }
+
+    void merge(int x, int y) {
+        const int parent_x = find_parent(x), parent_y = find_parent(y);
+        if (parent_x != parent_y) {
+            parent[parent_x] = parent_y;
+        }
     }
 };

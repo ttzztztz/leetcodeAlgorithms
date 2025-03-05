@@ -1,47 +1,36 @@
 class Solution {
 public:
-    int N;
-    vector<vector<int>> isPalindrome;
-    vector<vector<string>> answer;
+    vector<vector<string>> partition(string s) {
+        vector<string> cur;
+        dfs(s, cur, 0);
+        return ans;
+    }
+private:
+    vector<vector<string>> ans;
 
-    int dp(const string& s, int i, int j) {
-        if (i >= j) {
-            return isPalindrome[i][j] = 1;
+    bool is_palindrome(const string& s) {
+        int l = 0, r = s.size() - 1;
+        while (l < r) {
+            if (s[l] != s[r]) return false;
+            l++, r--;
         }
-
-        if (isPalindrome[i][j] != -1) {
-            return isPalindrome[i][j] == 1;
-        }
-
-        if (s[i] != s[j]) {
-            return isPalindrome[i][j] = false;
-        } else {
-            return isPalindrome[i][j] = dp(s, i + 1, j - 1);
-        }
+        return true;
     }
 
-    void dfs(const string& s, vector<string>& temp, int index) {
-        if (index == N) {
-            answer.push_back(temp);
+    void dfs(const string& s, vector<string>& cur, int idx) {
+        if (idx == s.size()) {
+            ans.push_back(cur);
             return;
         }
 
-        for (int i = index; i < N; i++) {
-            if (dp(s, index, i)) {
-                temp.push_back(s.substr(index, i - index + 1));
-                dfs(s, temp, i + 1);
-                temp.pop_back();
+        string t;
+        for (int j = idx; j < s.size(); j++) {
+            t += s[j];
+            if (is_palindrome(t)) {
+                cur.push_back(t);
+                dfs(s, cur, j + 1);
+                cur.pop_back();
             }
         }
-    }
-
-    vector<vector<string>> partition(string s) {
-        N = s.size();
-        isPalindrome = vector<vector<int>>(N + 5, vector<int>(N + 5, -1));
-        // do dfs
-        vector<string> temp;
-        dfs(s, temp, 0);
-
-        return answer;
     }
 };

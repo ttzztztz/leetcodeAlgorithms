@@ -1,35 +1,25 @@
 class Solution {
 public:
-    bool isOk;
-    vector<int> color;
-    void dfs(const vector<vector<int>>& graph, int u, int c) {
-        if (!isOk) {
-            return;
-        }
-
-        color[u] = c;
-        for (int v : graph[u]) {
-            if (color[v] == c) {
-                isOk = false;
-                return;
-            }
-
-            if (color[v] == -1) {
-                dfs(graph, v, !c);
-            }
-        }
-    }
     bool isBipartite(vector<vector<int>>& graph) {
-        isOk = true;
-        const int N = graph.size();
-        color = vector<int>(N, -1);
+        n = graph.size();
+        color = vector<int>(n, -1);
 
-        for (int u = 0; u < N; u++) {
-            if (color[u] == -1) {
-                dfs(graph, u, 1);
-            }
+        for (int i = 0; i < n; i++) {
+            if (color[i] == -1 && !dfs(graph, i, 0)) return false;
         }
+        return true;
+    }
+private:
+    int n;
+    vector<int> color;
+    bool dfs(const vector<vector<int>>& edges, int u, int col) {
+        color[u] = col;
 
-        return isOk;
+        for (int v : edges[u]) {
+            if (color[v] == col) return false;
+            if (color[v] == (col ^ 1)) continue;
+            if (!dfs(edges, v, col ^ 1)) return false;
+        }
+        return true;
     }
 };

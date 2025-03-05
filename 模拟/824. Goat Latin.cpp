@@ -1,28 +1,33 @@
 class Solution {
 public:
-    string toGoatLatin(string S) {
-        string answer;
+    string toGoatLatin(string sentence) {
+        string ans, tmp;
         int cnt = 1;
-        stringstream ss(S);
-        string tmp;
-        
-        unordered_set<char> vowel = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
-        while (ss >> tmp) {
-            if (cnt != 1) answer += " ";
-            
-            if (vowel.count(tmp[0])) tmp += "ma";
-            else {
-                const char ch = tmp[0];
-                tmp.erase(tmp.begin());
-                tmp += ch;
-                tmp += "ma";
+        for (int i = 0; i < sentence.size(); i++) {
+            if (sentence[i] != ' ') tmp += sentence[i];
+
+            if (sentence[i] == ' ' || i == sentence.size() - 1) {
+                if (!ans.empty()) ans += " ";
+                ans += process(tmp, cnt);
+                tmp.clear();
+                cnt++;
             }
-            
-            string other(cnt, 'a');
-            tmp += other;
-            answer += tmp;
-            cnt++;
         }
-        return answer;
+        return ans;
+    }
+private:
+    string process(string str, int idx) {
+        char ch = str[0];
+        if ('A' <= ch && ch <= 'Z') ch = ch - 'A' + 'a';
+
+        if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u') {
+            str += "ma";
+        } else {
+            const char ch =  str[0];
+            str = str.substr(1) + ch + "ma";
+        }
+
+        string repeated_suffix(idx, 'a');
+        return str + repeated_suffix;
     }
 };

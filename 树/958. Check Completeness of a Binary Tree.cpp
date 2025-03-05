@@ -12,22 +12,18 @@
 class Solution {
 public:
     bool isCompleteTree(TreeNode* root) {
+        return validate(root, 0, cnt(root));
+    }
+private:
+    int cnt(TreeNode* root) {
+        if (root == nullptr) return 0;
+        return 1 + cnt(root->left) + cnt(root->right);
+    }
+
+    bool validate(TreeNode* root, int idx, const int total) {
         if (root == nullptr) return true;
-        
-        deque<TreeNode*> q = {root};
-        while (!q.empty()) {
-            TreeNode* u = q.front();
-            q.pop_front();
-            
-            if (u == nullptr) break;
-            
-            q.push_back(u->left);
-            q.push_back(u->right);
-        }
-        
-        for (auto x : q) {
-            if (x != nullptr) return false;
-        }
-        return true;
+        if (idx >= total) return false;
+
+        return validate(root->left, 2 * idx + 1, total) && validate(root->right, 2 * idx + 2, total);
     }
 };

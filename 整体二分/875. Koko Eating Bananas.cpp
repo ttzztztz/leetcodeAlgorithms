@@ -1,33 +1,25 @@
 class Solution {
 public:
-    int judge(const vector<int>& piles, int K) {
-        int answer = 0;
+    int minEatingSpeed(vector<int>& piles, int h) {
+        if (piles.empty()) return -1;
 
-        for (int pile : piles) {
-            answer += pile / K;
-            if (pile % K) {
-                answer++;
-            }
+        ll l = 1, r = *max_element(piles.begin(), piles.end());
+        while (l <= r) {
+            const ll mid = (l + r) / 2;
+
+            if (solve(piles, mid) <= h) r = mid - 1;
+            else l = mid + 1;
         }
-
-        return answer;
+        return l;
     }
-    int minEatingSpeed(vector<int>& piles, int H) {
-        int left = 1, right = 1;
-        for (int pile : piles) {
-            right = max(right, pile);
+private:
+    typedef long long ll;
+    ll solve(const vector<int>& piles, int speed) {
+        ll ans = 0;
+        for (int i : piles) {
+            ans += i / speed;
+            if (i % speed > 0) ans++;
         }
-
-        while (left <= right) {
-            const int middle = (left + right) >> 1;
-
-            if (judge(piles, middle) <= H) {
-                right = middle - 1;
-            } else {
-                left = middle + 1;
-            }
-        }
-
-        return right + 1;
+        return ans;
     }
 };

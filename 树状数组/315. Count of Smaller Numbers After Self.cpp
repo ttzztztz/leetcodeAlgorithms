@@ -1,41 +1,35 @@
 class Solution {
 public:
     vector<int> countSmaller(vector<int>& nums) {
-        const int n = nums.size();
-        
-        memset(data, 0, sizeof data);
-        vector<int> ans(n, 0);
-        for (int i = n - 1; i >= 0; i--) {
-            ans[i] = query(nums[i] - 1);
-            inc(nums[i], 1);
+        data = vector<int>(maxn, 0);
+        vector<int> ans(nums.size(), 0);
+        for (int i = nums.size() - 1; i >= 0; i--) {
+            ans[i] = query(base + nums[i] - 1);
+            incr(base + nums[i], 1);
         }
         return ans;
     }
 private:
-    const int base = 1e4+1, maxn = 50000;
-    int data[50001];
-    
+    const int maxn = 2e4+15, base = 1e4+5;
+    vector<int> data;
+
     int lowbit(int x) {
         return x&(-x);
     }
-    
-    int query(int u) {
-        u += base;
-        
+
+    int query(int x) {
         int ans = 0;
-        while (u) {
-            ans += data[u];
-            u -= lowbit(u);
+        while (x) {
+            ans += data[x];
+            x -= lowbit(x);
         }
         return ans;
     }
-    
-    void inc(int u, int v) {
-        u += base;
-        
-        while (u && u < maxn) {
-            data[u] += v;
-            u += lowbit(u);
+
+    void incr(int x, int val) {
+        while (x <= maxn) {
+            data[x] += val;
+            x += lowbit(x);
         }
     }
 };

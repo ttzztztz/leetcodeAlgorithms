@@ -4,27 +4,27 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
     TreeNode* bstFromPreorder(vector<int>& preorder) {
-        const int N = preorder.size();
-        return build(preorder, 0, N - 1);
+        if (preorder.empty()) return nullptr;
+        return build(preorder, 0, preorder.size() - 1);
     }
 private:
-    TreeNode* build(const vector<int>& preorder, const int left, const int right) {
-        if (left == right) return new TreeNode(preorder[left]);
-        else if (left > right) return nullptr;
-        
-        TreeNode* root = new TreeNode(preorder[left]);
-        int ptr = left + 1;
-        while (ptr <= right && preorder[ptr] < preorder[left]) ptr++;
-        
-        root->left = build(preorder, left + 1, ptr - 1);
-        root->right = build(preorder, ptr, right);
-        
-        return root;
+    TreeNode* build(const vector<int>& data, int l, int r) {
+        if (l > r) return nullptr;
+        TreeNode* cur = new TreeNode(data[l]);
+        if (l == r) return cur;
+
+        int k = l + 1;
+        while (k <= r && data[l] > data[k]) k++;
+        cur->left = build(data, l + 1, k - 1);
+        cur->right = build(data, k, r);
+        return cur;
     }
 };

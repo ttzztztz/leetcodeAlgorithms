@@ -1,39 +1,19 @@
 class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        if (0 == intervals.size()) {
-            return vector<vector<int>>();
-        }
+        vector<vector<int>> ans;
 
-        sort(intervals.begin(), intervals.end(), [](const vector<int>& $1, const vector<int>& $2)->bool{
-            if ($1[0] == $2[0]) {
-                return $1[1] < $2[1];
-            } else {
-                return $1[0] < $2[0];
+        sort(intervals.begin(), intervals.end());
+        for (int i = 0; i < intervals.size(); i++) {
+            int l = intervals[i][0], r = intervals[i][1];
+            while (i + 1 < intervals.size() && max(l, intervals[i + 1][0]) <= min(r, intervals[i + 1][1])) {
+                l = min(l, intervals[i + 1][0]);
+                r = max(r, intervals[i + 1][1]);
+                i++;
             }
-        });
 
-        vector<vector<int>> answer;
-        int previousStart = intervals[0][0], previousEnd = intervals[0][1];
-
-        for (int i = 1; i < intervals.size(); i++) {
-            const vector<int>& interval = intervals[i];
-
-            if (interval[0] <= previousEnd) {
-                previousStart = std::min(interval[0], previousStart);
-                previousEnd = std::max(interval[1], previousEnd);
-            } else {
-                vector<int> pair = {previousStart, previousEnd};
-                answer.push_back(pair);
-
-                previousStart = interval[0];
-                previousEnd = interval[1];
-            }
+            ans.push_back(vector<int>{ l, r });
         }
-
-        vector<int> pair = {previousStart, previousEnd};
-        answer.push_back(pair);
-
-        return answer;
+        return ans;
     }
 };

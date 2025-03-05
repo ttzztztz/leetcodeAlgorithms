@@ -1,37 +1,24 @@
-class Point {
-public:
-    int x, y;
-    long long dist() const {
-        return (this->x * this->x) + (this->y * this->y);
-    }
-    Point() : x(0), y(0) {};
-    Point(int a, int b) : x(a), y(b) {};
-    bool operator< (const Point& p2) const {
-        return this->dist() < p2.dist();
-    }
-};
-
 class Solution {
 public:
-    vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
-        vector<vector<int>> answer;
-        priority_queue<Point> heap;
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+        // dist, x, y
+        typedef tuple<int, int, int> State;
+        priority_queue<State, vector<State>, less<>> heap; // big heap
         for (int i = 0; i < points.size(); i++) {
-            const int x = points[i][0], y = points[i][1];
-
-            heap.push(Point(x, y));
-            if (heap.size() > K) {
-                heap.pop();
-            }
+            heap.emplace(dist(points[i][0], points[i][1]), points[i][0], points[i][1]);
+            if (heap.size() > k) heap.pop();
         }
 
-        while (heap.size() > 0) {
-            const Point p = heap.top();
+        vector<vector<int>> ans;
+        while (!heap.empty()) {
+            auto[_, x, y] = heap.top();
             heap.pop();
-
-            vector<int> oneAnswer = {p.x, p.y};
-            answer.push_back(oneAnswer);
+            ans.push_back(vector<int>{ x, y });
         }
-        return answer;
+        return ans;
+    }
+private:
+    int dist(int x, int y) {
+        return x * x + y * y;
     }
 };

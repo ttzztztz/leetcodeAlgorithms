@@ -1,30 +1,30 @@
 class Solution {
 public:
     int numMatchingSubseq(string s, vector<string>& words) {
-        int ans = 0;
         unordered_map<char, vector<int>> idx;
-        
-        const int n = s.size(), m = words.size();
-        for (int i = 0; i < n; i++) idx[s[i]].push_back(i);
-        
-        for (int i = 0; i < m; i++) {
-            bool ok = true;
-            
-            int t = 0;
-            for (int j = 0; j < words[i].size(); j++) {
-                const char cur = words[i][j];
-                auto it = lower_bound(idx[cur].begin(), idx[cur].end(), t);
-                
-                if (it == idx[cur].end()) {
-                    ok = false;
-                    break;
-                } else {
-                    t = *it + 1;
-                }
-            }
-            
-            if (ok) ans++;
+        for (int i = 0; i < s.size(); i++) idx[s[i]].push_back(i);
+        int ans = 0;
+        for (const string& word : words) {
+            if (judge(idx, word)) ans++;
         }
         return ans;
+    }
+private:
+    bool judge(unordered_map<char, vector<int>>& idx, const string& word) {
+        const int n = word.size();
+        int ptr_s = 0;
+        for (int ptr_w = 0; ptr_w < n; ptr_w++) {
+            const char ch = word[ptr_w];
+            if (!idx.count(ch)) {
+                return false;
+            }
+            const vector<int>& v = idx[ch];
+            auto it = lower_bound(v.begin(), v.end(), ptr_s);
+            if (it == v.end()) {
+                return false;
+            }
+            ptr_s = *it + 1;
+        }
+        return true;
     }
 };

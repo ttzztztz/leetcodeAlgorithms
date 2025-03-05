@@ -12,23 +12,19 @@
 class Solution {
 public:
     vector<int> rightSideView(TreeNode* root) {
-        vector<int> answer;
-        if (root == nullptr) return answer;
-        
-        deque<TreeNode*> q = {root};
-        while (!q.empty()) {
-            int last = -1;
-            const int cnt = q.size();
-            for (int _ = 0; _ < cnt; _++) {
-                auto f = q.front();
-                q.pop_front();
-                
-                last = f->val;
-                if (f->left) q.push_back(f->left);
-                if (f->right) q.push_back(f->right);
-            }
-            answer.push_back(last);
-        }
-        return answer;
+        if (root == nullptr) return {};
+        dfs(root, 1);
+
+        return ans;
+    }
+private:
+    vector<int> ans;
+
+    void dfs(TreeNode* root, int layer) {
+        if (root == nullptr) return;
+
+        if (ans.size() < layer) ans.push_back(root->val);
+        dfs(root->right, layer + 1);
+        dfs(root->left, layer + 1);
     }
 };

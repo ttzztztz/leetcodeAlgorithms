@@ -12,29 +12,32 @@
 class Solution {
 public:
     vector<vector<int>> verticalTraversal(TreeNode* root) {
-        map<int, map<int, multiset<int>>> f;
-        typedef tuple<TreeNode*, int, int> State;
-        deque<State> q = {{root, 0, 0}};
+        if (root == nullptr) return {};
+        typedef tuple<int, int, int> Data; // (col, row, val)
+        typedef tuple<TreeNode*, int, int> State; // (node, row, col)
+
+        deque<State> q = { { root, 0, 0 } };
+        vector<Data> data;
         while (!q.empty()) {
-            TreeNode* u;
-            int x, y;
-            tie(u, x, y) = q.front();
+            auto [node, row, col] = q.front();
+            data.emplace_back(col, row, node->val);
             q.pop_front();
-            
-            f[x][y].insert(u->val);
-            if (u->left) q.emplace_back(u->left, x - 1, y + 1);
-            if (u->right) q.emplace_back(u->right, x + 1, y + 1);
+
+            if (node->left) q.emplace_back(node->left, row + 1, col - 1);
+            if (node->right) q.emplace_back(node->right, row + 1, col + 1);
         }
-        
-        vector<vector<int>> answer;
-        for (auto& p : f) {
-            const auto& pts = p.second;
-            vector<int> tmp;
-            for (auto& t : pts) {
-                for (int i : t.second) tmp.push_back(i);
+
+        sort(data.begin(), data.end());
+        vector<vector<int>> ans;
+        for (int i = 0; i < data.size(); i++) {
+            auto [col, row, val] = data[i];
+            vector<int> tmp = { val };
+            while (i + 1 < data.size() && get<0>(data[i + 1]) == col) {
+                tmp.push_back(get<2>(data[i + 1]));
+                i++;
             }
-            answer.push_back(tmp);
+            ans.push_back(tmp);
         }
-        return answer;
+        return ans;
     }
 };

@@ -1,25 +1,23 @@
 class MovingAverage {
 public:
-    /** Initialize your data structure here. */
     MovingAverage(int size) {
         this->size = size;
     }
     
     double next(int val) {
-        all.push_back(val);
-        sum += 1.0 * val;
-        while (all.size() > size) {
-            const int t = all.front();
-            all.pop_front();
-            sum -= 1.0 * t;
+        q.push_back(val);
+        sum += val;
+
+        if (q.size() > size) {
+            sum -= q.front();
+            q.pop_front();
         }
-        
-        return sum / (1.0 * all.size());
+
+        return 1.0 * sum / q.size();
     }
 private:
-    double sum = 0.0;
-    deque<int> all;
-    int size = 0;
+    deque<int> q;
+    int size = 0, sum = 0;
 };
 
 /**

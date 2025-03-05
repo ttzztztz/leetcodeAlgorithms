@@ -12,24 +12,24 @@
 class Solution {
 public:
     TreeNode* increasingBST(TreeNode* root) {
-        return dfs(root).first;
+        if (root == nullptr) return nullptr;
+        dfs(root);
+        return ans;
     }
 private:
-    typedef pair<TreeNode*, TreeNode*> State;
-    State kEmptyState = {nullptr, nullptr};
-    State dfs(TreeNode* root) {
-        if (root == nullptr) return kEmptyState;
-        State ans = {root, root};
-        
-        auto [l1, l2] = dfs(root->left);
-        auto [r1, r2] = dfs(root->right);
+    TreeNode* ans = nullptr;
+    TreeNode* last = nullptr;
 
-        if (l2) l2->right = root;
-        root->right = r1;
+    void dfs(TreeNode* root) {
+        if (root == nullptr) return;
+
+        dfs(root->left);
+
+        if (ans == nullptr) ans = root;
+        if (last != nullptr) last->right = root;
         root->left = nullptr;
-        
-        if (l1) ans.first = l1;
-        if (r2) ans.second = r2;
-        return ans;
+        last = root;
+
+        dfs(root->right);
     }
 };
