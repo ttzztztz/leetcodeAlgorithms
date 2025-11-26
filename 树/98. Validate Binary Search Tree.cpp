@@ -12,23 +12,19 @@
 class Solution {
 public:
     bool isValidBST(TreeNode* root) {
-        return validate(root);
+        if (root == nullptr) return true;
+        return is_valid(
+            root,
+            numeric_limits<int>::min(),
+            numeric_limits<int>::max()
+        );
     }
 private:
-    bool is_first = true;
-    int last_val = 0;
-
-    bool validate(TreeNode* root) {
+    bool is_valid(TreeNode* root, long long min_val, long long max_val) {
         if (root == nullptr) return true;
+        long long val = root->val;
 
-        bool result = true;
-
-        result = result && validate(root->left);
-        if (!is_first && last_val >= root->val) return false;
-        is_first = false;
-        last_val = root->val;
-        result = result && validate(root->right);
-
-        return result;
+        if (!(min_val <= val && val <= max_val)) return false;
+        return is_valid(root->left, min_val, val - 1) && is_valid(root->right, val + 1, max_val);
     }
 };

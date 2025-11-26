@@ -1,19 +1,15 @@
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
-        if (nums.size() == 0) {
-            return 0;
-        }
-        int dp[nums.size() + 1];
-        std::memset(dp, 0, sizeof(dp));
+        // f[i] = max(val, f[i - 1] + val)
 
-        dp[0] = nums[0];
-        int answer = dp[0];
-        for (int i = 1; i < nums.size(); i++) {
-            dp[i] = std::max(dp[i - 1] + nums[i], nums[i]);
-            answer = std::max(answer, dp[i]);
+        long long ans = numeric_limits<int>::min(), last = numeric_limits<int>::min();
+        const int n = nums.size();
+        for (int i = 0; i < n; i++) {
+            last = max<long long>(nums[i], nums[i] + last);
+            ans = max(ans, last);
         }
 
-        return answer;
+        return ans;
     }
 };

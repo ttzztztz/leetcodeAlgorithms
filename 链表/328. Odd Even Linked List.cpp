@@ -3,38 +3,48 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
     ListNode* oddEvenList(ListNode* head) {
-        ListNode* oddBegin = new ListNode(0);
-        ListNode* evenBegin = new ListNode(0);
-        
-        ListNode* flag = new ListNode(0);
-        flag->next = head;
-        
-        int i = 1;
-        ListNode* prev = flag, *cur = head;
-        ListNode* curOdd = oddBegin, *curEven = evenBegin;
+        if (head == nullptr) return nullptr;
+
+        ListNode* left_head = nullptr, *right_head = nullptr;
+        ListNode* left_last = nullptr, *right_last = nullptr;
+
+        ListNode* cur = head;
+        int idx = 0;
         while (cur) {
-            ListNode* nxt = cur->next;
-            if (i % 2 == 1) { // odd
-                curOdd->next = cur;
-                curOdd = curOdd->next;
-                curOdd->next = nullptr;
-            } else { // even
-                curEven->next = cur;
-                curEven = curEven->next;
-                curEven->next = nullptr;
+            if (idx % 2 == 0) {
+                if (left_last == nullptr) {
+                    left_head = left_last = cur;
+                } else {
+                    left_last->next = cur;
+                    left_last = cur;
+                }
+            } else {
+                if (right_last == nullptr) {
+                    right_head = right_last = cur;
+                } else {
+                    right_last->next = cur;
+                    right_last = cur;
+                }
             }
-            prev = cur;
-            cur = nxt;
-            i++;
+            
+            idx++;
+            cur = cur->next;
         }
-        
-        curOdd->next = evenBegin->next;
-        return oddBegin->next;
+
+        if (left_last != nullptr) {
+            left_last->next = right_head;
+        }
+        if (right_last != nullptr) {
+            right_last->next = nullptr;
+        }
+        return left_head;
     }
 };

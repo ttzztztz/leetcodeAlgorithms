@@ -1,58 +1,37 @@
 class Solution {
 public:
     int numIslands(vector<vector<char>>& grid) {
-        if (grid.empty() || grid[0].empty()) return 0;
+        if (grid.empty()) return 0;
+        n = grid.size(), m = grid[0].size();
+
+        visited = vector<vector<bool>>(n, vector<bool>(m, false));
+        int ans = 0;
+        for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) {
+            if (visited[i][j] || grid[i][j] != '1') continue;
+
+            dfs(grid, i, j);
+            ans++;
+        }
+        return ans;
+    }
+private:
+    vector<vector<bool>> visited;
+    int n, m;
+
+    bool point_valid(int i, int j) {
+        return i >= 0 && j >= 0 && i < n && j < m;
+    }
+
+    void dfs(const vector<vector<char>>& grid, int i, int j) {
+        visited[i][j] = true;
 
         const int dx[] = {0, 0, -1, 1};
         const int dy[] = {-1, 1, 0, 0};
+        for (int k = 0; k < 4; k++) {
+            const int nx = i + dx[k], ny = j + dy[k];
+            if (!point_valid(nx, ny) || grid[nx][ny] != '1' || visited[nx][ny]) continue;
 
-        n = grid.size(), m = grid[0].size();
-        init();
-        for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) {
-            if (grid[i][j] != '1') continue;
-            
-            for (int k = 0; k < 4; k++) {
-                const int nx = i + dx[k], ny = j + dy[k];
-                if (valid_point(nx, ny) && grid[nx][ny] == '1') {
-                    merge(id(nx, ny), id(i, j));
-                }
-            }
-        }
-
-        unordered_set<int> ans;
-        for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) {
-            if (grid[i][j] != '1') continue;
-            ans.insert(find_parent(id(i, j)));
-        }
-        return ans.size();
-    }
-private:
-    int n, m;
-    vector<int> parent;
-
-    bool valid_point(int x, int y) {
-        return x >= 0 && y >= 0 && x < n && y < m;
-    }
-
-    int id(int x, int y) {
-        return x * m + y;
-    }
-
-    void init() {
-        for (int i = 0; i < n * m; i++) {
-            parent.push_back(i);
-        }
-    }
-
-    int find_parent(int u) {
-        if (parent[u] == u) return u;
-        return parent[u] = find_parent(parent[u]);
-    }
-
-    void merge(int x, int y) {
-        const int parent_x = find_parent(x), parent_y = find_parent(y);
-        if (parent_x != parent_y) {
-            parent[parent_x] = parent_y;
+            dfs(grid, nx, ny);
         }
     }
 };

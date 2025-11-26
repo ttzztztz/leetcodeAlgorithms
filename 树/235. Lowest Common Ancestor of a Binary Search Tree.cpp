@@ -8,17 +8,17 @@
  * };
  */
 
- class Solution {
+class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if (root == nullptr) return nullptr;
+        if (root == nullptr || p == nullptr || q == nullptr) return nullptr;
 
-        TreeNode* node = root;
-        while (node != nullptr) {
-            if (p->val < node->val && q->val < node->val) node = node->left;
-            else if (p->val > node->val && q->val > node->val) node = node->right;
-            else return node;
+        TreeNode* cur = root;
+        while (cur != nullptr) {
+            if (p->val < cur->val && q->val < cur->val) cur = cur->left;
+            else if (p->val > cur->val && q->val > cur->val) cur = cur->right;
+            else return cur;
         }
-        return node;
+        return cur;
     }
 };

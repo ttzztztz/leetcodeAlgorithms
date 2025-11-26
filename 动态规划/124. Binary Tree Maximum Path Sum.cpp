@@ -12,7 +12,7 @@
 class Solution {
 public:
     int maxPathSum(TreeNode* root) {
-        if (root == nullptr) return ans;
+        if (root == nullptr) return 0;
 
         dfs(root);
         return ans;
@@ -20,13 +20,28 @@ public:
 private:
     int ans = numeric_limits<int>::min();
 
-    int dfs(TreeNode* cur) {
-        if (cur == nullptr) return 0;
+    int dfs(TreeNode* root) {
+        if (root == nullptr) return 0;
 
-        const int l_val = dfs(cur->left);
-        const int r_val = dfs(cur->right);
+        const int l = dfs(root->left);
+        const int r = dfs(root->right);
+        const int cur = root->val;
 
-        ans = max(ans, max(cur->val + l_val + r_val, max(cur->val, max(cur->val + l_val, cur->val + r_val))));
-        return max(cur->val, cur->val + max(l_val, r_val));
+        const int max_path = max(cur, max(
+            l + cur,
+            max(
+                r + cur,
+                l + r + cur
+            )
+        ));
+
+        ans = max(ans, max_path);
+        return max(
+            cur,
+            max(
+                l + cur,
+                r + cur
+            )
+        );
     }
 };

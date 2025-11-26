@@ -1,28 +1,25 @@
 class Solution {
 public:
-    vector<vector<int>> answer;
-    vector<int> current;
-    void dfs(const vector<int>& candidates, int index, int sum) {
-        if (sum == 0) {
-            answer.push_back(current);
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        dfs(candidates, 0, target);
+        return ans;
+    }
+private:
+    vector<vector<int>> ans;
+    vector<int> cur;
+
+    void dfs(const vector<int>& candidates, int idx, int target) {
+        if (target == 0) {
+            ans.push_back(cur);
             return;
         }
 
-        for (int i = index; i < candidates.size(); i++) {
-            const int candidate = candidates[i];
+        if (target < 0 || idx >= candidates.size()) return;
 
-            if (candidate > sum) {
-                break;
-            }
+        dfs(candidates, idx + 1, target);
 
-            current.push_back(candidate);
-            dfs(candidates, i, sum - candidate);
-            current.pop_back();
-        }
-    }
-    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        sort(candidates.begin(), candidates.end());
-        dfs(candidates, 0, target);
-        return answer;
+        cur.push_back(candidates[idx]);
+        dfs(candidates, idx, target - candidates[idx]);
+        cur.pop_back();
     }
 };

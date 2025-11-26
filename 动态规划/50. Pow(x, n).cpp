@@ -1,28 +1,22 @@
 class Solution {
 public:
-    double myPow(double x, int n) {
-        long long newN = n;
-        bool negativeFlag = false;
+    double myPow(double x, long long n) {
+        if (n == 0) return 1;
 
-        if (newN == 0) {
-            return 1;
-        } else if (n < 0) {
-            newN *= -1;
-            negativeFlag = true;
+        if (n < 0) {
+            x = 1.0 / x;
+            n = -n;
         }
-        double base = 1, pow = x;
-        while (newN) {
-            if (newN & 1) {
-                base *= x;
+
+        double base = x, ans = 1.0;
+        while (n > 0) {
+            if (n % 2 == 1) {
+                ans = ans * base;
             }
-            x *= x;
-            newN >>= 1;
-        }
 
-        if (negativeFlag) {
-            return 1.0 / base;
-        } else {
-            return base;
+            base = base * base;
+            n /= 2;
         }
+        return ans;
     }
 };

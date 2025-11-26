@@ -1,72 +1,73 @@
 class Solution {
 public:
-    int parent[300005];
-    void init() {
-        for (int i = 0; i < 300005; i++) {
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        int incr = 0;
+        unordered_map<string, int> email_to_id;
+        vector<string> id_to_person;
+        vector<string> id_to_email;
+
+        for (int i = 0; i < accounts.size(); i++) {
+            for (int j = 1; j < accounts[i].size(); j++) {
+                const string email = accounts[i][j];
+                if (!email_to_id.count(email)) {
+                    email_to_id[email] = incr;
+                    id_to_person.push_back(accounts[i][0]);
+                    id_to_email.push_back(email);
+
+                    incr++;
+                }
+            }
+        }
+
+        init(incr);
+        for (int i = 0; i < accounts.size(); i++) {
+            for (int j = 2; j < accounts[i].size(); j++) {
+                const int id1 = email_to_id[accounts[i][j]];
+                const int id2 = email_to_id[accounts[i][j - 1]];
+
+                merge(id1, id2);
+            }
+        }
+
+        unordered_map<int, set<string>> parent_to_account;
+        for (int i = 0; i < incr; i++) {
+            const int u = find_parent(i);
+            parent_to_account[u].insert(id_to_email[i]);
+        }
+
+        vector<vector<string>> ans;
+        for (auto& [k, v] : parent_to_account) {
+            vector<string> row = { id_to_person[k] };
+            
+            for (const string& str : v) {
+                row.push_back(str);
+            }
+
+            ans.push_back(row);
+        }
+        return ans;
+    }
+private:
+    vector<int> parent;
+
+    void init(int n) {
+        parent = vector<int>(n, 0);
+        for (int i = 0; i < n; i++) {
             parent[i] = i;
         }
     }
-    int findParent(int u) {
-        if (parent[u] == u) {
-            return parent[u];
-        } else {
-            return parent[u] = findParent(parent[u]);
+
+    void merge(int x, int y) {
+        const int parent_x = find_parent(x);
+        const int parent_y = find_parent(y);
+
+        if (parent_x != parent_y) {
+            parent[parent_x] = parent_y;
         }
     }
-    void merge(int u, int v) {
-        int parentU = findParent(u), parentV = findParent(v);
-        if (parentU != parentV) {
-            parent[parentU] = parentV;
-        }
-    }
-    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
-        vector<vector<string>> answer;
-        init();
 
-        int mailIndex = 0;
-        int answerIndex = 0;
-
-        unordered_map<string, int> mapMailToIndex;
-        unordered_map<int, string> mapIndexToMail;
-        unordered_map<int, int> mapMailIndexToNameIndex;
-        unordered_map<int, int> mapDisjointSetIndexToAnswerIndex;
-
-        for (int i = 0; i < accounts.size(); i++) {
-            const vector<string>& account = accounts[i];
-            for (int j = 1; j < account.size(); j++) {
-                if (!mapMailToIndex.count(account[j])) {
-                    mapMailToIndex[account[j]] = mailIndex;
-                    mapIndexToMail[mailIndex] = account[j];
-                    mailIndex++;
-                }
-
-                mapMailIndexToNameIndex[mapMailToIndex[account[j]]] = i;
-            }
-        }
-
-        for (int i = 0; i < accounts.size(); i++) {
-            const vector<string>& account = accounts[i];
-            for (int j = 2; j < account.size(); j++) {
-                merge(mapMailToIndex[account[j]], mapMailToIndex[account[1]]);
-            }
-        }
-
-        for (const pair<int, int>& mailIndexToNameIndex : mapMailIndexToNameIndex) {
-            int currentMailIndex = mailIndexToNameIndex.first, nameIndex = mailIndexToNameIndex.second;
-            int parent = findParent(currentMailIndex);
-            if (!mapDisjointSetIndexToAnswerIndex.count(parent)) {
-                answer.push_back(vector<string>());
-                answer[answerIndex].push_back(accounts[nameIndex][0]);
-                answer[answerIndex].push_back(mapIndexToMail[currentMailIndex]);
-                mapDisjointSetIndexToAnswerIndex[parent] = answerIndex++;
-            } else {
-                answer[mapDisjointSetIndexToAnswerIndex[parent]].push_back(mapIndexToMail[currentMailIndex]);
-            }
-        }
-
-        for (vector<string>& oneAnswer : answer) {
-            std::sort(oneAnswer.begin() + 1, oneAnswer.end());
-        }
-        return answer;
+    int find_parent(int i) {
+        if (parent[i] == i) return i;
+        return parent[i] = find_parent(parent[i]);
     }
 };

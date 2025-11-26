@@ -31,3 +31,38 @@ private:
         return true;
     }
 };
+
+
+
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        string ans;
+        unordered_map<char, int> cur, target;
+        string c;
+        for (const char ch : t) target[ch]++;
+
+        const int n = s.size();
+        for (int l = 0, r = 0; r < n; r++) {
+            cur[s[r]]++;
+            c += s[r];
+
+            while (is_contains(cur, target)) {
+                if (ans.empty() || ans.size() > c.size()) ans = c;
+
+                cur[s[l]]--;
+                c.erase(c.begin());
+                l++;
+            }
+        }
+
+        return ans;
+    }
+private:
+    bool is_contains(unordered_map<char, int>& cur, unordered_map<char, int>& target) {
+        for (auto& [ch, cnt] : target) {
+            if (cur[ch] < cnt) return false;
+        }
+        return true;
+    }
+};
